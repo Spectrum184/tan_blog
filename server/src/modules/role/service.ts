@@ -9,10 +9,18 @@ export class RoleService {
   ) {}
 
   async getRoles(): Promise<Role[]> {
-    return await this.roleRepository.find();
+    try {
+      return await this.roleRepository.find();
+    } catch (error) {
+      throw error;
+    }
   }
 
   async createRole(role: RoleDto): Promise<Role> {
-    return await this.roleRepository.create(role);
+    try {
+      return await this.roleRepository.create(role);
+    } catch (error) {
+      throw error;
+    }
   }
 }

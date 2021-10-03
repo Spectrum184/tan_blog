@@ -3,10 +3,12 @@ import {
   Column,
   Entity,
   JoinColumn,
+  JoinTable,
   ManyToMany,
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import { Account } from '../account/entity';
 import { Role } from '../role/entity';
 import { IAdmin, IMod, IUser } from './interface';
 
@@ -42,19 +44,36 @@ class User extends BaseEntity implements IUser {
   @Column({ type: 'varchar', nullable: false })
   name: string;
 
-  @Column({ type: 'varchar', length: 500, nullable: true })
+  @Column({ type: 'varchar', length: 500, nullable: true, default: '' })
   about: string;
 
-  @OneToOne('Admin', 'user')
+  @OneToOne('Admin', 'user', {
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+    cascade: true,
+  })
   @JoinColumn()
   admin?: IAdmin;
 
-  @OneToOne('Mod', 'user')
+  @OneToOne('Mod', 'user', {
+    onUpdate: 'CASCADE',
+    onDelete: 'CASCADE',
+    cascade: true,
+  })
   @JoinColumn()
   mod?: IMod;
 
   @ManyToMany(() => Role, (role) => role.users)
+  @JoinTable()
   roles: Role[];
+
+  @OneToOne(() => Account, (account) => account.user, {
+    onUpdate: 'CASCADE',
+    onDelete: 'CASCADE',
+    cascade: true,
+  })
+  @JoinColumn()
+  account: Account;
 }
 
 export { User, Admin, Mod };

@@ -3,14 +3,16 @@ import {
   Controller,
   Delete,
   Get,
+  HttpStatus,
+  InternalServerErrorException,
   Logger,
   Param,
-  Post,
   Put,
+  Res,
 } from '@nestjs/common';
+import { FastifyReply } from '@nestjs/platform-fastify/node_modules/fastify';
 import { ApiTags } from '@nestjs/swagger';
 import { UserDto } from './dto';
-import { User } from './entity';
 import { UserService } from './service';
 
 @ApiTags('users')
@@ -22,29 +24,40 @@ export class UserController {
   ) {}
 
   @Get()
-  async findAll(): Promise<User[]> {
+  async findAll(@Res() res: FastifyReply): Promise<FastifyReply> {
     try {
-      return await this.userService.findAllUser();
+      const users = await this.userService.findAllUser();
+      if (users.length === 0)
+        return res.status(HttpStatus.NOT_FOUND).send({ users: null });
+
+      return res.status(HttpStatus.OK).send({
+        users,
+      });
     } catch (error) {
       this.logger.error(error);
+      throw new InternalServerErrorException(error.message);
     }
   }
 
   @Get(':id')
-  async findOne(@Param('id') id: string): Promise<User> {
+  async findOne(
+    @Param('id') id: string,
+    @Res() res: FastifyReply,
+  ): Promise<FastifyReply> {
     try {
-      return await this.userService.findOneUser(id);
-    } catch (error) {
-      this.logger.error(error);
-    }
-  }
+      const user = await this.userService.findById(id);
 
-  @Post()
-  async create(@Body() userDto: UserDto): Promise<User> {
-    try {
-      return await this.userService.createUser(userDto);
+      if (!user)
+        return res.status(HttpStatus.NOT_FOUND).send({
+          user: null,
+        });
+
+      return res.status(HttpStatus.OK).send({
+        user,
+      });
     } catch (error) {
       this.logger.error(error);
+      throw new InternalServerErrorException(error.message);
     }
   }
 
@@ -52,16 +65,44 @@ export class UserController {
   async update(
     @Param('id') id: string,
     @Body() userDto: UserDto,
-  ): Promise<User> {
+    @Res() res: FastifyReply,
+  ): Promise<FastifyReply> {
     try {
-      return await this.userService.updateUser(id, userDto);
+      const user = await this.userService.updateUser(id, userDto);
+
+      if (!user)
+        return res.status(HttpStatus.NOT_MODIFIED).send({
+          user: null,
+        });
+
+      return res.status(HttpStatus.OK).send({
+        user,
+      });
     } catch (error) {
       this.logger.error(error);
+      throw new InternalServerErrorException(error.message);
     }
   }
 
   @Delete()
-  async delete(@Param('id') id: string): Promise<boolean> {
-    return await this.userService.deleteUser(id);
+  async delete(
+    @Param('id') id: string,
+    @Res() res: FastifyReply,
+  ): Promise<FastifyReply> {
+    try {
+      const isDeleted = await this.userService.deleteUser(id);
+
+      if (!isDeleted)
+        return res.status(HttpStatus.NOT_MODIFIED).send({
+          isDeleted: false,
+        });
+
+      return res.status(HttpStatus.OK).send({
+        isDeleted,
+      });
+    } catch (error) {
+      this.logger.error(error);
+      throw new InternalServerErrorException(error.message);
+    }
   }
 }

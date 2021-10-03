@@ -32,4 +32,9 @@ export class UserDto implements IUser {
   @Type(() => String)
   @IsString()
   readonly about: string;
+
+  @ApiProperty({ default: 'This is created time' })
+  @Type(() => String)
+  @IsString()
+  readonly createdAt: string;
 }

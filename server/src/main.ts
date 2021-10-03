@@ -15,7 +15,6 @@ async function bootstrap() {
     AppModule,
     new FastifyAdapter(),
   );
-  console.log(configService.getTypeOrmConfig());
 
   const PORT = configService.getAppPort();
 
