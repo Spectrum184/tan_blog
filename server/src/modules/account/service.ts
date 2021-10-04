@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { IAcountDto } from './dto';
+import { AccountUpdateDto, IAcountDto } from './dto';
 import { Account } from './entity';
 import { mapAccountToAccountDto } from './mapper';
 
@@ -29,6 +29,19 @@ export class AccountService {
       const result = await this.accountRepository.delete({ id });
 
       return result.affected !== null;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async update(id: string, updateData: AccountUpdateDto): Promise<IAcountDto> {
+    try {
+      const updatedAccount = await this.accountRepository.save({
+        id,
+        ...updateData,
+      });
+
+      return mapAccountToAccountDto(updatedAccount);
     } catch (error) {
       throw error;
     }

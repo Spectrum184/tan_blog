@@ -55,24 +55,13 @@ class ConfigService {
    * @var boolean isGenerate
    * @returns JwtConfig
    */
-  public getJwtConfig(isGenerate: boolean): JwtConfig {
-    if (isGenerate) {
-      return {
-        secret: this.getValue('JWT_GENERATE_KEY'),
-        signOptions: {
-          expireIn:
-            `${this.getValue('JWT_GENERATE_KEY_EXPIRE', false)}` || '1d',
-        },
-      };
-    } else {
-      return {
-        secret: this.getValue('JWT_REFRESH_KEY'),
-        signOptions: {
-          expireIn:
-            `${this.getValue('JWT_REFRESH_KEY_EXPIRE', false)}` || '15d',
-        },
-      };
-    }
+  public getJwtConfig(): JwtConfig {
+    return {
+      secret: this.getValue('JWT_GENERATE_KEY'),
+      signOptions: {
+        expireIn: `${this.getValue('JWT_GENERATE_KEY_EXPIRE', false)}` || '1d',
+      },
+    };
   }
 
   /**

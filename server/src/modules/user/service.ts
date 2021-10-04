@@ -53,18 +53,4 @@ export class UserService {
       throw error;
     }
   }
-
-  async findUser(param: string): Promise<User | undefined> {
-    try {
-      const user = await this.userRepository
-        .createQueryBuilder('user')
-        .where(`user.email=${param} OR user.username=${param}`)
-        .innerJoinAndSelect('user.account', 'account')
-        .getOne();
-
-      return user;
-    } catch (error) {
-      throw error;
-    }
-  }
 }

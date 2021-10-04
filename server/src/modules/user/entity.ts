@@ -32,10 +32,10 @@ class Mod implements IMod {
 
 @Entity('users')
 class User extends BaseEntity implements IUser {
-  @Column({ type: 'varchar', unique: true, length: 50, nullable: false })
+  @Column({ type: 'varchar', length: 50, nullable: false })
   username: string;
 
-  @Column({ type: 'varchar', length: 200, nullable: false, unique: true })
+  @Column({ type: 'varchar', length: 200, nullable: false })
   email: string;
 
   @Column({ type: 'varchar', nullable: true, default: 'avatar.jpg' })

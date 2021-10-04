@@ -27,6 +27,7 @@ async function bootstrap() {
       app,
       new DocumentBuilder()
         .setTitle('Manager API')
+        .setVersion('1.0')
         .setDescription('Tan Blog Manager API')
         .build(),
     );
@@ -45,11 +46,20 @@ async function bootstrap() {
   app.register(fastifyCookie);
 
   // add fastify helmet
-  app.register(fastifyHelmet);
+  app.register(fastifyHelmet, {
+    contentSecurityPolicy: {
+      directives: {
+        defaultSrc: [`'self'`],
+        styleSrc: [`'self'`, `'unsafe-inline'`],
+        imgSrc: [`'self'`, 'data:', 'validator.swagger.io'],
+        scriptSrc: [`'self'`, `https: 'unsafe-inline'`],
+      },
+    },
+  });
 
   // add exception filter for app
   app.useGlobalFilters(new AllExceptionFilter());
 
-  await app.listen(PORT);
+  await app.listen(PORT, () => console.log('Server is listening on ' + PORT));
 }
 bootstrap();

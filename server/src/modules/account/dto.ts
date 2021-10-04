@@ -13,7 +13,7 @@ export interface IAcountDto {
 }
 
 class AccountCreationDto {
-  @ApiProperty({ default: 'This is password' })
+  @ApiProperty({ description: 'This is password', default: 'thanhdepzai' })
   @Type(() => String)
   @IsNotEmpty()
   @IsString()
@@ -21,7 +21,7 @@ class AccountCreationDto {
 }
 
 class AccountUpdateDto {
-  @ApiProperty({ default: 'This is password' })
+  @ApiProperty({ description: 'This is password' })
   @Type(() => String)
   @IsNotEmpty()
   @IsString()

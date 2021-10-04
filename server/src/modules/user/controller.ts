@@ -94,7 +94,7 @@ export class UserController {
 
       if (!isDeleted)
         return res.status(HttpStatus.NOT_MODIFIED).send({
-          isDeleted: false,
+          isDeleted,
         });
 
       return res.status(HttpStatus.OK).send({

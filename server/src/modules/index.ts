@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { configService } from 'src/config/config.service';
+import { AccountModule } from './account';
 import { RoleModule } from './role';
 import { UserModule } from './user';
 
@@ -10,6 +11,7 @@ import { UserModule } from './user';
     TypeOrmModule.forRoot(configService.getTypeOrmConfig()),
     UserModule,
     RoleModule,
+    AccountModule,
     ConfigModule.forRoot(),
   ],
   providers: [],
