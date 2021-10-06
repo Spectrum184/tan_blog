@@ -10,25 +10,43 @@ export class UserService {
     @InjectRepository(User) private readonly userRepository: Repository<User>,
   ) {}
 
-  async findAllUser(): Promise<User[]> {
+  async findAllUser(): Promise<UserDto[]> {
     try {
-      return this.userRepository.find();
+      const users = await this.userRepository.find();
+
+      if (users.length === 0) return null;
+
+      const userDto = users.map((user) => new UserDto(user));
+
+      return userDto;
     } catch (error) {
       throw error;
     }
   }
 
-  async findById(id: string): Promise<User> {
+  async findById(id: string): Promise<UserDto> {
     try {
-      return this.userRepository.findOne(id);
+      const user = await this.userRepository.findOne(id);
+
+      return new UserDto(user);
     } catch (error) {
       throw error;
     }
   }
 
-  async createUser(user: UserDto): Promise<User> {
+  async createUser(userDto: UserDto): Promise<UserDto> {
     try {
-      return this.userRepository.create(user);
+      const user = new User();
+
+      user.username = userDto.username;
+      user.email = userDto.email;
+      user.avatar = userDto.avatar;
+      user.name = userDto.name;
+      user.about = userDto.about;
+
+      const newUser = await this.userRepository.save(user);
+
+      return new UserDto(newUser);
     } catch (error) {
       throw error;
     }
@@ -44,11 +62,17 @@ export class UserService {
     }
   }
 
-  async updateUser(id: string, newUser: UserDto): Promise<User> {
+  async updateUser(id: string, userDto: UserDto): Promise<UserDto> {
     try {
       const user = await this.userRepository.findOne(id);
-      Object.assign(user, newUser);
-      return await this.userRepository.save(user);
+
+      if (!user) return null;
+
+      Object.assign(user, userDto);
+
+      const newUser = await this.userRepository.save(user);
+
+      return new UserDto(newUser);
     } catch (error) {
       throw error;
     }

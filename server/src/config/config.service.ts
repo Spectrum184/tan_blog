@@ -5,7 +5,7 @@ import { join } from 'path';
 interface JwtConfig {
   secret: string;
   signOptions: {
-    expireIn: string;
+    expiresIn: string;
   };
 }
 
@@ -59,7 +59,9 @@ class ConfigService {
     return {
       secret: this.getValue('JWT_GENERATE_KEY'),
       signOptions: {
-        expireIn: `${this.getValue('JWT_GENERATE_KEY_EXPIRE', false)}` || '1d',
+        expiresIn: `${
+          this.getValue('JWT_GENERATE_KEY_EXPIRE', false) || '10d'
+        }`,
       },
     };
   }

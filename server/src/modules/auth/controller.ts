@@ -1,4 +1,5 @@
 import {
+  Body,
   Controller,
   HttpStatus,
   InternalServerErrorException,
@@ -11,6 +12,7 @@ import {
 import { ApiTags } from '@nestjs/swagger';
 import { FastifyReply } from 'fastify';
 import { Public } from './decorator';
+import { RegisterDto } from './dto';
 import { LocalAuthGuard } from './guards/local';
 import { ILoginRequest } from './interface';
 import { AuthService } from './service';
@@ -40,6 +42,24 @@ export class AuthController {
       this.logger.error(error);
 
       throw new InternalServerErrorException(error.message);
+    }
+  }
+
+  @Post('register')
+  @Public()
+  async register(
+    @Body() registerPayLoad: RegisterDto,
+    @Res() res: FastifyReply,
+  ): Promise<FastifyReply> {
+    try {
+      const { cookie, user } = await this.authService.register(registerPayLoad);
+
+      res.header('Set-Cookie', cookie);
+
+      return res.status(HttpStatus.OK).send({ user });
+    } catch (error) {
+      this.logger.error(error);
+      throw new InternalServerErrorException();
     }
   }
 }

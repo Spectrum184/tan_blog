@@ -9,11 +9,15 @@ import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import fastifyCookie from 'fastify-cookie';
 import { fastifyHelmet } from 'fastify-helmet';
 import { AllExceptionFilter } from './common/exceptions';
+import { ValidationPipe } from './common/validator';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(
     AppModule,
     new FastifyAdapter(),
+    // {
+    //   logger: false,
+    // },
   );
 
   const PORT = configService.getAppPort();
@@ -56,6 +60,9 @@ async function bootstrap() {
       },
     },
   });
+
+  //validation data type
+  app.useGlobalPipes(new ValidationPipe());
 
   // add exception filter for app
   app.useGlobalFilters(new AllExceptionFilter());

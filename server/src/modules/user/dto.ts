@@ -1,9 +1,22 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import { IsEmail, IsNotEmpty, MaxLength } from 'class-validator';
+import { Role } from '../role/entity';
+import { User } from './entity';
 import { IUser } from './interface';
 
 export class UserDto implements IUser {
+  constructor(user: User) {
+    this.username = user.username;
+    this.email = user.email;
+    this.avatar = user.avatar;
+    this.name = user.name;
+    this.about = user.about;
+    this.id = user.id;
+    this.createdAt = user.createdAt.toUTCString();
+    this.roles = user.roles;
+  }
+
   @ApiProperty({ description: 'This is username!', default: 'abc' })
   @IsNotEmpty({ message: 'Username is not empty!' })
   @MaxLength(50, { message: 'Username is too long!' })
@@ -32,6 +45,9 @@ export class UserDto implements IUser {
   readonly about: string;
 
   @ApiProperty({ description: 'This is created time' })
-  @Type(() => String)
-  readonly createdAt: string;
+  readonly createdAt?: string;
+
+  readonly id?: string;
+
+  readonly roles?: Role[];
 }

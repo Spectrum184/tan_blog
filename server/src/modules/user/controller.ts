@@ -27,8 +27,8 @@ export class UserController {
   async findAll(@Res() res: FastifyReply): Promise<FastifyReply> {
     try {
       const users = await this.userService.findAllUser();
-      if (users.length === 0)
-        return res.status(HttpStatus.NOT_FOUND).send({ users: null });
+
+      if (!users) return res.status(HttpStatus.NOT_FOUND).send({ users: null });
 
       return res.status(HttpStatus.OK).send({
         users,

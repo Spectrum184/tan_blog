@@ -10,9 +10,11 @@ import {
 } from '@nestjs/common';
 import { FastifyReply } from '@nestjs/platform-fastify/node_modules/fastify';
 import { ApiTags } from '@nestjs/swagger';
+import { Public, Roles } from '../auth/decorator';
 import { RoleDto } from './dto';
 import { RoleService } from './service';
 
+@Public()
 @ApiTags('role')
 @Controller('role')
 export class RoleController {
@@ -26,7 +28,7 @@ export class RoleController {
     try {
       const roles = await this.roleService.getRoles();
 
-      if (roles.length === 0)
+      if (!roles)
         return res.status(HttpStatus.NOT_FOUND).send({
           roles: null,
         });
@@ -40,6 +42,7 @@ export class RoleController {
     }
   }
 
+  @Roles('ADMIN')
   @Post()
   async create(
     @Body() roleDto: RoleDto,

@@ -5,7 +5,8 @@ import { configService } from 'src/config/config.service';
 import { Connection, Repository } from 'typeorm';
 import { Account } from '../account/entity';
 import { Role } from '../role/entity';
-import { User } from '../user/entity';
+import { UserDto } from '../user/dto';
+import { Admin, User } from '../user/entity';
 import { RegisterDto } from './dto';
 import { ITokenPayLoad } from './interface';
 import { checkPassword, hashPassword } from './utils';
@@ -15,7 +16,6 @@ export class AuthService {
   constructor(
     private readonly jwtService: JwtService,
     @InjectRepository(User) private readonly userRepository: Repository<User>,
-    @InjectRepository(Account)
     @InjectRepository(Role)
     private readonly roleRepository: Repository<Role>,
     private readonly connection: Connection,
@@ -25,7 +25,7 @@ export class AuthService {
     try {
       const user = await this.userRepository.findOne({
         where: [{ username: param }, { email: param }],
-        relations: ['account'],
+        relations: ['account', 'roles'],
       });
 
       if (user && (await checkPassword(password, user.account.password)))
@@ -37,28 +37,22 @@ export class AuthService {
     }
   }
 
-  async validateJwtUser({ userId }: ITokenPayLoad): Promise<any> {
+  async validateJwtUser({ userId }: ITokenPayLoad): Promise<User> {
     try {
       const user = await this.userRepository.findOne({
-        id: userId,
+        where: { id: userId },
+        relations: ['roles'],
       });
 
       if (!user) return null;
 
-      const { id, email, username, name } = user;
-
-      return {
-        id,
-        email,
-        username,
-        name,
-      };
+      return user;
     } catch (error) {
       throw error;
     }
   }
 
-  async login(user: User): Promise<{ user: User; cookie: string }> {
+  async login(user: UserDto): Promise<{ user: UserDto; cookie: string }> {
     const { id } = user;
 
     const cookie = await this.generateCookie(id);
@@ -77,7 +71,7 @@ export class AuthService {
       const hashedPassword = await hashPassword(password);
 
       const adminRole = await this.roleRepository.findOne({
-        where: { name: 'ADMIN' },
+        name: 'ADMIN',
       });
 
       await this.checkExistedUser({ username, email });
@@ -99,7 +93,12 @@ export class AuthService {
 
         const createdUser = await manager.save(newUser);
 
-        return this.login(createdUser);
+        const newAdmin = new Admin();
+        newAdmin.user = newUser;
+
+        await manager.save(newAdmin);
+
+        return this.login(new UserDto(createdUser));
       });
     } catch (error) {
       throw error;
@@ -108,12 +107,12 @@ export class AuthService {
 
   async generateCookie(userId: string): Promise<string> {
     const payload: ITokenPayLoad = { userId };
-    const token = this.jwtService.sign(payload);
-    const {
-      signOptions: { expireIn },
-    } = configService.getJwtConfig();
+    const { expiresIn } = configService.getJwtConfig().signOptions;
+    const token = this.jwtService.sign(payload, {
+      expiresIn,
+    });
 
-    return `Authentication=Bearer ${token}; HttpOnly; Path:/; Max-Age:${expireIn}; SameSite:None; Secure`;
+    return `Authentication=Bearer ${token}; HttpOnly; Path:/; Max-Age:${expiresIn}; SameSite:None; Secure`;
   }
 
   async generateEmptyCookie(): Promise<string> {
@@ -122,14 +121,14 @@ export class AuthService {
 
   async checkExistedUser({ username, email }): Promise<void> {
     try {
-      const existedEmail = this.userRepository.findOne({
-        where: { email },
+      const existedEmail = await this.userRepository.findOne({
+        email,
       });
 
       if (existedEmail) throw new Error('Email is existed!');
 
-      const existedUsername = this.userRepository.findOne({
-        where: { username },
+      const existedUsername = await this.userRepository.findOne({
+        username,
       });
 
       if (existedUsername) throw new Error('Username is existed!');

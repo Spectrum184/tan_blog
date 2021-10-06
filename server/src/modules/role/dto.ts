@@ -1,9 +1,16 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import { Matches } from 'class-validator';
+import { Role } from './entity';
 import { RoleEnum } from './enum';
 
 export class RoleDto {
+  constructor(role: Role) {
+    this.name = role.name;
+    this.createdBy = role.createdBy;
+    this.id = role.id;
+  }
+
   @ApiProperty()
   @Type(() => String)
   @Matches(
@@ -11,5 +18,9 @@ export class RoleDto {
       .filter((v) => typeof v !== 'number')
       .join('|')}$`,
   )
-  name: string;
+  readonly name: string;
+
+  readonly createdBy: string;
+
+  readonly id: string;
 }
