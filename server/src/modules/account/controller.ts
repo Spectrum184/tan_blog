@@ -34,7 +34,7 @@ export class AccountController {
       return res.status(HttpStatus.OK).send({ account });
     } catch (error) {
       this.logger.error(error);
-      throw new InternalServerErrorException(error.message);
+      throw new InternalServerErrorException(error);
     }
   }
 
@@ -56,7 +56,7 @@ export class AccountController {
       });
     } catch (error) {
       this.logger.error(error);
-      throw new InternalServerErrorException(error.message);
+      throw new InternalServerErrorException(error);
     }
   }
 }

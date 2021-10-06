@@ -19,6 +19,7 @@ import { AuthService } from './service';
 
 @ApiTags('auth')
 @Controller('auth')
+@Public()
 export class AuthController {
   constructor(
     private readonly authService: AuthService,
@@ -26,7 +27,6 @@ export class AuthController {
   ) {}
 
   @Post('login')
-  @Public()
   @UseGuards(LocalAuthGuard)
   async login(
     @Req() req: ILoginRequest,
@@ -41,12 +41,11 @@ export class AuthController {
     } catch (error) {
       this.logger.error(error);
 
-      throw new InternalServerErrorException(error.message);
+      throw new InternalServerErrorException(error);
     }
   }
 
   @Post('register')
-  @Public()
   async register(
     @Body() registerPayLoad: RegisterDto,
     @Res() res: FastifyReply,
@@ -59,7 +58,7 @@ export class AuthController {
       return res.status(HttpStatus.OK).send({ user });
     } catch (error) {
       this.logger.error(error);
-      throw new InternalServerErrorException();
+      throw new InternalServerErrorException(error);
     }
   }
 }

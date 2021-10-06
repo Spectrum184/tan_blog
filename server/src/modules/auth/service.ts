@@ -6,7 +6,7 @@ import { Connection, Repository } from 'typeorm';
 import { Account } from '../account/entity';
 import { Role } from '../role/entity';
 import { UserDto } from '../user/dto';
-import { Admin, User } from '../user/entity';
+import { User } from '../user/entity';
 import { RegisterDto } from './dto';
 import { ITokenPayLoad } from './interface';
 import { checkPassword, hashPassword } from './utils';
@@ -70,8 +70,8 @@ export class AuthService {
     try {
       const hashedPassword = await hashPassword(password);
 
-      const adminRole = await this.roleRepository.findOne({
-        name: 'ADMIN',
+      const userRole = await this.roleRepository.findOne({
+        name: 'USER',
       });
 
       await this.checkExistedUser({ username, email });
@@ -88,16 +88,14 @@ export class AuthService {
         newUser.email = email;
         newUser.name = name;
         newUser.about = about;
-        newUser.roles = [adminRole];
+        newUser.roles = [userRole];
         newUser.account = newAccount;
 
         const createdUser = await manager.save(newUser);
+        // const newAdmin = new Admin();
+        // newAdmin.user = newUser;
 
-        const newAdmin = new Admin();
-        newAdmin.user = newUser;
-
-        await manager.save(newAdmin);
-
+        // await manager.save(newAdmin);
         return this.login(new UserDto(createdUser));
       });
     } catch (error) {

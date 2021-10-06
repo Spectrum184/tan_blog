@@ -38,7 +38,7 @@ export class RoleController {
       });
     } catch (error) {
       this.logger.error(error);
-      throw new InternalServerErrorException(error.message);
+      throw new InternalServerErrorException(error);
     }
   }
 
@@ -61,7 +61,7 @@ export class RoleController {
       });
     } catch (error) {
       this.logger.error(error);
-      throw new InternalServerErrorException(error.message);
+      throw new InternalServerErrorException(error);
     }
   }
 }

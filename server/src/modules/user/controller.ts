@@ -35,7 +35,7 @@ export class UserController {
       });
     } catch (error) {
       this.logger.error(error);
-      throw new InternalServerErrorException(error.message);
+      throw new InternalServerErrorException(error);
     }
   }
 
@@ -57,7 +57,7 @@ export class UserController {
       });
     } catch (error) {
       this.logger.error(error);
-      throw new InternalServerErrorException(error.message);
+      throw new InternalServerErrorException(error);
     }
   }
 
@@ -80,7 +80,7 @@ export class UserController {
       });
     } catch (error) {
       this.logger.error(error);
-      throw new InternalServerErrorException(error.message);
+      throw new InternalServerErrorException(error);
     }
   }
 
@@ -102,7 +102,7 @@ export class UserController {
       });
     } catch (error) {
       this.logger.error(error);
-      throw new InternalServerErrorException(error.message);
+      throw new InternalServerErrorException(error);
     }
   }
 }

@@ -6,7 +6,7 @@ export class LoginDto {
   @ApiProperty()
   @Type(() => String)
   @IsNotEmpty({ message: 'Username or Email is not null!' })
-  readonly user: string;
+  readonly param: string;
 
   @ApiProperty()
   @Type(() => String)
