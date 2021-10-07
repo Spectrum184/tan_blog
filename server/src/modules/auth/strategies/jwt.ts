@@ -9,7 +9,9 @@ import { AuthService } from '../service';
 export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor(private readonly authService: AuthService) {
     super({
-      jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
+      jwtFromRequest: ExtractJwt.fromExtractors([
+        (request) => request.cookies.jwtToken,
+      ]),
       ignoreExpiration: false,
       secretOrKey: configService.getJwtConfig().secret,
     });

@@ -52,12 +52,12 @@ export class AuthService {
     }
   }
 
-  async login(user: UserDto): Promise<{ user: UserDto; cookie: string }> {
+  async login(user: UserDto): Promise<{ user: UserDto; token: string }> {
     const { id } = user;
 
-    const cookie = await this.generateCookie(id);
+    const token = await this.generateJwtToken(id);
 
-    return { user, cookie };
+    return { user, token };
   }
 
   async register({
@@ -66,7 +66,7 @@ export class AuthService {
     name,
     about,
     password,
-  }: RegisterDto): Promise<any> {
+  }: RegisterDto): Promise<{ user: UserDto; token: string }> {
     try {
       const hashedPassword = await hashPassword(password);
 
@@ -76,7 +76,7 @@ export class AuthService {
 
       await this.checkExistedUser({ username, email });
 
-      await this.connection.transaction(async (manager) => {
+      return await this.connection.transaction(async (manager) => {
         const newAccount = new Account();
         newAccount.password = hashedPassword;
 
@@ -92,29 +92,24 @@ export class AuthService {
         newUser.account = newAccount;
 
         const createdUser = await manager.save(newUser);
-        // const newAdmin = new Admin();
-        // newAdmin.user = newUser;
 
-        // await manager.save(newAdmin);
-        return this.login(new UserDto(createdUser));
+        const token = await this.generateJwtToken(createdUser.id);
+
+        return { user: new UserDto(createdUser), token };
       });
     } catch (error) {
       throw error;
     }
   }
 
-  async generateCookie(userId: string): Promise<string> {
+  async generateJwtToken(userId: string): Promise<string> {
     const payload: ITokenPayLoad = { userId };
     const { expiresIn } = configService.getJwtConfig().signOptions;
     const token = this.jwtService.sign(payload, {
       expiresIn,
     });
 
-    return `Authentication=Bearer ${token}; HttpOnly; Path:/; Max-Age:${expiresIn}; SameSite:None; Secure`;
-  }
-
-  async generateEmptyCookie(): Promise<string> {
-    return `Authentication=; HttpOnly; Path:/; Max-Age:0; SameSite:None; Secure`;
+    return token;
   }
 
   async checkExistedUser({ username, email }): Promise<void> {

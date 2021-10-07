@@ -7,6 +7,7 @@ import { configService } from 'src/config/config.service';
 import { AccountModule } from '../account';
 import { Account } from '../account/entity';
 import { Role } from '../role/entity';
+import { UserModule } from '../user';
 import { User } from '../user/entity';
 import { AuthController } from './controller';
 import { RoleGuard } from './guards/role';
@@ -19,6 +20,7 @@ import { LocalStrategy } from './strategies/local';
     TypeOrmModule.forFeature([User, Role, Account]),
     AccountModule,
     PassportModule,
+    UserModule,
     JwtModule.register(configService.getJwtConfig()),
   ],
   controllers: [AuthController],

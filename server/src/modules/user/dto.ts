@@ -1,7 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import { IsEmail, IsNotEmpty, MaxLength } from 'class-validator';
-import { Role } from '../role/entity';
+import { RoleDto } from '../role/dto';
 import { User } from './entity';
 import { IUser } from './interface';
 
@@ -14,7 +14,7 @@ export class UserDto implements IUser {
     this.about = user.about;
     this.id = user.id;
     this.createdAt = user.createdAt.toUTCString();
-    this.roles = user.roles;
+    this.roles = user.roles.map((role) => new RoleDto(role));
   }
 
   @ApiProperty({ description: 'This is username!', default: 'abc' })
@@ -49,5 +49,5 @@ export class UserDto implements IUser {
 
   readonly id?: string;
 
-  readonly roles?: Role[];
+  readonly roles?: RoleDto[];
 }

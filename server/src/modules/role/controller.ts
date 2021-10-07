@@ -10,11 +10,10 @@ import {
 } from '@nestjs/common';
 import { FastifyReply } from '@nestjs/platform-fastify/node_modules/fastify';
 import { ApiTags } from '@nestjs/swagger';
-import { Public, Roles } from '../auth/decorator';
+import { Roles } from '../auth/decorator';
 import { RoleDto } from './dto';
 import { RoleService } from './service';
 
-@Public()
 @ApiTags('role')
 @Controller('role')
 export class RoleController {
