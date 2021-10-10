@@ -12,6 +12,7 @@ import { FastifyReply } from '@nestjs/platform-fastify/node_modules/fastify';
 import { ApiTags } from '@nestjs/swagger';
 import { Roles } from '../auth/decorator';
 import { RoleDto } from './dto';
+import { RoleEnum } from './enum';
 import { RoleService } from './service';
 
 @ApiTags('role')
@@ -22,6 +23,7 @@ export class RoleController {
     private readonly logger: Logger,
   ) {}
 
+  @Roles(RoleEnum.Admin)
   @Get()
   async findAll(@Res() res: FastifyReply): Promise<FastifyReply> {
     try {
@@ -41,7 +43,7 @@ export class RoleController {
     }
   }
 
-  @Roles('ADMIN')
+  @Roles(RoleEnum.Admin)
   @Post()
   async create(
     @Body() roleDto: RoleDto,

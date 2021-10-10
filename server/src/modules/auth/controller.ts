@@ -12,9 +12,9 @@ import {
 import { ApiTags } from '@nestjs/swagger';
 import { FastifyReply } from 'fastify';
 import { Public } from './decorator';
-import { RegisterDto } from './dto';
 import { LocalAuthGuard } from './guards/local';
 import { ILoginRequest } from './interface';
+import { RegisterPayload } from './payload';
 import { AuthService } from './service';
 
 @ApiTags('auth')
@@ -52,7 +52,7 @@ export class AuthController {
   @Public()
   @Post('register')
   async register(
-    @Body() registerPayLoad: RegisterDto,
+    @Body() registerPayLoad: RegisterPayload,
     @Res() res: FastifyReply,
   ): Promise<FastifyReply> {
     try {
@@ -88,7 +88,7 @@ export class AuthController {
 
   @Post('refresh-token')
   async generateRefresh(
-    @Req() req,
+    @Req() req: ILoginRequest,
     @Res() res: FastifyReply,
   ): Promise<FastifyReply> {
     try {

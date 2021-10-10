@@ -8,14 +8,17 @@ import {
   Logger,
   Param,
   Put,
+  Req,
   Res,
 } from '@nestjs/common';
-import { FastifyReply } from '@nestjs/platform-fastify/node_modules/fastify';
 import { ApiTags } from '@nestjs/swagger';
-import { UserDto } from './dto';
+import { FastifyReply } from 'fastify';
+import { Public } from '../auth/decorator';
+import { ILoginRequest } from '../auth/interface';
+import { UserPayload } from './payload';
 import { UserService } from './service';
 
-@ApiTags('users')
+@ApiTags('user')
 @Controller('user')
 export class UserController {
   constructor(
@@ -39,6 +42,7 @@ export class UserController {
     }
   }
 
+  @Public()
   @Get(':id')
   async findOne(
     @Param('id') id: string,
@@ -64,7 +68,7 @@ export class UserController {
   @Put(':id')
   async update(
     @Param('id') id: string,
-    @Body() userDto: UserDto,
+    @Body() userDto: UserPayload,
     @Res() res: FastifyReply,
   ): Promise<FastifyReply> {
     try {
@@ -87,10 +91,11 @@ export class UserController {
   @Delete()
   async delete(
     @Param('id') id: string,
+    @Req() req: ILoginRequest,
     @Res() res: FastifyReply,
   ): Promise<FastifyReply> {
     try {
-      const isDeleted = await this.userService.deleteUser(id);
+      const isDeleted = await this.userService.deleteUser(id, req.user);
 
       if (!isDeleted)
         return res.status(HttpStatus.NOT_MODIFIED).send({

@@ -5,10 +5,12 @@ import {
   JoinColumn,
   JoinTable,
   ManyToMany,
+  OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Account } from '../account/entity';
+import { Post } from '../post/entity';
 import { Role } from '../role/entity';
 import { IAdmin, IMod, IUser } from './interface';
 
@@ -74,6 +76,21 @@ class User extends BaseEntity implements IUser {
   })
   @JoinColumn()
   account: Account;
+
+  @OneToMany(() => Post, (post) => post.author, {
+    onUpdate: 'CASCADE',
+    onDelete: 'CASCADE',
+    cascade: true,
+  })
+  posts: Post[];
+
+  @ManyToMany(() => Post, (post) => post.likedUsers, {
+    onUpdate: 'CASCADE',
+    onDelete: 'CASCADE',
+    cascade: true,
+  })
+  @JoinTable()
+  likedPosts: Post[];
 }
 
 export { User, Admin, Mod };

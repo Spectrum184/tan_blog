@@ -11,7 +11,7 @@ export class RoleDto {
     this.id = role.id;
   }
 
-  @ApiProperty()
+  @ApiProperty({ description: 'This is role name', default: 'ADMIM' })
   @Type(() => String)
   @Matches(
     `^${Object.values(RoleEnum)

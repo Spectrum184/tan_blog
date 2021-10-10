@@ -12,8 +12,8 @@ import { FastifyReply } from '@nestjs/platform-fastify/node_modules/fastify';
 import { ApiTags } from '@nestjs/swagger';
 import { AccountService } from './service';
 
-@ApiTags('accounts')
-@Controller('accounts')
+@ApiTags('account')
+@Controller('account')
 export class AccountController {
   constructor(
     private readonly accountService: AccountService,

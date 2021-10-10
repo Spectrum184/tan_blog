@@ -1,14 +1,15 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, InternalServerErrorException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { configService } from 'src/config/config.service';
 import { Connection, Repository } from 'typeorm';
 import { Account } from '../account/entity';
 import { Role } from '../role/entity';
+import { RoleEnum } from '../role/enum';
 import { UserDto } from '../user/dto';
 import { User } from '../user/entity';
-import { RegisterDto } from './dto';
 import { ITokenPayLoad } from './interface';
+import { RegisterPayload } from './payload';
 import { checkPassword, hashPassword } from './utils';
 
 @Injectable()
@@ -27,6 +28,9 @@ export class AuthService {
         where: [{ username: param }, { email: param }],
         relations: ['account', 'roles'],
       });
+
+      if (user && !user.account.isActivated)
+        throw new InternalServerErrorException('Your account got banned!');
 
       if (user && (await checkPassword(password, user.account.password)))
         return user;
@@ -66,12 +70,12 @@ export class AuthService {
     name,
     about,
     password,
-  }: RegisterDto): Promise<{ user: UserDto; token: string }> {
+  }: RegisterPayload): Promise<{ user: UserDto; token: string }> {
     try {
       const hashedPassword = await hashPassword(password);
 
       const userRole = await this.roleRepository.findOne({
-        name: 'USER',
+        name: RoleEnum.User,
       });
 
       await this.checkExistedUser({ username, email });
