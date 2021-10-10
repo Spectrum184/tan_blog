@@ -11,8 +11,8 @@ import {
 import { FastifyReply } from '@nestjs/platform-fastify/node_modules/fastify';
 import { ApiTags } from '@nestjs/swagger';
 import { Roles } from '../auth/decorator';
-import { RoleDto } from './dto';
 import { RoleEnum } from './enum';
+import { RolePayload } from './payload';
 import { RoleService } from './service';
 
 @ApiTags('role')
@@ -46,11 +46,11 @@ export class RoleController {
   @Roles(RoleEnum.Admin)
   @Post()
   async create(
-    @Body() roleDto: RoleDto,
+    @Body() rolePayload: RolePayload,
     @Res() res: FastifyReply,
   ): Promise<FastifyReply> {
     try {
-      const role = await this.roleService.createRole(roleDto);
+      const role = await this.roleService.createRole(rolePayload);
 
       if (!role)
         return res.status(HttpStatus.NOT_MODIFIED).send({

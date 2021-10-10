@@ -1,9 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { AccountUpdateDto, IAcountDto } from './dto';
+import { IAcountDto } from './dto';
 import { Account } from './entity';
 import { mapAccountToAccountDto } from './mapper';
+import { AccountUpdatePayload } from './payload';
 
 @Injectable()
 export class AccountService {
@@ -34,7 +35,10 @@ export class AccountService {
     }
   }
 
-  async update(id: string, updateData: AccountUpdateDto): Promise<IAcountDto> {
+  async update(
+    id: string,
+    updateData: AccountUpdatePayload,
+  ): Promise<IAcountDto> {
     try {
       const updatedAccount = await this.accountRepository.save({
         id,

@@ -2,6 +2,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { RoleDto } from './dto';
 import { Role } from './entity';
+import { RolePayload } from './payload';
 
 export class RoleService {
   constructor(
@@ -21,10 +22,10 @@ export class RoleService {
     }
   }
 
-  async createRole(roleDto: RoleDto): Promise<RoleDto> {
+  async createRole(rolePayload: RolePayload): Promise<RoleDto> {
     try {
       const role = new Role();
-      role.name = roleDto.name;
+      role.name = rolePayload.name;
       role.createdBy = 'admin';
 
       return await this.roleRepository.save(role);
