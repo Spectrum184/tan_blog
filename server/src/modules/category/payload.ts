@@ -11,4 +11,9 @@ export class CategoryPayload {
   @ApiProperty({ description: 'This is description!', default: 'abc' })
   @Type(() => String)
   description: string;
+
+  @ApiProperty({ description: 'This is link thumbnail!', default: 'abc.jpg' })
+  @Type(() => String)
+  @IsNotEmpty({ message: 'Thumbnail is not null' })
+  thumbnail: string;
 }

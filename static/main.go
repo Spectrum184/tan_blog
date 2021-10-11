@@ -17,7 +17,7 @@ func main() {
 	}))
 
 	app.Get("/", func(c *fiber.Ctx) error {
-		return c.SendString("Hello, World!")
+		return c.SendString("Static server is ready!")
 	})
 
 	routes.Setup(app)
@@ -27,7 +27,7 @@ func main() {
 		Compress:      true,
 		ByteRange:     true,
 		Browse:        true,
-		CacheDuration: 10 * time.Second,
+		CacheDuration: 20 * time.Second,
 		MaxAge:        3600,
 	})
 

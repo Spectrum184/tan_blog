@@ -32,5 +32,5 @@ export class Category extends BaseEntity implements ICategory {
     onDelete: 'CASCADE',
     cascade: true,
   })
-  posts: Post[];
+  posts?: Post[];
 }
