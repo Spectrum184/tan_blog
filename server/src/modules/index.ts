@@ -7,6 +7,7 @@ import { AccountModule } from './account';
 import { AuthModule } from './auth';
 import { JwtAuthGuard } from './auth/guards/jwt';
 import { RoleModule } from './role';
+import { TagModule } from './tag';
 import { UserModule } from './user';
 
 @Module({
@@ -16,6 +17,7 @@ import { UserModule } from './user';
     RoleModule,
     AccountModule,
     AuthModule,
+    TagModule,
     ConfigModule.forRoot(),
   ],
   providers: [

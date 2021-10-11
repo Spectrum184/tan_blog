@@ -1,3 +1,9 @@
+import { Tag } from './entity';
+
 export class TagDto {
-  readonly name: string;
+  constructor(tags: Tag[]) {
+    this.tags = tags.map((tag) => tag.name);
+  }
+
+  readonly tags: string[];
 }
