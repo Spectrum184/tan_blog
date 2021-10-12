@@ -88,7 +88,7 @@ export class UserController {
     }
   }
 
-  @Delete()
+  @Delete(':id')
   async delete(
     @Param('id') id: string,
     @Req() req: ILoginRequest,

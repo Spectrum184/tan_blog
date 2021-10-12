@@ -6,6 +6,7 @@ import { configService } from 'src/config/config.service';
 import { AccountModule } from './account';
 import { AuthModule } from './auth';
 import { JwtAuthGuard } from './auth/guards/jwt';
+import { CategoryModule } from './category';
 import { RoleModule } from './role';
 import { TagModule } from './tag';
 import { UserModule } from './user';
@@ -18,6 +19,7 @@ import { UserModule } from './user';
     AccountModule,
     AuthModule,
     TagModule,
+    CategoryModule,
     ConfigModule.forRoot(),
   ],
   providers: [
