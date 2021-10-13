@@ -10,7 +10,7 @@ export class TagService {
     @InjectRepository(Tag) private readonly tagRepository: Repository<Tag>,
   ) {}
 
-  async createTags(name: string): Promise<string[]> {
+  async generateTags(name: string): Promise<string[]> {
     try {
       const arrTag: string[] = [];
       const tags = name.split(',');
@@ -20,6 +20,34 @@ export class TagService {
         .subscribe((tag) => arrTag.push(tag.toLowerCase()));
 
       return arrTag;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async createTags(username: string, tag: string): Promise<Tag[]> {
+    try {
+      const arrTag = await this.generateTags(tag);
+
+      const newArrTag = await Promise.all(
+        arrTag.map(async (name: string) => {
+          const tag = await this.tagRepository.findOne({
+            name,
+          });
+
+          if (tag) return tag;
+
+          const newTag = new Tag();
+          newTag.name = name;
+          newTag.createdBy = username;
+
+          const saveTag = await this.tagRepository.save(newTag);
+
+          return saveTag;
+        }),
+      );
+
+      return newArrTag;
     } catch (error) {
       throw error;
     }

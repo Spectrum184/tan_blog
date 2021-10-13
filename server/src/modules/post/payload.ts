@@ -9,24 +9,31 @@ export class PostPayload {
   })
   @Type(() => String)
   @IsNotEmpty({ message: 'Title is not null' })
-  title: string;
+  readonly title: string;
 
   @ApiProperty({ description: 'This is post title', default: 'ok baby' })
   @Type(() => String)
   @IsNotEmpty({ message: 'Content is not null' })
-  content: string;
+  readonly content: string;
+
+  @ApiProperty({
+    description: 'This is post thumbnail',
+    default: 'thumbnail.jpg',
+  })
+  @Type(() => String)
+  readonly thumbnail: string;
 
   @ApiProperty({ description: 'This is post status', default: true })
   @Type(() => Boolean)
-  status: boolean;
+  readonly status: boolean;
 
   @ApiProperty({ description: 'This is post title', default: 'ok baby' })
   @Type(() => String)
   @IsNotEmpty({ message: 'Content is not null' })
-  categoryName: string;
+  readonly categoryId: string;
 
   @ApiProperty({ description: 'This is post title', default: 'ok baby' })
   @Type(() => String)
   @IsNotEmpty({ message: 'Content is not null' })
-  tag: string;
+  readonly tag: string;
 }
