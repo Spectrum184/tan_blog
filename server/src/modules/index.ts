@@ -7,6 +7,7 @@ import { AccountModule } from './account';
 import { AuthModule } from './auth';
 import { JwtAuthGuard } from './auth/guards/jwt';
 import { CategoryModule } from './category';
+import { PostModule } from './post';
 import { RoleModule } from './role';
 import { TagModule } from './tag';
 import { UserModule } from './user';
@@ -20,6 +21,7 @@ import { UserModule } from './user';
     AuthModule,
     TagModule,
     CategoryModule,
+    PostModule,
     ConfigModule.forRoot(),
   ],
   providers: [

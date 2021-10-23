@@ -10,16 +10,18 @@ import {
 } from '@nestjs/common';
 import { FastifyReply } from '@nestjs/platform-fastify/node_modules/fastify';
 import { ApiTags } from '@nestjs/swagger';
+import { Public } from '../auth/decorator';
 import { AccountService } from './service';
 
-@ApiTags('account')
-@Controller('account')
+@ApiTags('accounts')
+@Controller('accounts')
 export class AccountController {
   constructor(
     private readonly accountService: AccountService,
     private readonly logger: Logger,
   ) {}
 
+  @Public()
   @Get(':id')
   async findById(
     @Param('id') id: string,

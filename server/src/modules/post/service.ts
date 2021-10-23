@@ -9,6 +9,8 @@ import { Post } from './entity';
 import { PostPayload } from './payload';
 import slugify from 'slugify';
 import { User } from '../user/entity';
+import { PaginationQueryDto } from 'src/common/pagination';
+import { IResultPagination } from 'src/common/interface';
 
 @Injectable()
 export class PostService {
@@ -69,5 +71,46 @@ export class PostService {
     if (post) throw new Error('This category is existed!');
 
     return slug;
+  }
+
+  async findPosts({
+    page,
+    param,
+    perPage,
+    sort,
+  }: PaginationQueryDto): Promise<IResultPagination<PostDto>> {
+    try {
+      const limit = perPage || 9;
+      const builder = await this.postRepository
+        .createQueryBuilder('posts')
+        .where('posts.title LIKE :param', { param: `%${param || ''}%` });
+
+      if (sort) builder.orderBy('posts.createdAt', sort);
+
+      const total = await builder.getCount();
+
+      builder.offset((page - 1) * limit).limit(limit);
+
+      const posts = await builder.getMany();
+
+      if (posts.length === 0)
+        return {
+          data: [],
+          total: 0,
+          page,
+          lastPage: Math.ceil(total / limit),
+        };
+
+      const newPosts = posts.map((post) => new PostDto(post));
+
+      return {
+        data: newPosts,
+        total,
+        page,
+        lastPage: Math.ceil(total / limit),
+      };
+    } catch (error) {
+      throw error;
+    }
   }
 }

@@ -18,14 +18,15 @@ import { ILoginRequest } from '../auth/interface';
 import { UserPayload } from './payload';
 import { UserService } from './service';
 
-@ApiTags('user')
-@Controller('user')
+@ApiTags('users')
+@Controller('users')
 export class UserController {
   constructor(
     private readonly userService: UserService,
     private readonly logger: Logger,
   ) {}
 
+  @Public()
   @Get()
   async findAll(@Res() res: FastifyReply): Promise<FastifyReply> {
     try {
@@ -68,11 +69,11 @@ export class UserController {
   @Put(':id')
   async update(
     @Param('id') id: string,
-    @Body() userDto: UserPayload,
+    @Body() userPayload: UserPayload,
     @Res() res: FastifyReply,
   ): Promise<FastifyReply> {
     try {
-      const user = await this.userService.updateUser(id, userDto);
+      const user = await this.userService.updateUser(id, userPayload);
 
       if (!user)
         return res.status(HttpStatus.NOT_MODIFIED).send({

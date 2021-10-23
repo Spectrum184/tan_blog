@@ -86,6 +86,7 @@ export class AuthController {
     }
   }
 
+  @Public()
   @Post('refresh-token')
   async generateRefresh(
     @Req() req: ILoginRequest,

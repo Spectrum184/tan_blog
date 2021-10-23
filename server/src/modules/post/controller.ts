@@ -1,0 +1,66 @@
+import {
+  Body,
+  Controller,
+  Get,
+  HttpStatus,
+  InternalServerErrorException,
+  Logger,
+  Post,
+  Query,
+  Req,
+  Res,
+} from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
+import { FastifyReply } from 'fastify';
+import { PaginationQueryDto } from 'src/common/pagination';
+import { Public, Roles } from '../auth/decorator';
+import { ILoginRequest } from '../auth/interface';
+import { RoleEnum } from '../role/enum';
+import { PostPayload } from './payload';
+import { PostService } from './service';
+
+@ApiTags('posts')
+@Controller('posts')
+export class PostController {
+  constructor(
+    private readonly postService: PostService,
+    private readonly logger: Logger,
+  ) {}
+
+  @Roles(RoleEnum.Admin, RoleEnum.Mod)
+  @Post()
+  async create(
+    @Body() postPayload: PostPayload,
+    @Req() req: ILoginRequest,
+    @Res() res: FastifyReply,
+  ): Promise<FastifyReply> {
+    try {
+      const posts = await this.postService.createPost(postPayload, req.user);
+
+      return res.status(HttpStatus.OK).send({
+        posts,
+      });
+    } catch (error) {
+      this.logger.error(error);
+
+      throw new InternalServerErrorException(error);
+    }
+  }
+
+  @Public()
+  @Get()
+  async get(
+    @Query() query: PaginationQueryDto,
+    @Res() res: FastifyReply,
+  ): Promise<FastifyReply> {
+    try {
+      const result = await this.postService.findPosts(query);
+
+      return res.status(HttpStatus.OK).send({ ...result });
+    } catch (error) {
+      this.logger.error(error);
+
+      throw new InternalServerErrorException(error);
+    }
+  }
+}

@@ -15,8 +15,8 @@ import { RoleEnum } from './enum';
 import { RolePayload } from './payload';
 import { RoleService } from './service';
 
-@ApiTags('role')
-@Controller('role')
+@ApiTags('roles')
+@Controller('roles')
 export class RoleController {
   constructor(
     private readonly roleService: RoleService,
