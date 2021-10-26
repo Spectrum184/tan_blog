@@ -41,7 +41,7 @@ export class AuthController {
         maxAge: 10 * 24 * 60 * 60 * 1000, // 10 days
       });
 
-      return res.status(HttpStatus.OK).send({ user, jwtToken: token });
+      return res.status(HttpStatus.OK).send({ ...user, jwtToken: token });
     } catch (error) {
       this.logger.error(error);
 
@@ -64,7 +64,7 @@ export class AuthController {
         maxAge: 10 * 24 * 60 * 60 * 1000, // 10 days
       });
 
-      return res.status(HttpStatus.OK).send({ user, jwtToken: token });
+      return res.status(HttpStatus.OK).send({ ...user, jwtToken: token });
     } catch (error) {
       this.logger.error(error);
       throw new InternalServerErrorException(error);
@@ -104,7 +104,7 @@ export class AuthController {
         sameSite: 'none',
       });
 
-      return res.status(HttpStatus.OK).send({ user, jwtToken: token });
+      return res.status(HttpStatus.OK).send({ ...user, jwtToken: token });
     } catch (error) {
       this.logger.error(error);
       throw new InternalServerErrorException(error);
