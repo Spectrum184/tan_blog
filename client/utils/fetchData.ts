@@ -9,7 +9,7 @@ export const postDataAPI = async (
   token?: string
 ) => {
   const res = await axios.post(`${SERVER_URL}/${url}`, data, {
-    headers: { Cookie: `jwtToken=${token}` },
+    headers: { Authorization: `${token}` },
   });
 
   return res;
@@ -17,7 +17,7 @@ export const postDataAPI = async (
 
 export const getDataAPI = async (url: string, token?: string) => {
   const res = await axios.get(`${SERVER_URL}/${url}`, {
-    headers: { Cookie: `jwtToken=${token}` },
+    headers: { Authorization: `${token}` },
   });
 
   return res;
@@ -29,7 +29,7 @@ export const patchDataAPI = async (
   token?: string
 ) => {
   const res = await axios.patch(`${SERVER_URL}/${url}`, data, {
-    headers: { Cookie: `jwtToken=${token}` },
+    headers: { Authorization: `${token}` },
   });
 
   return res;
@@ -37,7 +37,7 @@ export const patchDataAPI = async (
 
 export const putDataAPI = async (url: string, data: object, token?: string) => {
   const res = await axios.put(`${SERVER_URL}/${url}`, data, {
-    headers: { Cookie: `jwtToken=${token}` },
+    headers: { Authorization: `${token}` },
   });
 
   return res;
@@ -45,7 +45,7 @@ export const putDataAPI = async (url: string, data: object, token?: string) => {
 
 export const deleteDataAPI = async (url: string, token?: string) => {
   const res = await axios.delete(`${SERVER_URL}/${url}`, {
-    headers: { Cookie: `jwtToken=${token}` },
+    headers: { Authorization: `${token}` },
   });
 
   return res;

@@ -1,19 +1,32 @@
 import Head from "next/head";
-import { NextPage } from "next";
-import { ChangeEvent, SyntheticEvent, useState } from "react";
-import { ILogin } from "../interface/auth";
+import Link from "next/link";
+import useUser from "../hooks/globalHooks";
+import Router from "next/router";
 
-const initialState: ILogin = {
-  username: "",
-  password: "",
-};
+import { NextPage } from "next";
+import { ChangeEvent, SyntheticEvent, useState, useEffect } from "react";
+import { ILogin } from "../interface/auth";
+import { postDataAPI } from "../utils/fetchData";
 
 const Login: NextPage = () => {
+  const initialState: ILogin = {
+    username: "",
+    password: "",
+  };
   const [userData, setUserData] = useState(initialState);
   const { username, password } = userData;
+  const { user, loggedOut, mutate } = useUser();
 
-  const onSubmit = (e: SyntheticEvent) => {
+  useEffect(() => {
+    if (user && !loggedOut) Router.replace("/");
+  }, [user, loggedOut]);
+
+  const onSubmit = async (e: SyntheticEvent) => {
     e.preventDefault();
+
+    await postDataAPI("auth/login", userData);
+
+    mutate();
   };
 
   const handleChangeInput = (e: ChangeEvent<HTMLInputElement>) => {
@@ -28,7 +41,7 @@ const Login: NextPage = () => {
       </Head>
       <div className="bg-white min-h-1/4 p-10 shadow-lg border-green-700 flex justify-center items-center rounded-md">
         <div>
-          <form>
+          <form action="POST" onSubmit={onSubmit}>
             <div className="text-center">
               <span className="text-sm text-gray-900">Welcome back</span>
               <h1 className="text-2xl font-bold">Login to your account</h1>
@@ -86,9 +99,13 @@ const Login: NextPage = () => {
           </form>
           <p className="mt-8">
             Dont have an account?
-            <span className="cursor-pointer text-sm text-blue-600">
-              Join free today
-            </span>
+            <Link href="/register">
+              <a>
+                <span className="cursor-pointer text-sm text-blue-600">
+                  Join free today
+                </span>
+              </a>
+            </Link>
           </p>
         </div>
       </div>
