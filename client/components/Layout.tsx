@@ -1,5 +1,10 @@
-import { ReactNode, FC } from "react";
 import Head from "next/head";
+import Navbar from "./Navbar";
+import Footer from "./Footer";
+
+import { ReactNode, FC, useEffect } from "react";
+import { useAppDispatch } from "../redux/store";
+import { refresh } from "../redux/userStore";
 
 type PropTypes = {
   children?: ReactNode;
@@ -7,14 +12,22 @@ type PropTypes = {
 };
 
 const Layout: FC<PropTypes> = ({ children, title = "Blogs | Thanh TK" }) => {
+  const dispatch = useAppDispatch();
+
+  useEffect(() => {
+    dispatch(refresh());
+  }, [dispatch]);
+
   return (
-    <div className="container">
+    <div>
       <Head>
         <title>{title}</title>
-        <meta charSet="utf-8" />
+        <meta lang="en" charSet="utf-8" />
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
-      {children}
+      <Navbar />
+      <div className="container mx-auto">{children}</div>
+      <Footer />
     </div>
   );
 };

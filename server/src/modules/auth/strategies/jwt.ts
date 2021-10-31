@@ -25,7 +25,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   async validate(payload: ITokenPayLoad): Promise<UserDto> {
     const user = await this.authService.validateJwtUser(payload);
 
-    if (!user) throw new UnauthorizedException();
+    if (!user) throw new UnauthorizedException('Tài khoản này không tồn tại!');
 
     return new UserDto(user);
   }

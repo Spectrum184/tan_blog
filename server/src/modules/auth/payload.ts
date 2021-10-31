@@ -33,11 +33,6 @@ export class RegisterPayload {
   @IsNotEmpty({ message: 'Name is not empty!' })
   readonly name: string;
 
-  @ApiProperty({ description: 'This is about!', default: 'Thanh Pro' })
-  @Type(() => String)
-  @MaxLength(500, { message: 'About is too long !' })
-  readonly about: string;
-
   @ApiProperty({ description: 'This is password!', default: 'avvac' })
   @Type(() => String)
   @MinLength(4, { message: 'Password is too short!' })

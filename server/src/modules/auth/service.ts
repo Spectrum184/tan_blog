@@ -30,7 +30,7 @@ export class AuthService {
       });
 
       if (user && !user.account.isActivated)
-        throw new InternalServerErrorException('Your account got banned!');
+        throw new InternalServerErrorException('Tài khoản của bạn đã bị khoá!');
 
       if (user && (await checkPassword(password, user.account.password)))
         return user;
@@ -68,7 +68,6 @@ export class AuthService {
     username,
     email,
     name,
-    about,
     password,
   }: RegisterPayload): Promise<{ user: UserDto; token: string }> {
     try {
@@ -91,7 +90,6 @@ export class AuthService {
         newUser.username = username;
         newUser.email = email;
         newUser.name = name;
-        newUser.about = about;
         newUser.roles = [userRole];
         newUser.account = newAccount;
 
@@ -122,13 +120,13 @@ export class AuthService {
         email,
       });
 
-      if (existedEmail) throw new Error('Email is existed!');
+      if (existedEmail) throw new Error('Email đã tồn tại!');
 
       const existedUsername = await this.userRepository.findOne({
         username,
       });
 
-      if (existedUsername) throw new Error('Username is existed!');
+      if (existedUsername) throw new Error('Tên đăng nhập đã tồn tại!');
     } catch (error) {
       throw error;
     }

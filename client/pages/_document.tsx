@@ -16,7 +16,7 @@ class MyDocument extends Document {
     return (
       <Html>
         <Head>
-          <meta name="description" content="Thanh TK blog with Nextjs" />
+          <meta name="description" content="Thanh TK blog sử dụng Nextjs" />
           <link rel="icon" href="/favicon.ico" />
         </Head>
         <body>

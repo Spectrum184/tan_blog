@@ -1,8 +1,7 @@
 import { IUser } from "../interface/user";
 import { createSlice, PayloadAction, Dispatch } from "@reduxjs/toolkit";
-import { ILogin } from "../interface/auth";
+import { ILogin, IRegister } from "../interface/auth";
 import { postDataAPI } from "../utils/fetchData";
-import { AxiosError } from "axios";
 
 const initialState: IUser = {
   username: "",
@@ -34,8 +33,13 @@ export const login = (payload: ILogin) => async (dispatch: Dispatch) => {
     const res = await postDataAPI("auth/login", payload);
 
     dispatch(setUserState(res.data));
+
+    localStorage.setItem("logged", "true");
+
+    if (typeof window !== "undefined") window.location.href = "/";
   } catch (error: any) {
     console.log(error.response);
+    localStorage.clear();
   }
 };
 
@@ -44,6 +48,33 @@ export const refresh = () => async (dispatch: Dispatch) => {
     const res = await postDataAPI("auth/refresh-token", {});
 
     dispatch(setUserState(res.data));
+
+    localStorage.setItem("logged", "true");
+  } catch (error: any) {
+    console.log(error.response);
+    localStorage.clear();
+  }
+};
+
+export const register = (payload: IRegister) => async (dispatch: Dispatch) => {
+  try {
+    const res = await postDataAPI("auth/register", payload);
+
+    dispatch(setUserState(res.data));
+    localStorage.setItem("logged", "true");
+
+    if (typeof window !== "undefined") window.location.href = "/";
+  } catch (error: any) {
+    console.log(error.response);
+    localStorage.clear();
+  }
+};
+
+export const logout = () => async (dispatch: Dispatch) => {
+  try {
+    localStorage.clear();
+    await postDataAPI("auth/logout", {});
+    if (typeof window !== "undefined") window.location.href = "/";
   } catch (error: any) {
     console.log(error.response);
   }
