@@ -14,6 +14,22 @@ export class CategoryService {
     private readonly categoryRepository: Repository<Category>,
   ) {}
 
+  async findAllCategories(): Promise<CategoryDto[]> {
+    try {
+      const categories = await this.categoryRepository.find();
+
+      if (categories.length === 0) return [];
+
+      const arrCategories = categories.map(
+        (category) => new CategoryDto(category),
+      );
+
+      return arrCategories;
+    } catch (error) {
+      throw error;
+    }
+  }
+
   async createdCategory(
     categoryPayload: CategoryPayload,
     user: UserDto,

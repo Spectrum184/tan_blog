@@ -1,10 +1,10 @@
 import Head from "next/head";
+import SidebarAdmin from "./SidebarAdmin";
 
 import { FC, ReactNode, useEffect } from "react";
 import { useAppState } from "../../redux/store";
 import { useRouter } from "next/router";
 import { RoleEnum } from "../../interface/user";
-import SidebarAdmin from "./SidebarAdmin";
 
 type PropTypes = {
   children?: ReactNode;
@@ -32,9 +32,11 @@ const LayoutAdmin: FC<PropTypes> = ({
         <meta lang="en" charSet="utf-8" />
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
-      <div className="min-h-screen">
+      <div>
         <SidebarAdmin />
-        {children}
+        <div className="min-h-screen min-w-right-sm lg:min-w-right-lg fixed top-0 lg:left-64 left-20 flex flex-col">
+          {children}
+        </div>
       </div>
     </div>
   );

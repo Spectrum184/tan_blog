@@ -28,6 +28,22 @@ export class CategoryController {
   ) {}
 
   @Public()
+  @Get()
+  async findAll(@Res() res: FastifyReply): Promise<FastifyReply> {
+    try {
+      const categories = await this.categoryService.findAllCategories();
+
+      return res.status(HttpStatus.OK).send({
+        categories,
+      });
+    } catch (error) {
+      this.logger.error(error);
+
+      throw new InternalServerErrorException(error);
+    }
+  }
+
+  @Public()
   @Get(':slug')
   async findOne(
     @Param('slug') slug: string,

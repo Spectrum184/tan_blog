@@ -1,14 +1,18 @@
 import Link from "next/link";
+import cn from "classnames";
 
 import { useRouter } from "next/router";
 import { FC } from "react";
+import { useAppDispatch } from "../../redux/store";
+import { logout } from "../../redux/userStore";
 
 const SidebarAdmin: FC = () => {
-  const router = useRouter();
+  const { pathname } = useRouter();
+  const dispatch = useAppDispatch();
 
   return (
     <div className="min-h-screen flex flex-col flex-auto flex-shrink-0 bg-green-500 text-gray-900">
-      <div className="fixed flex flex-col top-0 left-0 lg:w-64 w-20 bg-green-500 h-full border-r">
+      <div className="fixed flex flex-col top-0 left-0 lg:w-64 w-20 bg-green-500 h-full">
         <div className="flex items-center justify-center h-14 border-b hover:bg-green-300">
           <Link href="/">
             <a className="flex">
@@ -43,7 +47,15 @@ const SidebarAdmin: FC = () => {
             </li>
             <li>
               <Link href="/admin/dashboard">
-                <a className="relative flex flex-row items-center h-11 focus:outline-none hover:bg-green-300 text-gray-700 hover:text-gray-900 border-l-4 border-transparent hover:border-indigo-500 pr-6">
+                <a
+                  className={cn(
+                    "relative flex flex-row items-center h-11 focus:outline-none hover:bg-green-300 text-gray-700 hover:text-gray-900 border-l-4 border-transparent hover:border-indigo-500 pr-6",
+                    {
+                      "bg-green-300 border-indigo-500":
+                        pathname.includes("dashboard"),
+                    }
+                  )}
+                >
                   <span className="inline-flex justify-center items-center ml-4">
                     <svg
                       className="w-5 h-5"
@@ -153,8 +165,16 @@ const SidebarAdmin: FC = () => {
               </div>
             </li>
             <li>
-              <Link href="#">
-                <a className="relative flex flex-row items-center h-11 focus:outline-none hover:bg-green-300 text-gray-700 hover:text-gray-900 border-l-4 border-transparent hover:border-indigo-500 pr-6">
+              <Link href="/admin/post">
+                <a
+                  className={cn(
+                    "relative flex flex-row items-center h-11 focus:outline-none hover:bg-green-300 text-gray-700 hover:text-gray-900 border-l-4 border-transparent hover:border-indigo-500 pr-6",
+                    {
+                      "bg-green-300 border-indigo-500":
+                        pathname.includes("post"),
+                    }
+                  )}
+                >
                   <span className="inline-flex justify-center items-center ml-4">
                     <svg
                       className="w-5 h-5"
@@ -289,7 +309,10 @@ const SidebarAdmin: FC = () => {
               </Link>
             </li>
             <li>
-              <div className="cursor-pointer relative flex flex-row items-center h-11 focus:outline-none hover:bg-green-300 text-gray-700 hover:text-gray-900 border-l-4 border-transparent hover:border-indigo-500 pr-6">
+              <div
+                onClick={() => dispatch(logout())}
+                className="cursor-pointer relative flex flex-row items-center h-11 focus:outline-none hover:bg-green-300 text-gray-700 hover:text-gray-900 border-l-4 border-transparent hover:border-indigo-500 pr-6"
+              >
                 <span className="inline-flex justify-center items-center ml-4">
                   <svg
                     className="w-5 h-5"

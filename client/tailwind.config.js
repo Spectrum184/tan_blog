@@ -17,6 +17,8 @@ module.exports = {
       "1/2": "50%",
       "3/4": "75%",
       full: "100%",
+      "right-sm": "calc(100% - 80px)",
+      "right-lg": "calc(100% - 256px)",
     },
   },
   variants: {
