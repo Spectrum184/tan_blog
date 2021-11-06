@@ -4,7 +4,7 @@ import dynamic from "next/dynamic";
 
 import { ICategory } from "interface/category";
 import { GetStaticProps, InferGetStaticPropsType, NextPage } from "next";
-import { useState } from "react";
+import { useState, SyntheticEvent } from "react";
 
 const Quill = dynamic(() => import("components/editor/ReactQuill"), {
   ssr: false,
@@ -25,12 +25,16 @@ const Post: NextPage = ({
   categories,
 }: InferGetStaticPropsType<typeof getStaticProps>) => {
   const [content, setContent] = useState<string>("");
+
+  const onSubmit = (e: SyntheticEvent) => {
+    e.preventDefault();
+  };
   return (
-    <LayoutAdmin>
+    <LayoutAdmin title="Đăng bài">
       <main>
         <div className="ml-4 mt-2">
           <h3 className="text-center text-3xl mb-2 underline">VIẾT BÀI: </h3>
-          <form action="POST" className="flex flex-wrap">
+          <form action="POST" className="flex flex-wrap" onSubmit={onSubmit}>
             <div className="mb-4 flex items-center w-full">
               <label className="text-lg text-gray-900 w-32">
                 Tiêu đề <span className="text-red-500">*</span>:
@@ -100,7 +104,10 @@ const Post: NextPage = ({
               <Quill setContent={setContent} content={content} />
             </div>
             <div className="flex justify-center w-full">
-              <button className="p-2 pl-5 pr-5 bg-green-500 text-gray-100 text-lg rounded-lg focus:border-4 border-green-300">
+              <button
+                type="submit"
+                className="p-2 pl-5 pr-5 bg-green-500 text-gray-100 text-lg rounded-lg focus:border-4 border-green-300"
+              >
                 Đăng bài
               </button>
             </div>

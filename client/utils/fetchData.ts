@@ -63,3 +63,5 @@ export const postDataStaticAPI = async (url: string, data: object) => {
 
   return res;
 };
+
+export const fetcher = (url: string) => getDataAPI(url).then((res) => res.data);

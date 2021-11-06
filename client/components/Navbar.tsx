@@ -7,13 +7,20 @@ import { FC, useState, useRef, useEffect } from "react";
 import { useAppDispatch, useAppState } from "../redux/store";
 import { logout } from "../redux/userStore";
 import { RoleEnum } from "../interface/user";
+import { ICategory } from "interface/category";
+import { useRouter } from "next/router";
 
-const Navbar: FC = () => {
+type PropTypes = {
+  categories: ICategory[];
+};
+
+const Navbar: FC<PropTypes> = ({ categories }) => {
   const { avatar, username, roles } = useAppState((state) => state.user);
   const divRef = useRef<HTMLDivElement>(null);
   const [openProfile, setOpenProfile] = useState<boolean>(false);
   const [openNav, setOpenNav] = useState<boolean>(false);
   const dispatch = useAppDispatch();
+  const { query } = useRouter();
 
   useEffect(() => {
     function handleClick(event: any) {
@@ -69,30 +76,29 @@ const Navbar: FC = () => {
             }
           )}
         >
-          <Link href="#">
-            <a className="px-4 py-2 mt-2 text-sm font-semibold text-gray-900 bg-green-300 rounded-lg dark-mode:bg-gray-700 dark-mode:hover:bg-gray-600 dark-mode:focus:bg-gray-600 dark-mode:focus:text-white dark-mode:hover:text-white dark-mode:text-gray-200 md:mt-0 hover:text-gray-900 focus:text-gray-900 hover:bg-green-300 focus:bg-green-300focus:outline-none focus:shadow-outline">
-              Blog
-            </a>
-          </Link>
-          <Link href="#">
+          {categories.map((category) => (
+            <Link
+              href={{
+                pathname: "/category/[slug]",
+                query: { slug: category.slug },
+              }}
+              key={category.id}
+            >
+              <a
+                className={cn(
+                  "px-4 py-2 mt-2 text-sm font-semibold text-gray-900 rounded-lg dark-mode:bg-gray-700 dark-mode:hover:bg-gray-600 dark-mode:focus:bg-gray-600 dark-mode:focus:text-white dark-mode:hover:text-white dark-mode:text-gray-200 md:mt-0 hover:text-gray-900 focus:text-gray-900 hover:bg-green-300 focus:bg-green-300 focus:outline-none focus:shadow-outline",
+                  {
+                    "bg-green-300": query.slug && query.slug === category.slug,
+                  }
+                )}
+              >
+                {category.name}
+              </a>
+            </Link>
+          ))}
+          <Link href="/about">
             <a className="px-4 py-2 mt-2 text-sm font-semibold bg-transparent rounded-lg dark-mode:bg-transparent dark-mode:hover:bg-gray-600 dark-mode:focus:bg-gray-600 dark-mode:focus:text-white dark-mode:hover:text-white dark-mode:text-gray-200 md:mt-0 md:ml-4 hover:text-gray-900 focus:text-gray-900 hover:bg-green-300 focus:bg-green-300 focus:outline-none focus:shadow-outline">
-              Portfolio
-            </a>
-          </Link>
-          <Link href="#">
-            <a
-              className="px-4 py-2 mt-2 text-sm font-semibold bg-transparent rounded-lg dark-mode:bg-transparent dark-mode:hover:bg-gray-600 dark-mode:focus:bg-gray-600 dark-mode:focus:text-white dark-mode:hover:text-white dark-mode:text-gray-200 md:mt-0 md:ml-4 hover:text-gray-900 focus:text-gray-900 hover:bg-green-300 focus:bg-green-300 focus:outline-none focus:shadow-outline"
-              href="#"
-            >
-              About
-            </a>
-          </Link>
-          <Link href="#">
-            <a
-              className="px-4 py-2 mt-2 text-sm font-semibold bg-transparent rounded-lg dark-mode:bg-transparent dark-mode:hover:bg-gray-600 dark-mode:focus:bg-gray-600 dark-mode:focus:text-white dark-mode:hover:text-white dark-mode:text-gray-200 md:mt-0 md:ml-4 hover:text-gray-900 focus:text-gray-900 hover:bg-green-300 focus:bg-green-300 focus:outline-none focus:shadow-outline"
-              href="#"
-            >
-              Contact
+              Về tôi
             </a>
           </Link>
           {username ? (
