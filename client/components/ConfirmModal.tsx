@@ -33,7 +33,10 @@ const ConfirmModal: FC<PropType> = ({
             <p className="text-2xl font-bold">{header}</p>
             <div
               className="modal-close cursor-pointer z-40"
-              onClick={() => setVisible(false)}
+              onClick={(e) => {
+                e.preventDefault();
+                setVisible(false);
+              }}
             >
               <svg
                 className="fill-current text-black"
@@ -52,13 +55,19 @@ const ConfirmModal: FC<PropType> = ({
           <div className="flex justify-end pt-2">
             <button
               className="focus:outline-none modal-close px-4 bg-red-500 p-3 rounded-lg text-black hover:bg-red-300"
-              onClick={() => setVisible(false)}
+              onClick={(e) => {
+                e.preventDefault();
+                setVisible(false);
+              }}
             >
               Cancel
             </button>
             <button
               className="focus:outline-none px-4 bg-green-500 p-3 ml-3 rounded-lg text-white hover:bg-green-300"
-              onClick={() => onConfirm()}
+              onClick={(e) => {
+                e.preventDefault();
+                onConfirm();
+              }}
             >
               Confirm
             </button>

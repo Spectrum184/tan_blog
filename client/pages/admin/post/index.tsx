@@ -7,9 +7,10 @@ import { ICategory } from "interface/category";
 import { GetStaticProps, InferGetStaticPropsType, NextPage } from "next";
 import { useState, SyntheticEvent, ChangeEvent } from "react";
 import { IPost } from "interface/post";
-import { checkImageFile } from "utils/fileUpload";
-import { useAppDispatch } from "redux/store";
+import { checkImageFile, uploadImage } from "utils/fileUpload";
+import { useAppDispatch, useAppState } from "redux/store";
 import { setAlertState } from "redux/alertStore";
+import { postDataAPI } from "utils/fetchData";
 
 const Quill = dynamic(() => import("components/editor/ReactQuill"), {
   ssr: false,
@@ -39,19 +40,54 @@ const Post: NextPage = ({
     categoryId: "",
     tag: "",
   };
-  const [content, setContent] = useState<string>("");
   const [postData, setPostData] = useState(initialState);
-  const { title, status, categoryId, tag } = postData;
+  const { title, status, categoryId, tag, content } = postData;
   const [visible, setVisible] = useState<boolean>(false);
-  const [thumbnail, setThumbnail] = useState<string>("");
   const [file, setFile] = useState<File>();
   const dispatch = useAppDispatch();
+  const { jwtToken } = useAppState((state) => state.user);
 
-  const onSubmit = (e: SyntheticEvent) => {
+  const onSubmit = async (e: SyntheticEvent) => {
     e.preventDefault();
+    try {
+      const res = await postDataAPI("posts", postData, jwtToken);
+
+      console.log(res.data);
+      dispatch(
+        setAlertState({
+          show: true,
+          message: "Đăng bài thành công",
+          type: "success",
+        })
+      );
+    } catch (error: any) {
+      dispatch(
+        setAlertState({
+          show: true,
+          message: error.response.data.message,
+          type: "error",
+        })
+      );
+    }
   };
 
-  const onUploadFile = async () => {};
+  const onUploadFile = async () => {
+    if (!file) return;
+    try {
+      const photo = await uploadImage(file, "upload-post-image");
+
+      setPostData({ ...postData, thumbnail: photo.imageUrl });
+      setVisible(false);
+    } catch (error: any) {
+      dispatch(
+        setAlertState({
+          show: true,
+          message: error.response.data.message,
+          type: "error",
+        })
+      );
+    }
+  };
 
   const handleUploadFile = (e: ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
@@ -134,6 +170,12 @@ const Post: NextPage = ({
                   name="status"
                   id="status"
                   className="ml-2"
+                  checked={status}
+                  onChange={() =>
+                    setPostData((post) => {
+                      return { ...post, status: !post.status };
+                    })
+                  }
                 />
               </div>
             </div>
@@ -174,7 +216,7 @@ const Post: NextPage = ({
               <label className="text-lg text-gray-900 lg:w-28 w-30">
                 Nội dung<span className="text-red-500">*</span>:
               </label>
-              <Quill setContent={setContent} content={content} />
+              <Quill setContent={setPostData} content={content} />
             </div>
             <div className="flex justify-center w-full">
               <button

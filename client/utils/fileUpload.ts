@@ -16,11 +16,7 @@ export const checkImageFile = (file: File): string => {
 export const uploadImage = async (file: File, url: string) => {
   const formData = new FormData();
   formData.append("image", file);
-  try {
-    const res = await postDataStaticAPI(url, formData);
+  const res = await postDataStaticAPI(url, formData);
 
-    return res.data.data;
-  } catch (error) {
-    console.log(error);
-  }
+  return res.data.data;
 };

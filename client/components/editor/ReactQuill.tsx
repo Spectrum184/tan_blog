@@ -2,8 +2,19 @@ import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import ConfirmModal from "components/ConfirmModal";
 
-import { FC, useRef, useEffect, useCallback, useState } from "react";
+import {
+  FC,
+  useRef,
+  useEffect,
+  useCallback,
+  useState,
+  Dispatch,
+  SetStateAction,
+} from "react";
 import { checkImageFile, uploadImage } from "utils/fileUpload";
+import { useAppDispatch } from "redux/store";
+import { setAlertState } from "redux/alertStore";
+import { IPost } from "interface/post";
 
 const container = [
   [{ font: [] }],
@@ -24,7 +35,7 @@ const container = [
 ];
 
 type PropTypes = {
-  setContent: (value: string) => void;
+  setContent: Dispatch<SetStateAction<IPost>>;
   content: string;
 };
 
@@ -33,32 +44,66 @@ const Quill: FC<PropTypes> = ({ setContent, content }) => {
   const quillRef = useRef<ReactQuill>(null);
   const [file, setFile] = useState<File>();
   const [visible, setVisible] = useState<boolean>(false);
+  const dispatch = useAppDispatch();
 
-  const handleFile = async (input: HTMLInputElement) => {
-    const files = input.files;
+  const handleFile = useCallback(
+    async (input: HTMLInputElement) => {
+      const files = input.files;
 
-    if (!files) return console.log("Chua chon file");
+      if (!files) {
+        dispatch(
+          setAlertState({
+            type: "error",
+            show: true,
+            message: "Vui lòng chọn file",
+          })
+        );
+        return;
+      }
 
-    const file = files[0];
+      const file = files[0];
 
-    const err = checkImageFile(file);
+      const err = checkImageFile(file);
 
-    if (err) return console.log(err);
+      if (err) {
+        dispatch(
+          setAlertState({
+            type: "error",
+            show: true,
+            message: err,
+          })
+        );
+        return;
+      }
 
-    setFile(file);
-    setVisible(true);
-  };
+      setFile(file);
+      setVisible(true);
+    },
+    [dispatch]
+  );
 
   const onUploadFile = async () => {
     if (!file) return;
 
-    const photo = await uploadImage(file, "upload-post-image");
+    try {
+      const photo = await uploadImage(file, "upload-post-image");
 
-    const quill = quillRef.current;
-    const range = quill?.getEditor().getSelection()?.index;
+      const quill = quillRef.current;
+      const range = quill?.getEditor().getSelection()?.index;
 
-    if (range !== undefined)
-      quill?.getEditor().insertEmbed(range, "image", `${photo.imageUrl}`);
+      if (range !== undefined)
+        quill?.getEditor().insertEmbed(range, "image", `${photo.imageUrl}`);
+
+      setVisible(false);
+    } catch (error: any) {
+      dispatch(
+        setAlertState({
+          show: true,
+          message: error.response.message,
+          type: "error",
+        })
+      );
+    }
   };
 
   const handleChangeImage = useCallback(() => {
@@ -72,7 +117,7 @@ const Quill: FC<PropTypes> = ({ setContent, content }) => {
       e.stopImmediatePropagation();
       handleFile(input);
     };
-  }, []);
+  }, [handleFile]);
 
   useEffect(() => {
     const quill = quillRef.current;
@@ -84,7 +129,7 @@ const Quill: FC<PropTypes> = ({ setContent, content }) => {
   }, [handleChangeImage]);
 
   return (
-    <div className="">
+    <div>
       <ConfirmModal
         header="Xác nhận upload file"
         content="Bạn có chắc chắn muốn upload ảnh này không?"
@@ -98,7 +143,14 @@ const Quill: FC<PropTypes> = ({ setContent, content }) => {
         placeholder="Viết nội dung bài đăng..."
         ref={quillRef}
         value={content}
-        onChange={(e) => setContent(e)}
+        onChange={(e) =>
+          setContent((post: IPost) => {
+            return {
+              ...post,
+              content: e,
+            };
+          })
+        }
       />
     </div>
   );

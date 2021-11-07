@@ -5,6 +5,7 @@ import {
   HttpStatus,
   InternalServerErrorException,
   Logger,
+  Param,
   Post,
   Query,
   Req,
@@ -35,10 +36,10 @@ export class PostController {
     @Res() res: FastifyReply,
   ): Promise<FastifyReply> {
     try {
-      const posts = await this.postService.createPost(postPayload, req.user);
+      const slug = await this.postService.createPost(postPayload, req.user);
 
       return res.status(HttpStatus.OK).send({
-        posts,
+        slug,
       });
     } catch (error) {
       this.logger.error(error);
@@ -57,6 +58,23 @@ export class PostController {
       const result = await this.postService.findPosts(query);
 
       return res.status(HttpStatus.OK).send({ ...result });
+    } catch (error) {
+      this.logger.error(error);
+
+      throw new InternalServerErrorException(error);
+    }
+  }
+
+  @Public()
+  @Get(':slug')
+  async getBySlug(
+    @Param('slug') slug: string,
+    @Res() res: FastifyReply,
+  ): Promise<FastifyReply> {
+    try {
+      const post = await this.postService.getPostBySlug(slug);
+
+      return res.status(HttpStatus.OK).send(post);
     } catch (error) {
       this.logger.error(error);
 

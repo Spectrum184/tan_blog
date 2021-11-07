@@ -2,6 +2,7 @@ import { IUser } from "../interface/user";
 import { createSlice, PayloadAction, Dispatch } from "@reduxjs/toolkit";
 import { ILogin, IRegister } from "../interface/auth";
 import { postDataAPI } from "../utils/fetchData";
+import { setAlertState } from "./alertStore";
 
 const initialState: IUser = {
   username: "",
@@ -38,7 +39,13 @@ export const login = (payload: ILogin) => async (dispatch: Dispatch) => {
 
     if (typeof window !== "undefined") window.location.href = "/";
   } catch (error: any) {
-    console.log(error.response);
+    dispatch(
+      setAlertState({
+        show: true,
+        type: "error",
+        message: error.response.message,
+      })
+    );
     localStorage.clear();
   }
 };
@@ -51,7 +58,13 @@ export const refresh = () => async (dispatch: Dispatch) => {
 
     localStorage.setItem("logged", "true");
   } catch (error: any) {
-    console.log(error.response);
+    dispatch(
+      setAlertState({
+        show: true,
+        type: "error",
+        message: error.response.message,
+      })
+    );
     localStorage.clear();
   }
 };
@@ -65,7 +78,13 @@ export const register = (payload: IRegister) => async (dispatch: Dispatch) => {
 
     if (typeof window !== "undefined") window.location.href = "/";
   } catch (error: any) {
-    console.log(error.response);
+    dispatch(
+      setAlertState({
+        show: true,
+        type: "error",
+        message: error.response.message,
+      })
+    );
     localStorage.clear();
   }
 };
@@ -76,7 +95,13 @@ export const logout = () => async (dispatch: Dispatch) => {
     await postDataAPI("auth/logout", {});
     if (typeof window !== "undefined") window.location.href = "/";
   } catch (error: any) {
-    console.log(error.response);
+    dispatch(
+      setAlertState({
+        show: true,
+        type: "error",
+        message: error.response.message,
+      })
+    );
   }
 };
 

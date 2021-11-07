@@ -25,7 +25,7 @@ export class PostService {
   async createPost(
     { title, content, status, categoryId, tag, thumbnail }: PostPayload,
     user: UserDto,
-  ): Promise<PostDto> {
+  ): Promise<string> {
     try {
       const slug = await this.generateSlug(title);
       const author = await this.userRepository.findOne({ id: user.id });
@@ -48,9 +48,9 @@ export class PostService {
       newPost.status = status;
       newPost.thumbnail = thumbnail;
 
-      const savePost = await this.postRepository.save(newPost);
+      await this.postRepository.save(newPost);
 
-      return new PostDto(savePost, category, arrTag);
+      return slug;
     } catch (error) {
       throw error;
     }
@@ -73,6 +73,19 @@ export class PostService {
     return slug;
   }
 
+  async getPostBySlug(slug: string): Promise<PostDto> {
+    try {
+      const post = await this.postRepository.findOne({
+        where: { slug: slug, status: true },
+        relations: ['tags', 'category'],
+      });
+
+      return new PostDto(post);
+    } catch (error) {
+      throw error;
+    }
+  }
+
   async findPosts({
     page,
     param,
@@ -83,6 +96,8 @@ export class PostService {
       const limit = perPage || 9;
       const builder = await this.postRepository
         .createQueryBuilder('posts')
+        .leftJoinAndSelect('posts.tags', 'tags')
+        .leftJoinAndSelect('posts.category', 'category')
         .where('posts.title LIKE :param', { param: `%${param || ''}%` });
 
       if (sort) builder.orderBy('posts.createdAt', sort);

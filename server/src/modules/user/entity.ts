@@ -66,7 +66,7 @@ class User extends BaseEntity implements IUser {
   mod?: IMod;
 
   @ManyToMany(() => Role, (role) => role.users)
-  @JoinTable()
+  @JoinTable({ name: 'user_roles' })
   roles: Role[];
 
   @OneToOne(() => Account, (account) => account.user, {
@@ -89,7 +89,7 @@ class User extends BaseEntity implements IUser {
     onDelete: 'CASCADE',
     cascade: true,
   })
-  @JoinTable()
+  @JoinTable({ name: 'user_liked_posts' })
   likedPosts: Post[];
 }
 

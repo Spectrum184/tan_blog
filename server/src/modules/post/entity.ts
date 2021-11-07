@@ -34,7 +34,7 @@ export class Post extends BaseEntity implements IPost {
   category: Category;
 
   @ManyToMany(() => Tag, (tag) => tag.posts)
-  @JoinTable()
+  @JoinTable({ name: 'post_tags' })
   tags: Tag[];
 
   @ManyToMany(() => User, (user) => user.likedPosts)
