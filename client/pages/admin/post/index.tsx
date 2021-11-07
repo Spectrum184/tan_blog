@@ -1,10 +1,15 @@
 import LayoutAdmin from "components/admin/LayoutAdmin";
 import axios from "axios";
 import dynamic from "next/dynamic";
+import ConfirmModal from "components/ConfirmModal";
 
 import { ICategory } from "interface/category";
 import { GetStaticProps, InferGetStaticPropsType, NextPage } from "next";
-import { useState, SyntheticEvent } from "react";
+import { useState, SyntheticEvent, ChangeEvent } from "react";
+import { IPost } from "interface/post";
+import { checkImageFile } from "utils/fileUpload";
+import { useAppDispatch } from "redux/store";
+import { setAlertState } from "redux/alertStore";
 
 const Quill = dynamic(() => import("components/editor/ReactQuill"), {
   ssr: false,
@@ -24,11 +29,69 @@ export const getStaticProps: GetStaticProps = async () => {
 const Post: NextPage = ({
   categories,
 }: InferGetStaticPropsType<typeof getStaticProps>) => {
+  const initialState: IPost = {
+    id: "",
+    title: "",
+    slug: "",
+    content: "",
+    thumbnail: "",
+    status: true,
+    categoryId: "",
+    tag: "",
+  };
   const [content, setContent] = useState<string>("");
+  const [postData, setPostData] = useState(initialState);
+  const { title, status, categoryId, tag } = postData;
+  const [visible, setVisible] = useState<boolean>(false);
+  const [thumbnail, setThumbnail] = useState<string>("");
+  const [file, setFile] = useState<File>();
+  const dispatch = useAppDispatch();
 
   const onSubmit = (e: SyntheticEvent) => {
     e.preventDefault();
   };
+
+  const onUploadFile = async () => {};
+
+  const handleUploadFile = (e: ChangeEvent<HTMLInputElement>) => {
+    const files = e.target.files;
+
+    if (!files) {
+      dispatch(
+        setAlertState({
+          show: true,
+          message: "Vui lòng chọn file",
+          type: "error",
+        })
+      );
+      e.target.value = "";
+      return;
+    }
+
+    const file = files[0];
+
+    const err = checkImageFile(file);
+
+    if (err) {
+      dispatch(setAlertState({ show: true, message: err, type: "error" }));
+
+      e.target.value = "";
+
+      return;
+    }
+
+    setFile(file);
+    setVisible(true);
+  };
+
+  const handleChangeInput = (
+    e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
+    const { name, value } = e.target;
+
+    setPostData({ ...postData, [name]: value });
+  };
+
   return (
     <LayoutAdmin title="Đăng bài">
       <main>
@@ -45,6 +108,8 @@ const Post: NextPage = ({
                 name="title"
                 id="title"
                 autoFocus
+                value={title}
+                onChange={handleChangeInput}
               />
             </div>
             <div className="mb-4 flex items-center flex-wrap w-full">
@@ -57,6 +122,7 @@ const Post: NextPage = ({
                   className="px-4 border-2 py-2 rounded-md text-sm outline-none ml-2"
                   name="thumbnail"
                   id="thumbnail"
+                  onChange={handleUploadFile}
                 />
               </div>
               <div className="flex items-center lg:w-1/2 w-full">
@@ -76,7 +142,12 @@ const Post: NextPage = ({
                 <label className="text-lg text-gray-900 w-32">
                   Thể loại<span className="text-red-500">*</span>:
                 </label>
-                <select className="ml-2 text-lg rounded border-2 border-gray-200 text-gray-900 px-2 py-1 bg-white hover:border-gray-400 focus:outline-none cursor-pointer">
+                <select
+                  value={categoryId}
+                  onChange={handleChangeInput}
+                  name="categoryId"
+                  className="ml-2 text-lg rounded border-2 border-gray-200 text-gray-900 px-2 py-1 bg-white hover:border-gray-400 focus:outline-none cursor-pointer"
+                >
                   {categories.map((category: ICategory) => (
                     <option key={category.id} value={category.id}>
                       {category.name}
@@ -94,6 +165,8 @@ const Post: NextPage = ({
                   id="tag"
                   className="px-4 border-2 py-2 rounded-md text-sm outline-none ml-2"
                   placeholder="Cách nhau bằng các dấu phẩy..."
+                  value={tag}
+                  onChange={handleChangeInput}
                 />
               </div>
             </div>
@@ -113,6 +186,13 @@ const Post: NextPage = ({
             </div>
           </form>
         </div>
+        <ConfirmModal
+          visible={visible}
+          setVisible={setVisible}
+          header="Tải ảnh lên"
+          content="Bạn có muốn tải ảnh này lên không?"
+          onConfirm={onUploadFile}
+        />
       </main>
     </LayoutAdmin>
   );

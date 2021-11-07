@@ -1,10 +1,11 @@
 import { configureStore, ThunkAction, Action } from "@reduxjs/toolkit";
 import { useDispatch, useSelector } from "react-redux";
 import user from "./userStore";
+import alert from "./alertStore";
 
 export function makeStore() {
   return configureStore({
-    reducer: { user },
+    reducer: { user, alert },
   });
 }
 
