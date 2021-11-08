@@ -18,5 +18,15 @@ export class CategoryDto implements ICategory {
   readonly description: string;
   readonly thumbnail: string;
   readonly createdAt: string;
-  readonly posts?: Post[];
+  readonly posts?: Post[] | number;
+}
+
+export class CategoryPostTagDto implements ICategory {
+  readonly id: string;
+  readonly name: string;
+  readonly slug: string;
+  readonly description: string;
+  readonly thumbnail: string;
+  readonly createdAt: string;
+  readonly posts: Post[];
 }

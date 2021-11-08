@@ -45,12 +45,12 @@ export class CategoryController {
 
   @Public()
   @Get(':slug')
-  async findOne(
+  async findBySlug(
     @Param('slug') slug: string,
     @Res() res: FastifyReply,
   ): Promise<FastifyReply> {
     try {
-      const category = await this.categoryService.findCategoryBySlug(slug);
+      const category = await this.categoryService.findPostByCategorySlug(slug);
 
       if (!category)
         res.status(HttpStatus.NOT_FOUND).send({

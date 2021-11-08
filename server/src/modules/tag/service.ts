@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { map, of } from 'rxjs';
 import { Repository } from 'typeorm';
+import { TagDto } from './dto';
 import { Tag } from './entity';
 
 @Injectable()
@@ -48,6 +49,25 @@ export class TagService {
       );
 
       return newArrTag;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async findAll(): Promise<TagDto> {
+    try {
+      const tags = await this.tagRepository.find();
+
+      if (tags.length !== 0) return new TagDto(tags);
+
+      return null;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async findPostByTag(tag: string): Promise<any> {
+    try {
     } catch (error) {
       throw error;
     }

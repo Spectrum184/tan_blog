@@ -16,7 +16,10 @@ export class CategoryService {
 
   async findAllCategories(): Promise<CategoryDto[]> {
     try {
-      const categories = await this.categoryRepository.find();
+      const categories = await this.categoryRepository
+        .createQueryBuilder('categories')
+        .loadRelationCountAndMap('categories.posts', 'categories.posts')
+        .getMany();
 
       if (categories.length === 0) return [];
 
@@ -52,14 +55,18 @@ export class CategoryService {
     }
   }
 
-  async findCategoryBySlug(slug: string): Promise<CategoryDto> {
+  async findPostByCategorySlug(slug: string): Promise<any> {
     try {
-      const category = await this.categoryRepository.findOne({
-        slug,
-      });
+      const category = await this.categoryRepository
+        .createQueryBuilder('category')
+        .where('category.slug = :slug', { slug })
+        .leftJoinAndSelect('category.posts', 'posts')
+        .leftJoinAndSelect('posts.tags', 'tags')
+        .getOne();
 
-      if (category) return new CategoryDto(category);
-      return null;
+      console.log(category);
+
+      return category;
     } catch (error) {
       throw error;
     }
@@ -87,7 +94,7 @@ export class CategoryService {
       slug,
     });
 
-    if (category) throw new Error('This category is existed!');
+    if (category) throw new Error('Không tồn tại danh mục này!');
 
     return slug;
   }

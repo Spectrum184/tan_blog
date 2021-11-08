@@ -94,7 +94,7 @@ export class PostService {
   }: PaginationQueryDto): Promise<IResultPagination<PostDto>> {
     try {
       const limit = perPage || 9;
-      const builder = await this.postRepository
+      const builder = this.postRepository
         .createQueryBuilder('posts')
         .leftJoinAndSelect('posts.tags', 'tags')
         .leftJoinAndSelect('posts.category', 'category')

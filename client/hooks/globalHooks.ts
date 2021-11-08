@@ -1,8 +1,8 @@
 import useSWR, { KeyedMutator } from "swr";
 import { IUser } from "../interface/user";
-import { postDataAPI } from "../utils/fetchData";
+import { getDataAPI } from "../utils/fetchData";
 
-const fetcher = (url: string) => postDataAPI(url, {}).then((res) => res.data);
+const fetcher = (url: string) => getDataAPI(url).then((res) => res.data);
 
 interface IUseUser {
   loading: boolean;
@@ -11,7 +11,7 @@ interface IUseUser {
   mutate: KeyedMutator<any>;
 }
 
-export default function useUser() {
+export const useUser = () => {
   const { data, mutate, error } = useSWR("auth/refresh-token", fetcher);
 
   const loading: boolean = !data && !error;
@@ -23,4 +23,8 @@ export default function useUser() {
     user: data,
     mutate,
   } as IUseUser;
-}
+};
+
+export const useLayoutData = () => {
+  const { data, error } = useSWR("categories", fetcher);
+};
