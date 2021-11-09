@@ -34,7 +34,7 @@ const LayoutAdmin: FC<PropTypes> = ({
       </Head>
       <div>
         <SidebarAdmin />
-        <div className="h-screen min-w-right-sm lg:min-w-right-lg fixed top-0 lg:left-64 left-20 flex flex-col overflow-y-auto">
+        <div className="h-screen min-w-right-sm lg:min-w-right-lg fixed top-0 lg:left-64 bg-white left-20 flex flex-col overflow-y-auto">
           {children}
         </div>
       </div>

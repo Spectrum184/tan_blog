@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { map, of } from 'rxjs';
 import { Repository } from 'typeorm';
-import { TagDto } from './dto';
+import { TagDto, TagPostDto } from './dto';
 import { Tag } from './entity';
 
 @Injectable()
@@ -66,8 +66,18 @@ export class TagService {
     }
   }
 
-  async findPostByTag(tag: string): Promise<any> {
+  async findPostByTag(tagName: string): Promise<any> {
     try {
+      const tag = await this.tagRepository
+        .createQueryBuilder('tag')
+        .where('tag.name = :tagName', { tagName })
+        .leftJoinAndSelect('tag.posts', 'posts', 'posts.status = :status', {
+          status: true,
+        })
+        .leftJoinAndSelect('posts.category', 'category')
+        .getOne();
+
+      return new TagPostDto(tag);
     } catch (error) {
       throw error;
     }

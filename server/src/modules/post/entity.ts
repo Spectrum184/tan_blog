@@ -27,6 +27,9 @@ export class Post extends BaseEntity implements IPost {
   @Column({ type: 'boolean', default: true })
   status: boolean;
 
+  @Column({ type: 'integer', default: 0 })
+  views: number;
+
   @ManyToOne(() => User, (user) => user.posts)
   author: User;
 

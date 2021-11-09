@@ -78,7 +78,7 @@ export class AuthController {
       res.clearCookie('jwtToken', { path: 'api/jwt-token' });
 
       return res.status(HttpStatus.OK).send({
-        message: 'Log out!',
+        message: 'Đã đăng xuất!',
       });
     } catch (error) {
       this.logger.error(error);

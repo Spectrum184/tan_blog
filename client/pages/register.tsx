@@ -71,7 +71,7 @@ const Register: NextPage = () => {
                 name="username"
                 placeholder="Tên đăng nhập"
                 autoFocus
-                value={username}
+                value={username.toLowerCase().replace(/ /g, "")}
                 onChange={handleChangeInput}
               />
               <small className="text-red-500 text-sm w-full">

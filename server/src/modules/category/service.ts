@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { CategoryDto } from './dto';
+import { CategoryDto, CategoryPostDto } from './dto';
 import { Category } from './entity';
 import { CategoryPayload } from './payload';
 import slugify from 'slugify';
@@ -55,18 +55,21 @@ export class CategoryService {
     }
   }
 
-  async findPostByCategorySlug(slug: string): Promise<any> {
+  async findPostByCategorySlug(slug: string): Promise<CategoryPostDto> {
     try {
       const category = await this.categoryRepository
         .createQueryBuilder('category')
         .where('category.slug = :slug', { slug })
-        .leftJoinAndSelect('category.posts', 'posts')
+        .leftJoinAndSelect(
+          'category.posts',
+          'posts',
+          'posts.status = :status',
+          { status: true },
+        )
         .leftJoinAndSelect('posts.tags', 'tags')
         .getOne();
 
-      console.log(category);
-
-      return category;
+      return new CategoryPostDto(category);
     } catch (error) {
       throw error;
     }
@@ -94,7 +97,7 @@ export class CategoryService {
       slug,
     });
 
-    if (category) throw new Error('Không tồn tại danh mục này!');
+    if (category) throw new Error('Đã tồn tại danh mục này!');
 
     return slug;
   }

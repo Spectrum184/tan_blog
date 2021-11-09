@@ -29,13 +29,12 @@ export class AuthService {
         relations: ['account', 'roles'],
       });
 
-      if (user && !user.account.isActivated)
+      if (!user) return null;
+
+      if (!user.account.isActivated)
         throw new InternalServerErrorException('Tài khoản của bạn đã bị khoá!');
 
-      if (user && (await checkPassword(password, user.account.password)))
-        return user;
-
-      return null;
+      if (await checkPassword(password, user.account.password)) return user;
     } catch (error) {
       throw error;
     }
@@ -45,10 +44,13 @@ export class AuthService {
     try {
       const user = await this.userRepository.findOne({
         where: { id: userId },
-        relations: ['roles'],
+        relations: ['account', 'roles'],
       });
 
       if (!user) return null;
+
+      if (!user.account.isActivated)
+        throw new InternalServerErrorException('Tài khoản của bạn đã bị khoá!');
 
       return user;
     } catch (error) {

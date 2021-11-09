@@ -68,7 +68,7 @@ export class PostService {
       slug,
     });
 
-    if (post) throw new Error('This category is existed!');
+    if (post) throw new Error('Bài đăng đã tồn tại!');
 
     return slug;
   }

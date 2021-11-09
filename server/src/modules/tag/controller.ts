@@ -7,10 +7,12 @@ import {
   Param,
   Res,
 } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { FastifyReply } from 'fastify';
 import { Public } from '../auth/decorator';
 import { TagService } from './service';
 
+@ApiTags('tags')
 @Controller('tags')
 export class TagController {
   constructor(
@@ -22,11 +24,11 @@ export class TagController {
   @Get()
   async findAll(@Res() res: FastifyReply): Promise<FastifyReply> {
     try {
-      const tags = this.tagService.findAll();
+      const tags = await this.tagService.findAll();
 
       if (!tags) return res.status(HttpStatus.OK).send({ tags: [] });
 
-      return res.status(HttpStatus.OK).send({ tags });
+      return res.status(HttpStatus.OK).send({ ...tags });
     } catch (error) {
       this.logger.error(error);
 
@@ -37,11 +39,13 @@ export class TagController {
   @Public()
   @Get(':tag')
   async findOne(
-    @Param('tag') tag: string,
+    @Param('tag') tagName: string,
     @Res() res: FastifyReply,
   ): Promise<FastifyReply> {
     try {
-      return res.status(HttpStatus.OK).send({});
+      const tag = await this.tagService.findPostByTag(tagName);
+
+      return res.status(HttpStatus.OK).send({ tag });
     } catch (error) {
       this.logger.error(error);
 

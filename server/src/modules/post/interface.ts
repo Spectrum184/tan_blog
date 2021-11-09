@@ -5,4 +5,5 @@ export interface IPost {
   content: string;
   thumbnail: string;
   status: boolean;
+  views: number;
 }

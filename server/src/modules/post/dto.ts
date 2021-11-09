@@ -16,8 +16,9 @@ export class PostDto implements IPost {
     this.status = post.status;
     this.createdBy = post.createdBy;
     this.createdAt = post.createdAt.toUTCString();
-    this.tags = post.tags.map((tag) => tag.name);
-    this.category = { name: post.category.name, slug: post.category.slug };
+    this.tags = post.tags?.map((tag) => tag.name);
+    this.category = { name: post.category?.name, slug: post.category?.slug };
+    this.views = post.views;
   }
 
   id: string;
@@ -30,4 +31,5 @@ export class PostDto implements IPost {
   createdAt: string;
   tags: string[];
   category: ICategoryPost;
+  views: number;
 }
