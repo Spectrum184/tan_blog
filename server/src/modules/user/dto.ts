@@ -1,3 +1,4 @@
+import { Post } from '../post/entity';
 import { User } from './entity';
 import { IUser } from './interface';
 
@@ -31,4 +32,20 @@ export class UserDto implements IUser {
   readonly roles?: string[];
 
   readonly isActivated?: boolean;
+}
+
+export class PostAuthorDto {
+  constructor(author: User) {
+    this.id = author.id;
+    this.username = author.username;
+    this.avatar = author.avatar;
+    this.isAdmin = author.admin ? true : false;
+    this.posts = author.posts;
+  }
+
+  readonly id: string;
+  readonly username: string;
+  readonly avatar: string;
+  readonly isAdmin: boolean;
+  readonly posts: Post[] | number;
 }

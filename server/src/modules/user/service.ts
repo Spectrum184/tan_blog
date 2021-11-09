@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Like, Repository } from 'typeorm';
-import { UserDto } from './dto';
+import { PostAuthorDto, UserDto } from './dto';
 import { User } from './entity';
 import { UserPayload } from './payload';
 
@@ -107,6 +107,28 @@ export class UserService {
       if (!user) return null;
 
       return new UserDto(user);
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async findPostAuthor(): Promise<PostAuthorDto[]> {
+    try {
+      const admin = await this.userRepository
+        .createQueryBuilder('author')
+        .innerJoinAndSelect('author.admin', 'admin')
+        .loadRelationCountAndMap('author.posts', 'author.posts')
+        .getMany();
+
+      const mod = await this.userRepository
+        .createQueryBuilder('author')
+        .innerJoinAndSelect('author.mod', 'mod')
+        .loadRelationCountAndMap('author.posts', 'author.posts')
+        .getMany();
+
+      const authors = [...admin, ...mod];
+
+      return authors.map((author) => new PostAuthorDto(author));
     } catch (error) {
       throw error;
     }

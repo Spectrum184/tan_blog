@@ -75,6 +75,7 @@ export class TagService {
           status: true,
         })
         .leftJoinAndSelect('posts.category', 'category')
+        .leftJoinAndSelect('posts.author', 'author')
         .getOne();
 
       return new TagPostDto(tag);

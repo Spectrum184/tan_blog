@@ -98,6 +98,7 @@ export class PostService {
         .createQueryBuilder('posts')
         .leftJoinAndSelect('posts.tags', 'tags')
         .leftJoinAndSelect('posts.category', 'category')
+        .leftJoinAndSelect('posts.author', 'author')
         .where('posts.title LIKE :param', { param: `%${param || ''}%` });
 
       if (sort) builder.orderBy('posts.createdAt', sort);

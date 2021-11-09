@@ -67,6 +67,7 @@ export class CategoryService {
           { status: true },
         )
         .leftJoinAndSelect('posts.tags', 'tags')
+        .leftJoinAndSelect('posts.author', 'author')
         .getOne();
 
       return new CategoryPostDto(category);

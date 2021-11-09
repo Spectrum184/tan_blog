@@ -76,26 +76,28 @@ const Navbar: FC<PropTypes> = ({ categories }) => {
             }
           )}
         >
-          {categories.map((category) => (
-            <Link
-              href={{
-                pathname: "/category/[slug]",
-                query: { slug: category.slug },
-              }}
-              key={category.id}
-            >
-              <a
-                className={cn(
-                  "px-4 py-2 mt-2 text-base font-semibold text-gray-900 rounded-lg dark-mode:bg-gray-700 dark-mode:hover:bg-gray-600 dark-mode:focus:bg-gray-600 dark-mode:focus:text-white dark-mode:hover:text-white dark-mode:text-gray-200 md:mt-0 hover:text-gray-900 focus:text-gray-900 hover:bg-green-300 focus:bg-green-300 focus:outline-none focus:shadow-outline",
-                  {
-                    "bg-green-300": query.slug && query.slug === category.slug,
-                  }
-                )}
+          {categories &&
+            categories.map((category) => (
+              <Link
+                href={{
+                  pathname: "/category/[slug]",
+                  query: { slug: category.slug },
+                }}
+                key={category.id}
               >
-                {category.name}
-              </a>
-            </Link>
-          ))}
+                <a
+                  className={cn(
+                    "px-4 py-2 mt-2 text-base font-semibold text-gray-900 rounded-lg dark-mode:bg-gray-700 dark-mode:hover:bg-gray-600 dark-mode:focus:bg-gray-600 dark-mode:focus:text-white dark-mode:hover:text-white dark-mode:text-gray-200 md:mt-0 hover:text-gray-900 focus:text-gray-900 hover:bg-green-300 focus:bg-green-300 focus:outline-none focus:shadow-outline",
+                    {
+                      "bg-green-300":
+                        query.slug && query.slug === category.slug,
+                    }
+                  )}
+                >
+                  {category.name}
+                </a>
+              </Link>
+            ))}
           <Link href="/about">
             <a className="px-4 py-2 mt-2 text-base font-semibold bg-transparent rounded-lg dark-mode:bg-transparent dark-mode:hover:bg-gray-600 dark-mode:focus:bg-gray-600 dark-mode:focus:text-white dark-mode:hover:text-white dark-mode:text-gray-200 md:mt-0 hover:text-gray-900 focus:text-gray-900 hover:bg-green-300 focus:bg-green-300 focus:outline-none focus:shadow-outline">
               Về Tôi

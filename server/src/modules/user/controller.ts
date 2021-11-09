@@ -111,4 +111,17 @@ export class UserController {
       throw new InternalServerErrorException(error);
     }
   }
+
+  @Public()
+  @Get('postAuthor')
+  async findPostAuthor(@Res() res: FastifyReply): Promise<FastifyReply> {
+    try {
+      const authors = await this.userService.findPostAuthor();
+
+      return res.status(HttpStatus.OK).send([...authors]);
+    } catch (error) {
+      this.logger.error(error);
+      throw new InternalServerErrorException(error);
+    }
+  }
 }

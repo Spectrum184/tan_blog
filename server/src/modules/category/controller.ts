@@ -33,9 +33,7 @@ export class CategoryController {
     try {
       const categories = await this.categoryService.findAllCategories();
 
-      return res.status(HttpStatus.OK).send({
-        categories,
-      });
+      return res.status(HttpStatus.OK).send([...categories]);
     } catch (error) {
       this.logger.error(error);
 

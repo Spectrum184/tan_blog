@@ -6,6 +6,12 @@ interface ICategoryPost {
   slug: string;
 }
 
+interface IAuthor {
+  username: string;
+  avatar: string;
+  id: string;
+}
+
 export class PostDto implements IPost {
   constructor(post: Post) {
     this.id = post.id;
@@ -19,6 +25,11 @@ export class PostDto implements IPost {
     this.tags = post.tags?.map((tag) => tag.name);
     this.category = { name: post.category?.name, slug: post.category?.slug };
     this.views = post.views;
+    this.author = {
+      username: post.author?.username,
+      avatar: post.author?.avatar,
+      id: post.author?.id,
+    };
   }
 
   id: string;
@@ -32,4 +43,5 @@ export class PostDto implements IPost {
   tags: string[];
   category: ICategoryPost;
   views: number;
+  author: IAuthor;
 }

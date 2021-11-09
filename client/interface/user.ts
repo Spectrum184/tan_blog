@@ -16,3 +16,11 @@ export enum RoleEnum {
   Admin = "ADMIN",
   Mod = "MOD",
 }
+
+export interface IAuthor {
+  readonly id: string;
+  readonly username: string;
+  readonly avatar: string;
+  readonly isAdmin: boolean;
+  readonly posts: number;
+}

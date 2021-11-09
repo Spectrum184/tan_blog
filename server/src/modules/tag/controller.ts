@@ -24,11 +24,11 @@ export class TagController {
   @Get()
   async findAll(@Res() res: FastifyReply): Promise<FastifyReply> {
     try {
-      const tags = await this.tagService.findAll();
+      const { tags } = await this.tagService.findAll();
 
-      if (!tags) return res.status(HttpStatus.OK).send({ tags: [] });
+      if (!tags) return res.status(HttpStatus.OK).send([]);
 
-      return res.status(HttpStatus.OK).send({ ...tags });
+      return res.status(HttpStatus.OK).send([...tags]);
     } catch (error) {
       this.logger.error(error);
 
