@@ -38,11 +38,11 @@ const Navbar: FC<PropTypes> = ({ categories }) => {
 
   return (
     <div className="w-full text-gray-800 bg-green-500 dark-mode:text-gray-200 dark-mode:bg-gray-800 shadow-md sticky top-0">
-      <div className="flex flex-col max-w-screen-xl px-4 mx-auto md:items-center md:justify-between md:flex-row md:px-6 lg:px-8">
+      <div className="flex flex-col max-w-screen-xl px-2 mx-auto md:items-center md:justify-between md:flex-row md:px-4 lg:px-6">
         <div className="p-4 flex flex-row items-center justify-between">
-          <Link href="/">
+          <Link href="/" replace>
             <a className="text-lg font-semibold tracking-widest text-gray-900 uppercase rounded-lg dark-mode:text-white focus:outline-none focus:shadow-outline">
-              ThanhTK Blog
+              <span className="text-white">ThanhTK</span> Blog
             </a>
           </Link>
           <button
@@ -79,10 +79,8 @@ const Navbar: FC<PropTypes> = ({ categories }) => {
           {categories &&
             categories.map((category) => (
               <Link
-                href={{
-                  pathname: "/category/[slug]",
-                  query: { slug: category.slug },
-                }}
+                href={`/category/${category.slug}`}
+                replace
                 key={category.id}
               >
                 <a
@@ -98,7 +96,7 @@ const Navbar: FC<PropTypes> = ({ categories }) => {
                 </a>
               </Link>
             ))}
-          <Link href="/about">
+          <Link href="/about" replace>
             <a className="px-4 py-2 mt-2 text-base font-semibold bg-transparent rounded-lg dark-mode:bg-transparent dark-mode:hover:bg-gray-600 dark-mode:focus:bg-gray-600 dark-mode:focus:text-white dark-mode:hover:text-white dark-mode:text-gray-200 md:mt-0 hover:text-gray-900 focus:text-gray-900 hover:bg-green-300 focus:bg-green-300 focus:outline-none focus:shadow-outline">
               Về Tôi
             </a>
@@ -145,13 +143,13 @@ const Navbar: FC<PropTypes> = ({ categories }) => {
                     </a>
                   </Link>
                   {roles.includes(RoleEnum.User) ? (
-                    <Link href="/user/dashboard">
+                    <Link href="/user/dashboard" replace>
                       <a className="block px-4 py-2 mt-2 text-base font-semibold bg-transparent rounded-lg dark-mode:bg-transparent dark-mode:hover:bg-gray-600 dark-mode:focus:bg-gray-600 dark-mode:focus:text-white dark-mode:hover:text-white dark-mode:text-gray-200 md:mt-0 hover:text-gray-900 focus:text-gray-900 hover:bg-green-300 focus:bg-green-300 focus:outline-none focus:shadow-outline">
                         Dashboard
                       </a>
                     </Link>
                   ) : (
-                    <Link href="/admin/dashboard">
+                    <Link href="/admin/dashboard" replace>
                       <a className="block px-4 py-2 mt-2 text-base font-semibold bg-transparent rounded-lg dark-mode:bg-transparent dark-mode:hover:bg-gray-600 dark-mode:focus:bg-gray-600 dark-mode:focus:text-white dark-mode:hover:text-white dark-mode:text-gray-200 md:mt-0 hover:text-gray-900 focus:text-gray-900 hover:bg-green-300 focus:bg-green-300 focus:outline-none focus:shadow-outline">
                         Dashboard
                       </a>
@@ -169,7 +167,7 @@ const Navbar: FC<PropTypes> = ({ categories }) => {
               </div>
             </div>
           ) : (
-            <Link href="/login">
+            <Link href="/login" replace>
               <a className="px-4 py-2 mt-2 text-base font-semibold bg-transparent rounded-lg dark-mode:bg-transparent dark-mode:hover:bg-gray-600 dark-mode:focus:bg-gray-600 dark-mode:focus:text-white dark-mode:hover:text-white dark-mode:text-gray-200 md:mt-0 md:ml-4 hover:text-gray-900 focus:text-gray-900 hover:bg-green-300 focus:bg-green-300 focus:outline-none focus:shadow-outline">
                 Đăng nhập
               </a>

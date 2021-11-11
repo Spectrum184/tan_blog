@@ -11,36 +11,6 @@ const Home: NextPage = () => {
       </Head>
       <main>
         <h1 className="text-gray-900">OK</h1>
-        <h1 className="text-gray-900">OK</h1>
-        <h1 className="text-gray-900">OK</h1>
-        <h1 className="text-gray-900">OK</h1>
-        <h1 className="text-gray-900">OK</h1>
-        <h1 className="text-gray-900">OK</h1>
-        <h1 className="text-gray-900">OK</h1>
-        <h1 className="text-gray-900">OK</h1>
-        <h1 className="text-gray-900">OK</h1>
-        <h1 className="text-gray-900">OK</h1>
-        <h1 className="text-gray-900">OK</h1>
-        <h1 className="text-gray-900">OK</h1>
-        <h1 className="text-gray-900">OK</h1>
-        <h1 className="text-gray-900">OK</h1>
-        <h1 className="text-gray-900">OK</h1>
-        <h1 className="text-gray-900">OK</h1>
-        <h1 className="text-gray-900">OK</h1>
-        <h1 className="text-gray-900">OK</h1>
-        <h1 className="text-gray-900">OK</h1>
-        <h1 className="text-gray-900">OK</h1>
-        <h1 className="text-gray-900">OK</h1>
-        <h1 className="text-gray-900">OK</h1>
-        <h1 className="text-gray-900">OK</h1>
-        <h1 className="text-gray-900">OK</h1>
-        <h1 className="text-gray-900">OK</h1>
-        <h1 className="text-gray-900">OK</h1>
-        <h1 className="text-gray-900">OK</h1>
-        <h1 className="text-gray-900">OK</h1>
-        <h1 className="text-gray-900">OK</h1>
-        <h1 className="text-gray-900">OK</h1>
-        <h1 className="text-gray-900">OK</h1>
       </main>
     </Layout>
   );

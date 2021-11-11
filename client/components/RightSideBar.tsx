@@ -3,6 +3,7 @@ import Image from "next/image";
 
 import { ILayoutData } from "hooks/globalHooks";
 import { FC } from "react";
+import { loaderImage } from "utils/fileUpload";
 
 const RightSideBar: FC<ILayoutData> = ({ categories, tags, authors }) => {
   return (
@@ -29,12 +30,7 @@ const RightSideBar: FC<ILayoutData> = ({ categories, tags, authors }) => {
           <ul className="-mx-2">
             {categories.map((category) => (
               <li className="flex items-center my-2" key={category.id}>
-                <Link
-                  href={{
-                    pathname: "categories/[slug]",
-                    query: { slug: category.slug },
-                  }}
-                >
+                <Link href={`categories/${category.slug}`} replace>
                   <a className="mx-1 font-bold text-gray-900 hover:underline">
                     - {category.name}
                   </a>
@@ -86,19 +82,27 @@ const RightSideBar: FC<ILayoutData> = ({ categories, tags, authors }) => {
         </h1>
         <div className="flex flex-col max-w-sm px-8 py-6 bg-white rounded-lg rounded-t-none shadow-md">
           <ul className="-mx-4">
-            <li className="flex items-center">
-              <p>
-                <a
-                  href="#"
-                  className="mx-1 font-bold text-gray-700 hover:underline"
-                >
-                  Alex John
-                </a>
-                <span className="text-sm font-light text-gray-700">
-                  Created 23 Posts
-                </span>
-              </p>
-            </li>
+            {authors.map((author) => (
+              <li className="flex items-center" key={author.id}>
+                <div className="flex items-center">
+                  <Image
+                    src={loaderImage(author.avatar, "avatar")}
+                    alt="avatar"
+                    width={40}
+                    height={40}
+                    className="rounded-full"
+                  />
+                  <Link href={`/user/${author.username}`} replace>
+                    <a className="mx-2 font-bold text-gray-700 hover:underline">
+                      {author.name}
+                    </a>
+                  </Link>
+                  <span className="text-sm font-light text-gray-700">
+                    đã đăng {author.posts} bài
+                  </span>
+                </div>
+              </li>
+            ))}
           </ul>
         </div>
       </div>

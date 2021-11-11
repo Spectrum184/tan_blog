@@ -10,6 +10,7 @@ import {
   useState,
   Dispatch,
   SetStateAction,
+  memo,
 } from "react";
 import { checkImageFile, uploadImage } from "utils/fileUpload";
 import { useAppDispatch } from "redux/store";
@@ -156,4 +157,4 @@ const Quill: FC<PropTypes> = ({ setContent, content }) => {
   );
 };
 
-export default Quill;
+export default memo(Quill);

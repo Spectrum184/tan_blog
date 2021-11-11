@@ -43,7 +43,7 @@ export const login = (payload: ILogin) => async (dispatch: Dispatch) => {
       setAlertState({
         show: true,
         type: "error",
-        message: error.response.message,
+        message: error.response.data.message,
       })
     );
     localStorage.clear();
@@ -58,13 +58,6 @@ export const refresh = () => async (dispatch: Dispatch) => {
 
     localStorage.setItem("logged", "true");
   } catch (error: any) {
-    dispatch(
-      setAlertState({
-        show: true,
-        type: "error",
-        message: error.response.message,
-      })
-    );
     localStorage.clear();
   }
 };
@@ -82,7 +75,7 @@ export const register = (payload: IRegister) => async (dispatch: Dispatch) => {
       setAlertState({
         show: true,
         type: "error",
-        message: error.response.message,
+        message: error.response.data.message,
       })
     );
     localStorage.clear();
@@ -99,7 +92,7 @@ export const logout = () => async (dispatch: Dispatch) => {
       setAlertState({
         show: true,
         type: "error",
-        message: error.response.message,
+        message: error.response.data.message,
       })
     );
   }

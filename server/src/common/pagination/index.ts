@@ -8,20 +8,33 @@ export class PaginationQueryDto {
   @IsOptional()
   @Type(() => Number)
   @Min(9)
-  perPage?: number | 9;
+  limit?: number | 9;
 
-  @ApiProperty({ description: 'Page want to get item', default: 0 })
+  @ApiProperty({ description: 'Page want to get item', default: 1 })
   @IsNumber()
   @Type(() => Number)
   @Min(1)
   page: number;
 
-  @ApiProperty({ description: 'Sort data or not', default: 'ASC' })
+  @ApiProperty({ description: 'Sort data or not', default: 'time' })
   @Type(() => String)
-  sort?: 'ASC' | 'DESC';
+  sort?: 'time' | 'view';
 
-  @ApiProperty({ description: 'Param want to search', default: '' })
+  @ApiProperty({
+    description: 'Param want to search',
+    default: '',
+    required: false,
+  })
   @IsOptional()
   @Type(() => String)
-  param: string;
+  content?: string;
+
+  @ApiProperty({
+    description: 'Param want to search',
+    default: 'DESC',
+    required: false,
+  })
+  @IsOptional()
+  @Type(() => String)
+  order?: 'ASC' | 'DESC';
 }

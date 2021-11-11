@@ -1,3 +1,5 @@
+import Avatar from "public/images/avatar.png";
+
 import { postDataStaticAPI } from "./fetchData";
 
 export const checkImageFile = (file: File): string => {
@@ -19,4 +21,16 @@ export const uploadImage = async (file: File, url: string) => {
   const res = await postDataStaticAPI(url, formData);
 
   return res.data.data;
+};
+
+export const loaderImage = (url: string, type: string) => {
+  if (url.includes("http://")) return url;
+
+  switch (type) {
+    case "avatar":
+      return Avatar;
+
+    default:
+      throw new Error("Không tồn tại ảnh này!");
+  }
 };

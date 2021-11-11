@@ -4,7 +4,7 @@ import { Repository } from 'typeorm';
 import { Category } from '../category/entity';
 import { TagService } from '../tag/service';
 import { UserDto } from '../user/dto';
-import { PostDto } from './dto';
+import { ListPostDto, PostDto } from './dto';
 import { Post } from './entity';
 import { PostPayload } from './payload';
 import slugify from 'slugify';
@@ -88,24 +88,27 @@ export class PostService {
 
   async findPosts({
     page,
-    param,
-    perPage,
+    content,
+    limit,
     sort,
+    order,
   }: PaginationQueryDto): Promise<IResultPagination<PostDto>> {
     try {
-      const limit = perPage || 9;
+      const limitValue = limit || 9;
       const builder = this.postRepository
         .createQueryBuilder('posts')
         .leftJoinAndSelect('posts.tags', 'tags')
         .leftJoinAndSelect('posts.category', 'category')
         .leftJoinAndSelect('posts.author', 'author')
-        .where('posts.title LIKE :param', { param: `%${param || ''}%` });
+        .where('posts.title LIKE :content', { content: `%${content || ''}%` });
 
-      if (sort) builder.orderBy('posts.createdAt', sort);
+      if (sort === 'time') builder.orderBy('posts.createdAt', order ?? 'DESC');
+
+      if (sort === 'view') builder.orderBy('posts.views', order ?? 'DESC');
 
       const total = await builder.getCount();
 
-      builder.offset((page - 1) * limit).limit(limit);
+      builder.offset((page - 1) * limitValue).limit(limitValue);
 
       const posts = await builder.getMany();
 
@@ -114,16 +117,16 @@ export class PostService {
           data: [],
           total: 0,
           page,
-          lastPage: Math.ceil(total / limit),
+          lastPage: Math.ceil(total / limitValue),
         };
 
-      const newPosts = posts.map((post) => new PostDto(post));
+      const newPosts = posts.map((post) => new ListPostDto(post));
 
       return {
         data: newPosts,
         total,
         page,
-        lastPage: Math.ceil(total / limit),
+        lastPage: Math.ceil(total / limitValue),
       };
     } catch (error) {
       throw error;

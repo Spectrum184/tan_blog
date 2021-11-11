@@ -8,5 +8,5 @@ import (
 
 func Setup(app *fiber.App) {
 	app.Post("/api/upload-post-image", controllers.UploadPostFile)
-	app.Post("/api/upload-category-image/:fileName", controllers.UploadPostFile)
+	app.Post("/api/upload-category-image/:fileName", controllers.UploadCategoryFile)
 }

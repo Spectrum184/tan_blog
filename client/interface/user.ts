@@ -21,6 +21,7 @@ export interface IAuthor {
   readonly id: string;
   readonly username: string;
   readonly avatar: string;
-  readonly isAdmin: boolean;
-  readonly posts: number;
+  readonly isAdmin?: boolean;
+  readonly posts?: number;
+  readonly name: string;
 }

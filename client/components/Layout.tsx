@@ -36,7 +36,7 @@ const Layout: FC<PropTypes> = ({ children, title = "Blogs | Thanh TK" }) => {
       </Head>
       {data.categories && <Navbar categories={data.categories} />}
       <div className="px-6 pt-4 pb-6">
-        <div className="container flex justify-between mx-auto">
+        <div className="container flex justify-between max-w-screen-xl px-2 md:px-4 lg:px-6 mx-auto">
           <div className="w-full lg:w-8/12">{children}</div>
           {!loading && <RightSideBar {...data} />}
         </div>

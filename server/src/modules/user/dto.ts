@@ -41,6 +41,7 @@ export class PostAuthorDto {
     this.avatar = author.avatar;
     this.isAdmin = author.admin ? true : false;
     this.posts = author.posts;
+    this.name = author.name;
   }
 
   readonly id: string;
@@ -48,4 +49,5 @@ export class PostAuthorDto {
   readonly avatar: string;
   readonly isAdmin: boolean;
   readonly posts: Post[] | number;
+  readonly name: string;
 }

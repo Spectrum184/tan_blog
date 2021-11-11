@@ -19,10 +19,10 @@ const LayoutAdmin: FC<PropTypes> = ({
   const router = useRouter();
 
   useEffect(() => {
-    if (roles.length === 0) router.push("/");
+    if (roles.length === 0) router.replace("/");
 
     if (roles.includes(RoleEnum.User) && roles.length === 1)
-      router.push("/user/dashboard");
+      router.replace("/user/dashboard");
   }, [router, roles]);
 
   return (

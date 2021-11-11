@@ -6,3 +6,8 @@ export interface ICategory {
   thumbnail: string;
   posts?: number;
 }
+
+export interface ICategoryPost {
+  name: string;
+  slug: string;
+}

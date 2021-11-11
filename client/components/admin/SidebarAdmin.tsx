@@ -14,7 +14,7 @@ const SidebarAdmin: FC = () => {
     <div className="min-h-screen flex flex-col flex-auto flex-shrink-0 bg-green-500 text-gray-900">
       <div className="fixed flex flex-col top-0 left-0 lg:w-64 w-20 bg-green-500 h-full">
         <div className="flex items-center justify-center h-14 border-b hover:bg-green-300">
-          <Link href="/">
+          <Link href="/" replace>
             <a className="flex">
               <svg
                 className="w-5 h-5"
@@ -46,7 +46,7 @@ const SidebarAdmin: FC = () => {
               </div>
             </li>
             <li>
-              <Link href="/admin/dashboard">
+              <Link href="/admin/dashboard" replace>
                 <a
                   className={cn(
                     "relative flex flex-row items-center h-11 focus:outline-none hover:bg-green-300 text-gray-700 hover:text-gray-900 border-l-4 border-transparent hover:border-indigo-500 pr-6",
@@ -165,7 +165,7 @@ const SidebarAdmin: FC = () => {
               </div>
             </li>
             <li>
-              <Link href="/admin/post">
+              <Link href="/admin/post" replace>
                 <a
                   className={cn(
                     "relative flex flex-row items-center h-11 focus:outline-none hover:bg-green-300 text-gray-700 hover:text-gray-900 border-l-4 border-transparent hover:border-indigo-500 pr-6",

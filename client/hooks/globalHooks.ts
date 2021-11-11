@@ -1,7 +1,9 @@
-import { ICategory } from "interface/category";
 import useSWR, { KeyedMutator } from "swr";
+
+import { ICategory } from "interface/category";
 import { IAuthor, IUser } from "../interface/user";
 import { getDataAPI } from "../utils/fetchData";
+import { IListPostPagination, IPagination } from "interface/pagination";
 
 interface IUseUser {
   loading: boolean;
@@ -19,6 +21,10 @@ export interface ILayoutData {
 interface IUseLayoutData {
   data: ILayoutData;
   error?: boolean;
+  loading: boolean;
+}
+
+interface IListPost extends IListPostPagination {
   loading: boolean;
 }
 
@@ -57,4 +63,24 @@ export const useLayoutData = () => {
     loading,
     error,
   } as IUseLayoutData;
+};
+
+export const useListPost = ({
+  prefix,
+  limit,
+  page,
+  content,
+  order,
+}: IPagination) => {
+  const { data, error } = useSWR(
+    `${prefix}?page=${page}&limit=${limit}&content=${content}&order=${order}`,
+    fetcher
+  );
+
+  const loading: boolean = !data && !error;
+
+  return {
+    ...data,
+    loading,
+  } as IListPost;
 };

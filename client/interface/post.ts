@@ -1,3 +1,6 @@
+import { ICategoryPost } from "./category";
+import { IAuthor } from "./user";
+
 export interface IPost {
   id: string;
   title: string;
@@ -5,6 +8,10 @@ export interface IPost {
   content: string;
   thumbnail: string;
   status: boolean;
-  categoryId: string;
-  tag: string;
+  createdBy: string;
+  createdAt: string;
+  tags: string[];
+  category: ICategoryPost;
+  views: number;
+  author: IAuthor;
 }
