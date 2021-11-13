@@ -1,58 +1,86 @@
 import cn from "classnames";
 
-import { useListPost } from "hooks/globalHooks";
-import { useRouter } from "next/router";
-import { FC, useState, useEffect } from "react";
+import { usePagination, DOTS } from "hooks/globalHooks";
+import { FC, useState } from "react";
 
 type PropTypes = {
-  prefix: string;
+  onPageChange: (pageNumber: number) => void;
+  totalPage: number;
+  siblingCount?: number;
+  currentPage: number;
 };
 
-const Pagination: FC<PropTypes> = ({ prefix }) => {
-  const [page, setPage] = useState<number>(1);
-  const { query, pathname } = useRouter();
+const Pagination: FC<PropTypes> = ({
+  onPageChange,
+  siblingCount = 1,
+  currentPage,
+  totalPage,
+}) => {
+  const paginationRange = usePagination({
+    totalPage,
+    siblingCount,
+    currentPage,
+  });
+  const lastPage = paginationRange[paginationRange.length - 1];
 
-  const { loading, lastPage } = useListPost({ prefix, page });
+  if (currentPage === 0 || paginationRange.length < 2) return null;
+
+  const onPrevious = () => onPageChange(currentPage - 1);
+
+  const onNext = () => onPageChange(currentPage + 1);
 
   return (
-    <div className="mt-8 mx-auto">
-      <div className="flex">
-        <button
-          disabled={pathname !== "/" || page === 1 || loading}
-          className="px-3 py-2 mx-1 font-medium text-gray-500 bg-white rounded-md"
+    <div className="mt-8 flex justify-center">
+      <ul className="flex">
+        <li
+          className={cn(
+            "px-2 md:px-3 py-1 md:py-2  mx-1 font-medium text-gray-900 bg-white rounded-md hover:bg-green-500 hover:text-white",
+            {
+              "pointer-events-none bg-gray-300": currentPage === 1,
+            }
+          )}
+          onClick={onPrevious}
         >
           Trước
-        </button>
-        {page > 2 && (
-          <button className="px-3 py-2 mx-1 font-medium text-gray-700 bg-white rounded-md hover:bg-green-500 hover:text-white">
-            {page - 2}
-          </button>
-        )}
-        {page > 1 && (
-          <button className="px-3 py-2 mx-1 font-medium text-gray-700 bg-white rounded-md hover:bg-green-500 hover:text-white">
-            {page - 1}
-          </button>
-        )}
-        <button className="px-3 py-2 mx-1 font-medium text-gray-700 bg-white rounded-md hover:bg-green-500 hover:text-white">
-          {page}
-        </button>
-        {page > 3 && (
-          <button className="px-3 py-2 mx-1 font-medium text-gray-700 bg-white rounded-md hover:bg-green-500 hover:text-white">
-            {page + 1}
-          </button>
-        )}
-        {page > 4 && (
-          <button className="px-3 py-2 mx-1 font-medium text-gray-700 bg-white rounded-md hover:bg-green-500 hover:text-white">
-            {page + 2}
-          </button>
-        )}
-        <button
-          disabled={pathname !== "/" || page === lastPage || loading}
-          className="px-3 py-2 mx-1 font-medium text-gray-700 bg-white rounded-md hover:bg-green-500 hover:text-white"
+        </li>
+        {paginationRange.map((pageNumber, index: number) => {
+          if (pageNumber === DOTS)
+            return (
+              <li
+                key={index}
+                className="px-1 md:px-3 py-1 md:py-2  mx-1 font-medium text-gray-900"
+              >
+                &#8230;
+              </li>
+            );
+
+          return (
+            <li
+              key={index}
+              className={cn(
+                "px-2 md:px-3 py-1 md:py-2  mx-1 font-medium text-gray-900 bg-white rounded-md hover:bg-green-500 hover:text-white",
+                {
+                  "bg-green-500": currentPage === pageNumber,
+                }
+              )}
+              onClick={() => onPageChange(Number(pageNumber))}
+            >
+              {pageNumber}
+            </li>
+          );
+        })}
+        <li
+          className={cn(
+            "px-2 md:px-3 py-1 md:py-2 mx-1 font-medium text-gray-900 bg-white rounded-md hover:bg-green-500 hover:text-white",
+            {
+              "pointer-events-none bg-gray-300": currentPage === lastPage,
+            }
+          )}
+          onClick={onNext}
         >
-          Sau
-        </button>
-      </div>
+          Tiếp
+        </li>
+      </ul>
     </div>
   );
 };

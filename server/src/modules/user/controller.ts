@@ -113,7 +113,7 @@ export class UserController {
   }
 
   @Public()
-  @Get('postAuthor')
+  @Get('post-author')
   async findPostAuthor(@Res() res: FastifyReply): Promise<FastifyReply> {
     try {
       const authors = await this.userService.findPostAuthor();

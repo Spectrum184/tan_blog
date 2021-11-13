@@ -13,5 +13,5 @@ export interface IListPostPagination {
   data: IPost[];
   total: number;
   page: number;
-  lastPage: number;
+  totalPage: number;
 }

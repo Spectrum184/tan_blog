@@ -117,7 +117,7 @@ export class PostService {
           data: [],
           total: 0,
           page,
-          lastPage: Math.ceil(total / limitValue),
+          totalPage: Math.ceil(total / limitValue),
         };
 
       const newPosts = posts.map((post) => new ListPostDto(post));
@@ -126,7 +126,7 @@ export class PostService {
         data: newPosts,
         total,
         page,
-        lastPage: Math.ceil(total / limitValue),
+        totalPage: Math.ceil(total / limitValue),
       };
     } catch (error) {
       throw error;
