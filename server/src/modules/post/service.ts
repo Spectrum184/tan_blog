@@ -88,27 +88,26 @@ export class PostService {
 
   async findPosts({
     page,
-    content,
-    limit,
-    sort,
-    order,
+    content = '',
+    limit = 9,
+    sort = 'time',
+    order = 'DESC',
   }: PaginationQueryDto): Promise<IResultPagination<PostDto>> {
     try {
-      const limitValue = limit || 9;
       const builder = this.postRepository
         .createQueryBuilder('posts')
         .leftJoinAndSelect('posts.tags', 'tags')
         .leftJoinAndSelect('posts.category', 'category')
         .leftJoinAndSelect('posts.author', 'author')
-        .where('posts.title LIKE :content', { content: `%${content || ''}%` });
+        .where('posts.title LIKE :content', { content: `%${content}%` });
 
-      if (sort === 'time') builder.orderBy('posts.createdAt', order ?? 'DESC');
+      if (sort === 'time') builder.orderBy('posts.createdAt', order);
 
-      if (sort === 'view') builder.orderBy('posts.views', order ?? 'DESC');
+      if (sort === 'view') builder.orderBy('posts.views', order);
 
       const total = await builder.getCount();
 
-      builder.offset((page - 1) * limitValue).limit(limitValue);
+      builder.skip((page - 1) * limit).take(limit);
 
       const posts = await builder.getMany();
 
@@ -117,7 +116,7 @@ export class PostService {
           data: [],
           total: 0,
           page,
-          totalPage: Math.ceil(total / limitValue),
+          totalPage: Math.ceil(total / limit),
         };
 
       const newPosts = posts.map((post) => new ListPostDto(post));
@@ -126,7 +125,7 @@ export class PostService {
         data: newPosts,
         total,
         page,
-        totalPage: Math.ceil(total / limitValue),
+        totalPage: Math.ceil(total / limit),
       };
     } catch (error) {
       throw error;

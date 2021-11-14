@@ -53,7 +53,7 @@ export class ListPostDto implements IPost {
     this.id = post.id;
     this.title = post.title;
     this.slug = post.slug;
-    this.content = post.content.replace(/<[^>]*>/g, '').substr(0, 300);
+    this.content = post.content.replace(/<[^>]*>/g, '').substr(0, 250);
     this.thumbnail = post.thumbnail;
     this.status = post.status;
     this.createdBy = post.createdBy;

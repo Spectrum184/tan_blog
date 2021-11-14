@@ -34,7 +34,7 @@ const Pagination: FC<PropTypes> = ({
       <ul className="flex">
         <li
           className={cn(
-            "px-2 md:px-3 py-1 md:py-2  mx-1 font-medium text-gray-900 bg-white rounded-md hover:bg-green-500 hover:text-white",
+            "px-2 md:px-3 py-1 md:py-2  mx-1 font-medium text-gray-900 bg-white rounded-md cursor-pointer hover:bg-green-500 hover:text-white",
             {
               "pointer-events-none bg-gray-300": currentPage === 1,
             }
@@ -58,7 +58,7 @@ const Pagination: FC<PropTypes> = ({
             <li
               key={index}
               className={cn(
-                "px-2 md:px-3 py-1 md:py-2  mx-1 font-medium text-gray-900 bg-white rounded-md hover:bg-green-500 hover:text-white",
+                "px-2 md:px-3 py-1 md:py-2  mx-1 font-medium text-gray-900 bg-white rounded-md cursor-pointer hover:bg-green-500 hover:text-white",
                 {
                   "bg-green-500": currentPage === pageNumber,
                 }
@@ -71,7 +71,7 @@ const Pagination: FC<PropTypes> = ({
         })}
         <li
           className={cn(
-            "px-2 md:px-3 py-1 md:py-2 mx-1 font-medium text-gray-900 bg-white rounded-md hover:bg-green-500 hover:text-white",
+            "px-2 md:px-3 py-1 md:py-2 mx-1 font-medium text-gray-900 bg-white rounded-md hover:bg-green-500 cursor-pointer hover:text-white",
             {
               "pointer-events-none bg-gray-300": currentPage === lastPage,
             }

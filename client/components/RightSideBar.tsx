@@ -86,7 +86,8 @@ const RightSideBar: FC<ILayoutData> = ({ categories, tags, authors }) => {
               <li className="flex items-center" key={author.id}>
                 <div className="flex items-center">
                   <Image
-                    src={loaderImage(author.avatar, "avatar")}
+                    loader={loaderImage}
+                    src={author.avatar}
                     alt="avatar"
                     width={40}
                     height={40}

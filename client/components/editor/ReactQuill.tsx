@@ -15,7 +15,7 @@ import {
 import { checkImageFile, uploadImage } from "utils/fileUpload";
 import { useAppDispatch } from "redux/store";
 import { setAlertState } from "redux/alertStore";
-import { IPost } from "interface/post";
+import { IPostData } from "interface/post";
 
 const container = [
   [{ font: [] }],
@@ -36,7 +36,7 @@ const container = [
 ];
 
 type PropTypes = {
-  setContent: Dispatch<SetStateAction<IPost>>;
+  setContent: Dispatch<SetStateAction<IPostData>>;
   content: string;
 };
 
@@ -145,7 +145,7 @@ const Quill: FC<PropTypes> = ({ setContent, content }) => {
         ref={quillRef}
         value={content}
         onChange={(e) =>
-          setContent((post: IPost) => {
+          setContent((post: IPostData) => {
             return {
               ...post,
               content: e,

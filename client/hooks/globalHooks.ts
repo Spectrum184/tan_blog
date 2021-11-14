@@ -77,10 +77,10 @@ export const useLayoutData = () => {
 // fetch data list post base on query
 export const useListPost = ({
   prefix,
-  limit,
+  limit = 9,
   page,
-  content,
-  order,
+  content = "",
+  order = "DESC",
 }: IPagination) => {
   const { data, error } = useSWR(
     `${prefix}?page=${page}&limit=${limit}&content=${content}&order=${order}`,

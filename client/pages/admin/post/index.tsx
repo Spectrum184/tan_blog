@@ -6,7 +6,7 @@ import ConfirmModal from "components/ConfirmModal";
 import { ICategory } from "interface/category";
 import { GetStaticProps, InferGetStaticPropsType, NextPage } from "next";
 import { useState, SyntheticEvent, ChangeEvent } from "react";
-import { IPost } from "interface/post";
+import { IPostData } from "interface/post";
 import { checkImageFile, uploadImage } from "utils/fileUpload";
 import { useAppDispatch, useAppState } from "redux/store";
 import { setAlertState } from "redux/alertStore";
@@ -18,7 +18,9 @@ const Quill = dynamic(() => import("components/editor/ReactQuill"), {
 
 export const getStaticProps: GetStaticProps = async () => {
   const res = await axios.get("http://localhost:5000/api/categories");
-  const categories: ICategory[] = await res.data.categories;
+  const categories: ICategory[] = await res.data;
+
+  console.log(categories);
 
   return {
     props: {
@@ -30,7 +32,7 @@ export const getStaticProps: GetStaticProps = async () => {
 const Post: NextPage = ({
   categories,
 }: InferGetStaticPropsType<typeof getStaticProps>) => {
-  const initialState: IPost = {
+  const initialState: IPostData = {
     id: "",
     title: "",
     slug: "",

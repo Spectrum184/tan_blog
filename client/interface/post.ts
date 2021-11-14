@@ -15,3 +15,14 @@ export interface IPost {
   views: number;
   author: IAuthor;
 }
+
+export interface IPostData {
+  id: string;
+  title: string;
+  slug: string;
+  content: string;
+  thumbnail: string;
+  status: boolean;
+  categoryId: string;
+  tag: string;
+}

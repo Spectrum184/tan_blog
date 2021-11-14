@@ -1,5 +1,4 @@
 import Link from "next/link";
-import Avatar from "../public/images/avatar.png";
 import Image from "next/image";
 import cn from "classnames";
 
@@ -9,6 +8,7 @@ import { logout } from "../redux/userStore";
 import { RoleEnum } from "../interface/user";
 import { ICategory } from "interface/category";
 import { useRouter } from "next/router";
+import { loaderImage } from "utils/fileUpload";
 
 type PropTypes = {
   categories: ICategory[];
@@ -37,10 +37,10 @@ const Navbar: FC<PropTypes> = ({ categories }) => {
   }, [divRef]);
 
   return (
-    <div className="w-full text-gray-800 bg-green-500 dark-mode:text-gray-200 dark-mode:bg-gray-800 shadow-md sticky top-0">
+    <div className="w-full text-gray-800 bg-green-500 dark-mode:text-gray-200 dark-mode:bg-gray-800 shadow-md sticky top-0 z-50">
       <div className="flex flex-col max-w-screen-xl px-2 mx-auto md:items-center md:justify-between md:flex-row md:px-4 lg:px-6">
         <div className="p-4 flex flex-row items-center justify-between">
-          <Link href="/" replace>
+          <Link href="/">
             <a className="text-lg font-semibold tracking-widest text-gray-900 uppercase rounded-lg dark-mode:text-white focus:outline-none focus:shadow-outline">
               <span className="text-white">ThanhTK</span> Blog
             </a>
@@ -78,11 +78,7 @@ const Navbar: FC<PropTypes> = ({ categories }) => {
         >
           {categories &&
             categories.map((category) => (
-              <Link
-                href={`/category/${category.slug}`}
-                replace
-                key={category.id}
-              >
+              <Link href={`/category/${category.slug}`} key={category.id}>
                 <a
                   className={cn(
                     "px-4 py-2 mt-2 text-base font-semibold text-gray-900 rounded-lg dark-mode:bg-gray-700 dark-mode:hover:bg-gray-600 dark-mode:focus:bg-gray-600 dark-mode:focus:text-white dark-mode:hover:text-white dark-mode:text-gray-200 md:mt-0 hover:text-gray-900 focus:text-gray-900 hover:bg-green-300 focus:bg-green-300 focus:outline-none focus:shadow-outline",
@@ -96,7 +92,7 @@ const Navbar: FC<PropTypes> = ({ categories }) => {
                 </a>
               </Link>
             ))}
-          <Link href="/about" replace>
+          <Link href="/about">
             <a className="px-4 py-2 mt-2 text-base font-semibold bg-transparent rounded-lg dark-mode:bg-transparent dark-mode:hover:bg-gray-600 dark-mode:focus:bg-gray-600 dark-mode:focus:text-white dark-mode:hover:text-white dark-mode:text-gray-200 md:mt-0 hover:text-gray-900 focus:text-gray-900 hover:bg-green-300 focus:bg-green-300 focus:outline-none focus:shadow-outline">
               Về Tôi
             </a>
@@ -106,7 +102,8 @@ const Navbar: FC<PropTypes> = ({ categories }) => {
               <button className="flex flex-row items-center w-full px-4 py-2 mt-2 text-base font-semibold text-left bg-transparent rounded-lg dark-mode:bg-transparent dark-mode:focus:text-white dark-mode:hover:text-white dark-mode:focus:bg-gray-600 dark-mode:hover:bg-gray-600 md:w-auto md:inline md:mt-0 hover:text-gray-900 focus:text-gray-900 hover:bg-green-300 focus:bg-green-300 focus:outline-none focus:shadow-outline">
                 <span className="flex content-center">
                   <Image
-                    src={avatar === "avatar.jpg" ? Avatar : avatar}
+                    loader={loaderImage}
+                    src={avatar}
                     alt="avatar.png"
                     width={24}
                     height={24}
@@ -143,13 +140,13 @@ const Navbar: FC<PropTypes> = ({ categories }) => {
                     </a>
                   </Link>
                   {roles.includes(RoleEnum.User) ? (
-                    <Link href="/user/dashboard" replace>
+                    <Link href="/user/dashboard">
                       <a className="block px-4 py-2 mt-2 text-base font-semibold bg-transparent rounded-lg dark-mode:bg-transparent dark-mode:hover:bg-gray-600 dark-mode:focus:bg-gray-600 dark-mode:focus:text-white dark-mode:hover:text-white dark-mode:text-gray-200 md:mt-0 hover:text-gray-900 focus:text-gray-900 hover:bg-green-300 focus:bg-green-300 focus:outline-none focus:shadow-outline">
                         Dashboard
                       </a>
                     </Link>
                   ) : (
-                    <Link href="/admin/dashboard" replace>
+                    <Link href="/admin/dashboard">
                       <a className="block px-4 py-2 mt-2 text-base font-semibold bg-transparent rounded-lg dark-mode:bg-transparent dark-mode:hover:bg-gray-600 dark-mode:focus:bg-gray-600 dark-mode:focus:text-white dark-mode:hover:text-white dark-mode:text-gray-200 md:mt-0 hover:text-gray-900 focus:text-gray-900 hover:bg-green-300 focus:bg-green-300 focus:outline-none focus:shadow-outline">
                         Dashboard
                       </a>
@@ -167,7 +164,7 @@ const Navbar: FC<PropTypes> = ({ categories }) => {
               </div>
             </div>
           ) : (
-            <Link href="/login" replace>
+            <Link href="/login">
               <a className="px-4 py-2 mt-2 text-base font-semibold bg-transparent rounded-lg dark-mode:bg-transparent dark-mode:hover:bg-gray-600 dark-mode:focus:bg-gray-600 dark-mode:focus:text-white dark-mode:hover:text-white dark-mode:text-gray-200 md:mt-0 md:ml-4 hover:text-gray-900 focus:text-gray-900 hover:bg-green-300 focus:bg-green-300 focus:outline-none focus:shadow-outline">
                 Đăng nhập
               </a>

@@ -7,4 +7,7 @@ module.exports = {
   },
   poweredByHeader: false,
   generateEtags: false,
+  images: {
+    domains: ["http:/localhost:8000"],
+  },
 };

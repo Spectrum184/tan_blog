@@ -1,5 +1,6 @@
 import Avatar from "public/images/avatar.png";
 
+import { IImageLoader } from "interface/common";
 import { postDataStaticAPI } from "./fetchData";
 
 export const checkImageFile = (file: File): string => {
@@ -23,14 +24,9 @@ export const uploadImage = async (file: File, url: string) => {
   return res.data.data;
 };
 
-export const loaderImage = (url: string, type: string) => {
-  if (url.includes("http://")) return url;
+export const loaderImage = ({ src, width, quality = 75 }: IImageLoader) => {
+  if (!src.includes("http://"))
+    return `http://localhost:8000/static/${src}?w=${width}&q=${quality}`;
 
-  switch (type) {
-    case "avatar":
-      return Avatar;
-
-    default:
-      throw new Error("Không tồn tại ảnh này!");
-  }
+  return `${src}?w=${width}&q=${quality}`;
 };
