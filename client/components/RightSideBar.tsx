@@ -7,7 +7,7 @@ import { loaderImage } from "utils/fileUpload";
 
 const RightSideBar: FC<ILayoutData> = ({ categories, tags, authors }) => {
   return (
-    <div className="hidden w-4/12 -mx-8 lg:block">
+    <div className="hidden w-4/12 lg:block">
       <div className="px-8">
         <h1 className="text-xl font-bold text-gray-900 bg-green-400 p-2 rounded-lg max-w-sm rounded-b-none shadow-md flex">
           <svg
@@ -30,7 +30,7 @@ const RightSideBar: FC<ILayoutData> = ({ categories, tags, authors }) => {
           <ul className="-mx-2">
             {categories.map((category) => (
               <li className="flex items-center my-2" key={category.id}>
-                <Link href={`categories/${category.slug}`} replace>
+                <Link href={`/category/${category.slug}`}>
                   <a className="mx-1 font-bold text-gray-900 hover:underline">
                     - {category.name}
                   </a>
@@ -64,12 +64,7 @@ const RightSideBar: FC<ILayoutData> = ({ categories, tags, authors }) => {
               key={index}
               className="m-1 bg-gray-200 hover:bg-gray-300 rounded-full px-2 font-bold text-sm leading-loose cursor-pointer"
             >
-              <Link
-                href={{
-                  pathname: "tags/[tag]",
-                  query: { tag },
-                }}
-              >
+              <Link href={`/tag/${tag}`}>
                 <a>#{tag}</a>
               </Link>
             </span>
@@ -78,7 +73,21 @@ const RightSideBar: FC<ILayoutData> = ({ categories, tags, authors }) => {
       </div>
       <div className="px-8 mt-10">
         <h1 className="text-xl font-bold text-gray-900 bg-green-400 p-2 rounded-lg max-w-sm rounded-b-none shadow-md flex">
-          Tác giả
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="h-6 w-6"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+            />
+          </svg>
+          <span className="ml-2">Tác giả</span>
         </h1>
         <div className="flex flex-col max-w-sm px-8 py-6 bg-white rounded-lg rounded-t-none shadow-md">
           <ul className="-mx-4">

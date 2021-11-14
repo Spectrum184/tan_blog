@@ -1,13 +1,13 @@
 import Head from "next/head";
 import Navbar from "./Navbar";
 import Footer from "./Footer";
+import RightSideBar from "./RightSideBar";
 
 import { ReactNode, FC, useEffect } from "react";
 import { useAppDispatch } from "../redux/store";
 import { refresh } from "../redux/userStore";
 import { useRouter } from "next/router";
 import { useLayoutData } from "hooks/globalHooks";
-import RightSideBar from "./RightSideBar";
 
 type PropTypes = {
   children?: ReactNode;

@@ -9,5 +9,6 @@ module.exports = {
   generateEtags: false,
   images: {
     domains: ["http:/localhost:8000"],
+    minimumCacheTTL: 60,
   },
 };
