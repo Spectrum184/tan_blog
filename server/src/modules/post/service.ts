@@ -76,8 +76,8 @@ export class PostService {
   async getPostBySlug(slug: string): Promise<PostDto> {
     try {
       const post = await this.postRepository.findOne({
-        where: { slug: slug, status: true },
-        relations: ['tags', 'category'],
+        where: { slug, status: true },
+        relations: ['tags', 'category', 'author'],
       });
 
       return new PostDto(post);

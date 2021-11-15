@@ -41,7 +41,7 @@ const Navbar: FC<PropTypes> = ({ categories }) => {
       <div className="flex flex-col max-w-screen-xl px-2 mx-auto md:items-center md:justify-between md:flex-row md:px-4 lg:px-6">
         <div className="p-4 flex flex-row items-center justify-between">
           <Link href="/">
-            <a className="text-lg font-semibold tracking-widest text-gray-900 uppercase rounded-lg dark-mode:text-white focus:outline-none focus:shadow-outline">
+            <a className="text-xl font-semibold tracking-widest text-gray-900 uppercase rounded-lg dark-mode:text-white focus:outline-none focus:shadow-outline">
               <span className="text-white">ThanhTK</span> Blog
             </a>
           </Link>

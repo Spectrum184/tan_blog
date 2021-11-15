@@ -48,8 +48,8 @@ const Home: NextPage = () => {
         <title>Trang chủ | ThanhTK Blog</title>
       </Head>
       <main>
-        <div className="flex items-center justify-between p-2 bg-green-400 rounded-t-lg">
-          <h1 className="text-md font-bold text-gray-900 md:text-2xl">
+        <div className="flex content-center justify-between p-2 bg-green-400 rounded-t-lg">
+          <h1 className="text-md font-bold text-gray-900 md:text-xl">
             Bài viết
           </h1>
           <div className="flex content-center justify-center">

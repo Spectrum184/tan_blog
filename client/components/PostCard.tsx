@@ -71,14 +71,14 @@ const PostCard: FC<IPost> = ({
               {views}
             </span>
             <Link href={`/category/${category.slug}`}>
-              <a className="px-2 py-1 font-bold text-gray-100 bg-gray-600 rounded hover:bg-gray-500">
+              <a className="px-2 py-1 text-sm font-bold text-gray-100 bg-gray-600 rounded hover:bg-gray-500">
                 {category.name}
               </a>
             </Link>
           </div>
           <div className="mt-1">
             <Link href={`/post/${slug}`}>
-              <a className="text-2xl font-bold text-gray-900 hover:underline">
+              <a className="text-xl font-bold text-gray-900 hover:underline">
                 {title.substr(0, 100)}
               </a>
             </Link>
