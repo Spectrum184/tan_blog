@@ -6,12 +6,17 @@ import { Category } from './entity';
 import { CategoryPayload } from './payload';
 import slugify from 'slugify';
 import { UserDto } from '../user/dto';
+import { PaginationQueryDto } from 'src/common/pagination';
+import { ListPostDto, PostDto } from '../post/dto';
+import { IResultPagination } from 'src/common/interface';
+import { Post } from '../post/entity';
 
 @Injectable()
 export class CategoryService {
   constructor(
     @InjectRepository(Category)
     private readonly categoryRepository: Repository<Category>,
+    @InjectRepository(Post) private readonly postRepository: Repository<Post>,
   ) {}
 
   async findAllCategories(): Promise<CategoryDto[]> {
@@ -55,22 +60,53 @@ export class CategoryService {
     }
   }
 
-  async findPostByCategorySlug(slug: string): Promise<CategoryPostDto> {
+  async findPostByCategorySlug(
+    slug: string,
+    {
+      page,
+      limit = 9,
+      sort = 'time',
+      order = 'DESC',
+    }: Partial<PaginationQueryDto>,
+  ): Promise<IResultPagination<PostDto>> {
     try {
-      const category = await this.categoryRepository
-        .createQueryBuilder('category')
-        .where('category.slug = :slug', { slug })
-        .leftJoinAndSelect(
-          'category.posts',
-          'posts',
-          'posts.status = :status',
-          { status: true },
-        )
+      const builder = this.postRepository
+        .createQueryBuilder('posts')
         .leftJoinAndSelect('posts.tags', 'tags')
-        .leftJoinAndSelect('posts.author', 'author')
-        .getOne();
+        .innerJoinAndSelect(
+          'posts.category',
+          'category',
+          'category.slug = :slug',
+          { slug },
+        )
+        .leftJoinAndSelect('posts.author', 'author');
 
-      return new CategoryPostDto(category);
+      if (sort === 'time') builder.orderBy('posts.createdAt', order);
+
+      if (sort === 'view') builder.orderBy('posts.views', order);
+
+      const total = await builder.getCount();
+
+      builder.skip((page - 1) * limit).take(limit);
+
+      const posts = await builder.getMany();
+
+      if (posts.length === 0)
+        return {
+          data: [],
+          total: 0,
+          page,
+          totalPage: Math.ceil(total / limit),
+        };
+
+      const newPosts = posts.map((post) => new ListPostDto(post));
+
+      return {
+        data: newPosts,
+        total,
+        page,
+        totalPage: Math.ceil(total / limit),
+      };
     } catch (error) {
       throw error;
     }

@@ -12,9 +12,14 @@ import { useLayoutData } from "hooks/globalHooks";
 type PropTypes = {
   children?: ReactNode;
   title?: string;
+  isHomepage?: boolean;
 };
 
-const Layout: FC<PropTypes> = ({ children, title = "Blogs | Thanh TK" }) => {
+const Layout: FC<PropTypes> = ({
+  children,
+  isHomepage = false,
+  title = "Blogs | Thanh TK",
+}) => {
   const dispatch = useAppDispatch();
   const router = useRouter();
   const { data, loading, error } = useLayoutData();
@@ -34,13 +39,17 @@ const Layout: FC<PropTypes> = ({ children, title = "Blogs | Thanh TK" }) => {
         <meta lang="en" charSet="utf-8" />
         <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       </Head>
-      {data.categories && <Navbar categories={data.categories} />}
-      <div className="px-6 pt-4 pb-6">
-        <div className="container flex justify-between max-w-screen-xl px-2 md:px-4 lg:px-6 mx-auto">
-          <div className="w-full lg:w-8/12">{children}</div>
-          {!loading && <RightSideBar {...data} />}
+      {!loading && <Navbar categories={data.categories} />}
+      {isHomepage ? (
+        <div>{children}</div>
+      ) : (
+        <div className="px-6 pt-4 pb-6">
+          <div className="container flex justify-between max-w-screen-xl px-2 md:px-4 lg:px-6 mx-auto">
+            <div className="w-full lg:w-8/12">{children}</div>
+            {!loading && <RightSideBar {...data} />}
+          </div>
         </div>
-      </div>
+      )}
       <Footer />
     </div>
   );

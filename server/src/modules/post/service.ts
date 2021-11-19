@@ -80,6 +80,8 @@ export class PostService {
         relations: ['tags', 'category', 'author'],
       });
 
+      if (!post) return null;
+
       return new PostDto(post);
     } catch (error) {
       throw error;

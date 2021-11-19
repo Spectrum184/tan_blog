@@ -74,6 +74,8 @@ export class PostController {
     try {
       const post = await this.postService.getPostBySlug(slug);
 
+      if (!post) return res.status(HttpStatus.NOT_FOUND).send({ post: null });
+
       return res.status(HttpStatus.OK).send(post);
     } catch (error) {
       this.logger.error(error);

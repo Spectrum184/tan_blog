@@ -16,7 +16,7 @@ const Custom404: NextPage = () => {
           <div className="border-t border-gray-200 text-center pt-8 p-10">
             <h1 className="text-9xl font-bold text-green-500">404</h1>
             <h1 className="text-2xl font-medium py-8">
-              oops! Trang này không tồn tại
+              Oops! Trang này không tồn tại
             </h1>
             <Link href="/">
               <a className="bg-gradient-to-r from-purple-400 to-blue-500 hover:from-pink-500 hover:to-orange-500 text-white font-semibold px-6 py-3 rounded-md mr-6">

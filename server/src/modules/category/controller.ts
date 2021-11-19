@@ -8,11 +8,13 @@ import {
   Logger,
   Param,
   Post,
+  Query,
   Req,
   Res,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { FastifyReply } from 'fastify';
+import { PaginationQueryDto } from 'src/common/pagination';
 import { Public, Roles } from '../auth/decorator';
 import { ILoginRequest } from '../auth/interface';
 import { RoleEnum } from '../role/enum';
@@ -45,18 +47,17 @@ export class CategoryController {
   @Get(':slug')
   async findBySlug(
     @Param('slug') slug: string,
+    @Query() query: Partial<PaginationQueryDto>,
     @Res() res: FastifyReply,
   ): Promise<FastifyReply> {
     try {
-      const category = await this.categoryService.findPostByCategorySlug(slug);
-
-      if (!category)
-        res.status(HttpStatus.NOT_FOUND).send({
-          message: 'Cant not found this category',
-        });
+      const result = await this.categoryService.findPostByCategorySlug(
+        slug,
+        query,
+      );
 
       return res.status(HttpStatus.OK).send({
-        category,
+        ...result,
       });
     } catch (error) {
       this.logger.error(error);

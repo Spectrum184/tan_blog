@@ -1,7 +1,7 @@
 import LayoutAdmin from "components/admin/LayoutAdmin";
 import axios from "axios";
-import dynamic from "next/dynamic";
 import ConfirmModal from "components/ConfirmModal";
+import TinyEditor from "components/editor/TinyEditor";
 
 import { ICategory } from "interface/category";
 import { GetStaticProps, InferGetStaticPropsType, NextPage } from "next";
@@ -12,15 +12,9 @@ import { useAppDispatch, useAppState } from "redux/store";
 import { setAlertState } from "redux/alertStore";
 import { postDataAPI } from "utils/fetchData";
 
-const Quill = dynamic(() => import("components/editor/ReactQuill"), {
-  ssr: false,
-});
-
 export const getStaticProps: GetStaticProps = async () => {
   const res = await axios.get("http://localhost:5000/api/categories");
   const categories: ICategory[] = await res.data;
-
-  console.log(categories);
 
   return {
     props: {
@@ -46,15 +40,15 @@ const Post: NextPage = ({
   const { title, status, categoryId, tag, content } = postData;
   const [visible, setVisible] = useState<boolean>(false);
   const [file, setFile] = useState<File>();
-  const dispatch = useAppDispatch();
   const { jwtToken } = useAppState((state) => state.user);
+
+  const dispatch = useAppDispatch();
 
   const onSubmit = async (e: SyntheticEvent) => {
     e.preventDefault();
     try {
-      const res = await postDataAPI("posts", postData, jwtToken);
+      await postDataAPI("posts", postData, jwtToken);
 
-      console.log(res.data);
       dispatch(
         setAlertState({
           show: true,
@@ -218,7 +212,7 @@ const Post: NextPage = ({
               <label className="text-lg text-gray-900 lg:w-28 w-30">
                 Nội dung<span className="text-red-500">*</span>:
               </label>
-              <Quill setContent={setPostData} content={content} />
+              <TinyEditor setPostData={setPostData} />
             </div>
             <div className="flex justify-center w-full">
               <button
