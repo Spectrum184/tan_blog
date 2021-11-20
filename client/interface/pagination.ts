@@ -7,6 +7,7 @@ export interface IPagination {
   sort?: "time" | "view";
   content?: string;
   order?: "ASC" | "DESC";
+  slug?: string | string[];
 }
 
 export interface IListPostPagination {

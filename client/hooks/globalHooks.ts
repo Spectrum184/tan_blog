@@ -81,9 +81,11 @@ export const useListPost = ({
   page,
   content = "",
   order = "DESC",
+  slug,
 }: IPagination) => {
+  const newPrefix = slug ? `${prefix}/${slug}` : prefix;
   const { data, error } = useSWR(
-    `${prefix}?page=${page}&limit=${limit}&content=${content}&order=${order}`,
+    `${newPrefix}?page=${page}&limit=${limit}&content=${content}&order=${order}`,
     fetcher
   );
 

@@ -47,7 +47,7 @@ export class CategoryController {
   @Get(':slug')
   async findBySlug(
     @Param('slug') slug: string,
-    @Query() query: Partial<PaginationQueryDto>,
+    @Query() query: PaginationQueryDto,
     @Res() res: FastifyReply,
   ): Promise<FastifyReply> {
     try {
