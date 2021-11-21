@@ -83,4 +83,46 @@ export class PostController {
       throw new InternalServerErrorException(error);
     }
   }
+
+  @Public()
+  @Get('get-random-post')
+  async getRandomPosts(@Res() res: FastifyReply): Promise<FastifyReply> {
+    try {
+      const posts = await this.postService.findRandomPosts();
+
+      return res.status(HttpStatus.OK).send(posts);
+    } catch (error) {
+      this.logger.error(error);
+
+      throw new InternalServerErrorException(error);
+    }
+  }
+
+  @Public()
+  @Get('get-latest-post')
+  async getLatestPosts(@Res() res: FastifyReply): Promise<FastifyReply> {
+    try {
+      const posts = await this.postService.findPostByCondition('time');
+
+      return res.status(HttpStatus.OK).send(posts);
+    } catch (error) {
+      this.logger.error(error);
+
+      throw new InternalServerErrorException(error);
+    }
+  }
+
+  @Public()
+  @Get('get-top-view-post')
+  async getTopViewPosts(@Res() res: FastifyReply): Promise<FastifyReply> {
+    try {
+      const posts = await this.postService.findPostByCondition('view');
+
+      return res.status(HttpStatus.OK).send(posts);
+    } catch (error) {
+      this.logger.error(error);
+
+      throw new InternalServerErrorException(error);
+    }
+  }
 }

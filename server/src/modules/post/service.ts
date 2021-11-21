@@ -1,3 +1,5 @@
+import slugify from 'slugify';
+
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -7,7 +9,6 @@ import { UserDto } from '../user/dto';
 import { ListPostDto, PostDto } from './dto';
 import { Post } from './entity';
 import { PostPayload } from './payload';
-import slugify from 'slugify';
 import { User } from '../user/entity';
 import { PaginationQueryDto } from 'src/common/pagination';
 import { IResultPagination } from 'src/common/interface';
@@ -129,6 +130,53 @@ export class PostService {
         page,
         totalPage: Math.ceil(total / limit),
       };
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async findPostByCondition(
+    condition: 'time' | 'view',
+  ): Promise<ListPostDto[]> {
+    try {
+      const builder = this.postRepository
+        .createQueryBuilder('posts')
+        .leftJoinAndSelect('posts.tags', 'tags')
+        .leftJoinAndSelect('posts.category', 'category')
+        .leftJoinAndSelect('posts.author', 'author');
+
+      if (condition === 'time') builder.orderBy('posts.createdAt', 'DESC');
+
+      if (condition === 'view') builder.orderBy('posts.views', 'DESC');
+
+      const posts = await builder.take(3).getMany();
+
+      if (posts.length === 0) return [];
+
+      const arrPost = posts.map((post) => new ListPostDto(post));
+
+      return arrPost;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async findRandomPosts(): Promise<ListPostDto[]> {
+    try {
+      const builder = this.postRepository
+        .createQueryBuilder('posts')
+        .select('*')
+        .leftJoinAndSelect('posts.tags', 'tags')
+        .leftJoinAndSelect('posts.category', 'category')
+        .leftJoinAndSelect('posts.author', 'author');
+
+      const posts = await builder.orderBy('RANDOM()').limit(5).execute();
+
+      if (posts.length === 0) return [];
+
+      const arrPost = posts.map((post) => new ListPostDto(post));
+
+      return arrPost;
     } catch (error) {
       throw error;
     }

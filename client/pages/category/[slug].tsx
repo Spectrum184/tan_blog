@@ -48,7 +48,7 @@ const Category: NextPage = () => {
   return (
     <Layout>
       <Head>
-        <title>Trang chủ | ThanhTK Blog</title>
+        <title> Danh mục | ThanhTK Blog</title>
       </Head>
       <main>
         <div className="flex content-center justify-between p-2 bg-green-400 rounded-t-lg">
