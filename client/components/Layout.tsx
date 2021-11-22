@@ -41,7 +41,9 @@ const Layout: FC<PropTypes> = ({
       </Head>
       {!loading && <Navbar categories={data.categories} />}
       {isHomepage ? (
-        <div>{children}</div>
+        <div className="container max-w-screen-xl px-2 md:px-4 lg:px-6 mx-auto">
+          {children}
+        </div>
       ) : (
         <div className="px-6 pt-4 pb-6">
           <div className="container flex justify-between max-w-screen-xl px-2 md:px-4 lg:px-6 mx-auto">

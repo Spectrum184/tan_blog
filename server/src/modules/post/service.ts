@@ -165,16 +165,17 @@ export class PostService {
     try {
       const builder = this.postRepository
         .createQueryBuilder('posts')
-        .select('*')
+        .orderBy('RANDOM()')
         .leftJoinAndSelect('posts.tags', 'tags')
         .leftJoinAndSelect('posts.category', 'category')
         .leftJoinAndSelect('posts.author', 'author');
 
-      const posts = await builder.orderBy('RANDOM()').limit(5).execute();
+      const posts = await builder.getMany();
 
       if (posts.length === 0) return [];
+      console.log(posts.length);
 
-      const arrPost = posts.map((post) => new ListPostDto(post));
+      const arrPost = posts.slice(0, 5).map((post) => new ListPostDto(post));
 
       return arrPost;
     } catch (error) {

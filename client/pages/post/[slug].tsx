@@ -28,7 +28,7 @@ const Post: FC<InferGetServerSidePropsType<typeof getServerSideProps>> = ({
 };
 
 export const getServerSideProps = async ({ query }: any) => {
-  const res = await axios.get(`http://localhost:5000/api/posts/${query.slug}`);
+  const res = await axios.get(`${process.env.SERVER_URL}/posts/${query.slug}`);
 
   return {
     props: { post: res.data } as { post: IPost },
