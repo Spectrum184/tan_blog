@@ -1,10 +1,11 @@
 import useSWR, { KeyedMutator } from "swr";
-import { useMemo } from "react";
 
+import { useMemo } from "react";
 import { ICategory } from "interface/category";
 import { IAuthor, IUser } from "../interface/user";
 import { getDataAPI } from "../utils/fetchData";
 import { IListPostPagination, IPagination } from "interface/pagination";
+import { IPost } from "interface/post";
 
 interface IUseUser {
   loading: boolean;
@@ -33,6 +34,13 @@ interface IUsePagination {
   totalPage: number;
   siblingCount?: number;
   currentPage: number;
+}
+
+interface IUseHomepageData {
+  topViewPosts: IPost[];
+  latestPosts: IPost[];
+  error?: boolean;
+  loading: boolean;
 }
 
 //customize user authentication
@@ -98,7 +106,6 @@ export const useListPost = ({
 };
 
 //customize pagination
-
 const range = (start: number, end: number) => {
   const length = end - start + 1;
 
@@ -152,4 +159,20 @@ export const usePagination = ({
   }, [siblingCount, currentPage, totalPage]);
 
   return paginationRange;
+};
+
+//fetch data for homepage
+export const useHomepageData = () => {
+  const latestPosts = useSWR("posts/get-latest-post", fetcher);
+  const topViewPosts = useSWR("posts/get-top-view-post", fetcher);
+
+  const loading: boolean = !latestPosts.data || !topViewPosts.data;
+  const error: boolean = latestPosts.error || topViewPosts.error;
+
+  return {
+    latestPosts: latestPosts.data,
+    topViewPosts: topViewPosts.data,
+    loading,
+    error,
+  } as IUseHomepageData;
 };
