@@ -10,6 +10,7 @@ import { IPost } from "interface/post";
 import { loaderImage } from "utils/fileUpload";
 import { useRouter } from "next/router";
 import { useHomepageData } from "hooks/globalHooks";
+import { useEffect } from "react";
 
 const Home: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> =
   ({ posts }) => {
@@ -19,6 +20,10 @@ const Home: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> =
     const goToPost = (param: string) => {
       router.push(`/post/${param}`);
     };
+
+    useEffect(() => {
+      if (posts.length === 0) router.push("404");
+    }, [posts, router]);
 
     return (
       <Layout isHomepage={true}>
@@ -34,6 +39,7 @@ const Home: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> =
                   alt="thumbnail"
                   src={posts[0].thumbnail}
                   layout="fill"
+                  priority
                   className="object-cover shadow-md rounded rounded-b-none md:rounded-b cursor-pointer"
                   onClick={() => goToPost(posts[0].slug)}
                 />
@@ -73,6 +79,7 @@ const Home: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> =
                       alt="thumbnail"
                       src={post.thumbnail}
                       layout="fill"
+                      priority
                       className="object-cover shadow-md rounded rounded-b-none md:rounded-r-none md:rounded-bl cursor-pointer"
                       onClick={() => goToPost(post.slug)}
                     />
@@ -115,6 +122,7 @@ const Home: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> =
                       alt="thumbnail"
                       src={post.thumbnail}
                       layout="fill"
+                      priority
                       className="object-cover shadow-md rounded rounded-b-none md:rounded-b cursor-pointer"
                       onClick={() => goToPost(post.slug)}
                     />
@@ -156,6 +164,7 @@ const Home: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> =
                       alt="thumbnail"
                       src={post.thumbnail}
                       layout="fill"
+                      priority
                       className="object-cover shadow-md rounded rounded-b-none md:rounded-b cursor-pointer"
                       onClick={() => goToPost(post.slug)}
                     />

@@ -1,7 +1,5 @@
-import Avatar from "public/images/avatar.png";
-
 import { IImageLoader } from "interface/common";
-import { postDataStaticAPI } from "./fetchData";
+import { postDataAPI, SERVER_URL } from "./fetchData";
 
 export const checkImageFile = (file: File): string => {
   const types = ["image/png", "image/jpeg"];
@@ -19,14 +17,15 @@ export const checkImageFile = (file: File): string => {
 export const uploadImage = async (file: File, url: string) => {
   const formData = new FormData();
   formData.append("image", file);
-  const res = await postDataStaticAPI(url, formData);
+  const res = await postDataAPI(url, formData);
 
   return res.data.data;
 };
 
 export const loaderImage = ({ src, width, quality = 75 }: IImageLoader) => {
+  
   if (!src.includes("http://"))
-    return `http://localhost:8000/static/${src}?w=${width}&q=${quality}`;
+    return `${SERVER_URL?.substr(0, SERVER_URL.lastIndexOf('/'))}/public/${src}?w=${width}&q=${quality}`;
 
   return `${src}?w=${width}&q=${quality}`;
 };

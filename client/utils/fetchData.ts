@@ -1,6 +1,5 @@
 import axios from "axios";
-const SERVER_URL = process.env.SERVER_URL;
-const SERVER_STATIC_URL = process.env.SERVER_STATIC_URL;
+export const SERVER_URL = process.env.SERVER_URL;
 
 axios.defaults.withCredentials = true;
 
@@ -48,18 +47,6 @@ export const deleteDataAPI = async (url: string, token?: string) => {
   const res = await axios.delete(`${SERVER_URL}/${url}`, {
     headers: { Authorization: `${token}` },
   });
-
-  return res;
-};
-
-export const getDataStaticAPI = async (url: string) => {
-  const res = await axios.get(`${SERVER_STATIC_URL}/${url}`);
-
-  return res;
-};
-
-export const postDataStaticAPI = async (url: string, data: object) => {
-  const res = await axios.post(`${SERVER_STATIC_URL}/${url}`, data);
 
   return res;
 };

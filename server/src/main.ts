@@ -1,3 +1,6 @@
+import fastifyCookie from 'fastify-cookie';
+import fastifyStatic from 'fastify-static';
+
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './modules';
 import {
@@ -6,10 +9,10 @@ import {
 } from '@nestjs/platform-fastify';
 import { configService } from './config/config.service';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import fastifyCookie from 'fastify-cookie';
 import { fastifyHelmet } from 'fastify-helmet';
 import { AllExceptionFilter } from './common/exceptions';
 import { ValidationPipe } from '@nestjs/common';
+import { join } from 'path';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestFastifyApplication>(
@@ -66,6 +69,14 @@ async function bootstrap() {
 
   // add exception filter for app
   app.useGlobalFilters(new AllExceptionFilter());
+
+  //serve static file
+  app.register(fastifyStatic, {
+    root: join(__dirname, 'public'),
+    prefix: '/public/',
+    cacheControl: true,
+    maxAge: 3600,
+  });
 
   await app.listen(PORT, () => console.log('Server is listening on ' + PORT));
 }
