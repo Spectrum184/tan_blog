@@ -1,5 +1,4 @@
 import fastifyCookie from 'fastify-cookie';
-import fastifyStatic from 'fastify-static';
 
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './modules';
@@ -71,7 +70,7 @@ async function bootstrap() {
   app.useGlobalFilters(new AllExceptionFilter());
 
   //serve static file
-  app.register(fastifyStatic, {
+  app.useStaticAssets({
     root: join(__dirname, 'public'),
     prefix: '/public/',
     cacheControl: true,

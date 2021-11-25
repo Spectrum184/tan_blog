@@ -173,7 +173,6 @@ export class PostService {
       const posts = await builder.getMany();
 
       if (posts.length === 0) return [];
-      console.log(posts.length);
 
       const arrPost = posts.slice(0, 5).map((post) => new ListPostDto(post));
 

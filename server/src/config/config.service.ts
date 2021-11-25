@@ -9,6 +9,11 @@ interface JwtConfig {
   };
 }
 
+interface SessionKey {
+  secret: string;
+  salt: string;
+}
+
 class ConfigService {
   constructor(private env: { [key: string]: string | undefined }) {}
 
@@ -85,6 +90,19 @@ class ConfigService {
       this.getValue('CLIENT_URL', false) || 'http://locahost:3000';
 
     return clientUrl;
+  }
+
+  /**
+   * name
+   */
+  public getSessionKey(): SessionKey {
+    const secret = this.getValue('SESSION_SECRET', false) || 'diepbungto';
+    const salt = this.getValue('SESSION_SALT', false) || 'okbaby';
+
+    return {
+      secret,
+      salt,
+    };
   }
 }
 
