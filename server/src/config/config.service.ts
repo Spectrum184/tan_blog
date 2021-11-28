@@ -14,6 +14,12 @@ interface SessionKey {
   salt: string;
 }
 
+interface RedisConfig {
+  host: string;
+  port: number;
+  ttl: number;
+}
+
 class ConfigService {
   constructor(private env: { [key: string]: string | undefined }) {}
 
@@ -102,6 +108,21 @@ class ConfigService {
     return {
       secret,
       salt,
+    };
+  }
+
+  /**
+   * name
+   */
+  public getRedisConfig(): RedisConfig {
+    const host = this.getValue('REDIS_HOST') || 'localhost';
+    const port = this.getValue('REDIS_PORT') || 6379;
+    const ttl = this.getValue('REDIS_TTL', false) || 3600;
+
+    return {
+      host,
+      port: Number(port),
+      ttl: Number(ttl),
     };
   }
 }

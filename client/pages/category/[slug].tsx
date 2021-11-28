@@ -13,13 +13,14 @@ const Category: NextPage = () => {
   const [currentPage, setCurrentPage] = useState<number>(1);
   const [sort, setSort] = useState<"time" | "view">("time");
   const [order, setOrder] = useState<"ASC" | "DESC">("DESC");
-  const { loading, data, totalPage } = useListPost({
+  const { data, totalPage } = useListPost({
     prefix: "categories",
     page: currentPage,
     sort,
     order,
     slug: query.slug,
   });
+
 
   const onChangeSearch = (e: ChangeEvent<HTMLSelectElement>) => {
     switch (e.target.value) {
@@ -69,7 +70,7 @@ const Category: NextPage = () => {
             </select>
           </div>
         </div>
-        {!loading && data.map((item) => <PostCard {...item} key={item.id} />)}
+        {data && data.map((item) => <PostCard {...item} key={item.id} />)}
         <Pagination
           currentPage={currentPage}
           onPageChange={(page) => setCurrentPage(page)}

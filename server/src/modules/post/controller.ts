@@ -12,7 +12,7 @@ import {
   Res,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { FastifyReply } from 'fastify';
+import { FastifyReply, FastifyRequest } from 'fastify';
 import { PaginationQueryDto } from 'src/common/pagination';
 import { Public, Roles } from '../auth/decorator';
 import { ILoginRequest } from '../auth/interface';
@@ -68,11 +68,12 @@ export class PostController {
   @Public()
   @Get(':slug')
   async getBySlug(
+    @Req() req: FastifyRequest,
     @Param('slug') slug: string,
     @Res() res: FastifyReply,
   ): Promise<FastifyReply> {
     try {
-      const post = await this.postService.getPostBySlug(slug);
+      const post = await this.postService.getPostBySlug(slug, req.ip);
 
       if (!post) return res.status(HttpStatus.NOT_FOUND).send({ post: null });
 

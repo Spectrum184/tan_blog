@@ -1,8 +1,10 @@
-import { Module } from '@nestjs/common';
+import { CacheModule, Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { APP_GUARD } from '@nestjs/core';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { configService } from 'src/config/config.service';
+import * as redisStore from 'cache-manager-redis-store';
+
 import { AccountModule } from './account';
 import { AuthModule } from './auth';
 import { JwtAuthGuard } from './auth/guards/jwt';
@@ -23,6 +25,13 @@ import { UserModule } from './user';
     CategoryModule,
     PostModule,
     ConfigModule.forRoot(),
+    CacheModule.register({
+      store: redisStore,
+      host: configService.getRedisConfig().host,
+      port: configService.getRedisConfig().port,
+      ttl: configService.getRedisConfig().ttl,
+      isGlobal: true,
+    }),
   ],
   providers: [
     {

@@ -1,6 +1,6 @@
 import slugify from 'slugify';
 
-import { Injectable } from '@nestjs/common';
+import { CACHE_MANAGER, Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Category } from '../category/entity';
@@ -12,6 +12,7 @@ import { PostPayload } from './payload';
 import { User } from '../user/entity';
 import { PaginationQueryDto } from 'src/common/pagination';
 import { IResultPagination } from 'src/common/interface';
+import { Cache } from 'cache-manager';
 
 @Injectable()
 export class PostService {
@@ -21,6 +22,7 @@ export class PostService {
     private readonly categoryRepository: Repository<Category>,
     private readonly tagService: TagService,
     @InjectRepository(User) private readonly userRepository: Repository<User>,
+    @Inject(CACHE_MANAGER) private cacheManager: Cache,
   ) {}
 
   async createPost(
@@ -74,7 +76,7 @@ export class PostService {
     return slug;
   }
 
-  async getPostBySlug(slug: string): Promise<PostDto> {
+  async getPostBySlug(slug: string, ip: string): Promise<PostDto> {
     try {
       const post = await this.postRepository.findOne({
         where: { slug, status: true },
@@ -82,6 +84,15 @@ export class PostService {
       });
 
       if (!post) return null;
+
+      const keyCache = ip + post.id;
+      const value = await this.cacheManager.get(keyCache);
+
+      if (value !== '1') {
+        post.views++;
+        await this.postRepository.save(post);
+        await this.cacheManager.set(keyCache, '1', { ttl: 60 });
+      }
 
       return new PostDto(post);
     } catch (error) {
