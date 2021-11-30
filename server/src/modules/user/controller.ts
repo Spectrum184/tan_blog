@@ -66,6 +66,29 @@ export class UserController {
     }
   }
 
+  @Public()
+  @Get('find-by-name/:username')
+  async findByUsername(
+    @Param('username') username: string,
+    @Res() res: FastifyReply,
+  ): Promise<FastifyReply> {
+    try {
+      const user = await this.userService.findByUsername(username);
+
+      if (!user)
+        return res.status(HttpStatus.NOT_FOUND).send({
+          user: null,
+        });
+
+      return res.status(HttpStatus.OK).send({
+        ...user,
+      });
+    } catch (error) {
+      this.logger.error(error);
+      throw new InternalServerErrorException(error);
+    }
+  }
+
   @Put(':id')
   async update(
     @Param('id') id: string,

@@ -17,6 +17,7 @@ class MyDocument extends Document {
       <Html>
         <Head>
           <meta name="description" content="Thanh TK blog sử dụng Nextjs" />
+          <meta lang="en"/>
           <link rel="icon" href="/favicon.ico" />
           <link rel="preconnect" href="https://fonts.googleapis.com" />
           <link rel="preconnect" href="https://fonts.gstatic.com" />

@@ -35,6 +35,19 @@ export class UserService {
     }
   }
 
+  async findByUsername(username: string): Promise<UserDto> {
+    try {
+      const user = await this.userRepository.findOne({
+        where: { username },
+        relations: ['account', 'roles'],
+      });
+
+      return new UserDto(user);
+    } catch (error) {
+      throw error;
+    }
+  }
+
   async createUser(userDto: UserDto): Promise<UserDto> {
     try {
       const user = new User();

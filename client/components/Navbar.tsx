@@ -15,11 +15,12 @@ type PropTypes = {
 };
 
 const Navbar: FC<PropTypes> = ({ categories }) => {
-  const { avatar, username, roles } = useAppState((state) => state.user);
+  const dispatch = useAppDispatch();
   const divRef = useRef<HTMLDivElement>(null);
+  
+  const { avatar, username, roles } = useAppState((state) => state.user);
   const [openProfile, setOpenProfile] = useState<boolean>(false);
   const [openNav, setOpenNav] = useState<boolean>(false);
-  const dispatch = useAppDispatch();
   const { query } = useRouter();
 
   useEffect(() => {
@@ -134,24 +135,18 @@ const Navbar: FC<PropTypes> = ({ categories }) => {
                 )}
               >
                 <div className="px-2 py-2 bg-green-400 rounded-md shadow dark-mode:bg-gray-800">
-                  <Link href="#">
+                  <Link href={`/user/${username}`}>
                     <a className="block px-4 py-2 mt-2 text-base font-semibold bg-transparent rounded-lg dark-mode:bg-transparent dark-mode:hover:bg-gray-600 dark-mode:focus:bg-gray-600 dark-mode:focus:text-white dark-mode:hover:text-white dark-mode:text-gray-200 md:mt-0 hover:text-gray-900 focus:text-gray-900 hover:bg-green-300 focus:bg-green-300 focus:outline-none focus:shadow-outline">
                       Trang Cá Nhân
                     </a>
                   </Link>
-                  {roles.includes(RoleEnum.User) ? (
-                    <Link href="/user/dashboard">
-                      <a className="block px-4 py-2 mt-2 text-base font-semibold bg-transparent rounded-lg dark-mode:bg-transparent dark-mode:hover:bg-gray-600 dark-mode:focus:bg-gray-600 dark-mode:focus:text-white dark-mode:hover:text-white dark-mode:text-gray-200 md:mt-0 hover:text-gray-900 focus:text-gray-900 hover:bg-green-300 focus:bg-green-300 focus:outline-none focus:shadow-outline">
-                        Dashboard
-                      </a>
-                    </Link>
-                  ) : (
+                  {!roles.includes(RoleEnum.User) &&
                     <Link href="/admin/dashboard">
                       <a className="block px-4 py-2 mt-2 text-base font-semibold bg-transparent rounded-lg dark-mode:bg-transparent dark-mode:hover:bg-gray-600 dark-mode:focus:bg-gray-600 dark-mode:focus:text-white dark-mode:hover:text-white dark-mode:text-gray-200 md:mt-0 hover:text-gray-900 focus:text-gray-900 hover:bg-green-300 focus:bg-green-300 focus:outline-none focus:shadow-outline">
                         Dashboard
                       </a>
                     </Link>
-                  )}
+                  }
                   <div
                     className="border-t-2 cursor-pointer"
                     onClick={() => dispatch(logout())}
