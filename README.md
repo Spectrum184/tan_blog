@@ -8,8 +8,4 @@
   <br>
   </p>
   <p style="color:#50fa7b">Oh shit! What a bug!</p>
-<img alt="GIF" src="https://media.giphy.com/media/hrSFdM4rg8VFpXyz2m/giphy.gif" />
-<img width="100%" height="100%" src="https://img.vinalive.vn/Images/2020/07/06/15/50/huyen-my-(2).jpg">
-  <br>
-  <br>
 </div>
