@@ -26,7 +26,7 @@ export class TagService {
     }
   }
 
-  async createTags(username: string, tag: string): Promise<Tag[]> {
+  async createTags(tag: string): Promise<Tag[]> {
     try {
       const arrTag = await this.generateTags(tag);
 
@@ -40,7 +40,6 @@ export class TagService {
 
           const newTag = new Tag();
           newTag.name = name;
-          newTag.createdBy = username;
 
           const saveTag = await this.tagRepository.save(newTag);
 

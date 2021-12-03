@@ -76,7 +76,6 @@ export class CategoryController {
     try {
       const category = await this.categoryService.createdCategory(
         categoryPayload,
-        req.user,
       );
 
       return res.status(HttpStatus.OK).send({

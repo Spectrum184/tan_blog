@@ -21,7 +21,6 @@ export class PostDto implements IPost {
     this.content = post.content;
     this.thumbnail = post.thumbnail;
     this.status = post.status;
-    this.createdBy = post.createdBy;
     this.createdAt = post.createdAt.toUTCString();
     this.tags = post.tags?.map((tag) => tag.name);
     this.category = { name: post.category?.name, slug: post.category?.slug };
@@ -56,7 +55,6 @@ export class ListPostDto implements IPost {
     this.content = post.content.replace(/<[^>]*>/g, '').substr(0, 250);
     this.thumbnail = post.thumbnail;
     this.status = post.status;
-    this.createdBy = post.createdBy;
     this.createdAt = post.createdAt.toUTCString();
     this.tags = post.tags?.map((tag) => tag.name);
     this.category = { name: post.category?.name, slug: post.category?.slug };

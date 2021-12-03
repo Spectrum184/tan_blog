@@ -1,11 +1,11 @@
+import slugify from 'slugify';
+
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { CategoryDto, CategoryPostDto } from './dto';
+import { CategoryDto } from './dto';
 import { Category } from './entity';
 import { CategoryPayload } from './payload';
-import slugify from 'slugify';
-import { UserDto } from '../user/dto';
 import { PaginationQueryDto } from 'src/common/pagination';
 import { ListPostDto, PostDto } from '../post/dto';
 import { IResultPagination } from 'src/common/interface';
@@ -40,7 +40,6 @@ export class CategoryService {
 
   async createdCategory(
     categoryPayload: CategoryPayload,
-    user: UserDto,
   ): Promise<CategoryDto> {
     try {
       const slug = await this.generateSlug(categoryPayload.name);
@@ -50,7 +49,6 @@ export class CategoryService {
       category.slug = slug;
       category.description = categoryPayload.description;
       category.thumbnail = categoryPayload.thumbnail;
-      category.createdBy = user.username;
 
       const newCategory = await this.categoryRepository.save(category);
 

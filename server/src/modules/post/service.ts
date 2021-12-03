@@ -37,7 +37,7 @@ export class PostService {
         id: categoryId,
       });
 
-      const arrTag = await this.tagService.createTags(user.username, tag);
+      const arrTag = await this.tagService.createTags(tag);
 
       const newPost = new Post();
 
@@ -46,7 +46,6 @@ export class PostService {
       newPost.author = author;
       newPost.content = content;
       newPost.tags = arrTag;
-      newPost.createdBy = user.username;
       newPost.slug = slug;
       newPost.status = status;
       newPost.thumbnail = thumbnail;
@@ -91,7 +90,7 @@ export class PostService {
       if (value !== '1') {
         post.views++;
         await this.postRepository.save(post);
-        await this.cacheManager.set(keyCache, '1', { ttl: 60 });
+        await this.cacheManager.set(keyCache, '1', { ttl: 180 });
       }
 
       return new PostDto(post);

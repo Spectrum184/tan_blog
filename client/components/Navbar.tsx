@@ -17,7 +17,7 @@ type PropTypes = {
 const Navbar: FC<PropTypes> = ({ categories }) => {
   const dispatch = useAppDispatch();
   const divRef = useRef<HTMLDivElement>(null);
-  
+
   const { avatar, username, roles } = useAppState((state) => state.user);
   const [openProfile, setOpenProfile] = useState<boolean>(false);
   const [openNav, setOpenNav] = useState<boolean>(false);
@@ -40,7 +40,7 @@ const Navbar: FC<PropTypes> = ({ categories }) => {
   return (
     <div className="w-full text-gray-800 bg-green-500 dark-mode:text-gray-200 dark-mode:bg-gray-800 shadow-md sticky top-0 z-50">
       <div className="flex flex-col max-w-screen-xl px-2 mx-auto md:items-center md:justify-between md:flex-row md:px-4 lg:px-6">
-        <div className="p-4 flex flex-row items-center justify-between">
+        <div className="p-4 flex flex-row items-center justify-between pl-0">
           <Link href="/">
             <a className="text-xl font-semibold tracking-widest text-gray-900 uppercase rounded-lg dark-mode:text-white focus:outline-none focus:shadow-outline">
               <span className="text-white">ThanhTK</span> Blog
@@ -74,7 +74,7 @@ const Navbar: FC<PropTypes> = ({ categories }) => {
             {
               hidden: !openNav,
               flex: openNav,
-            }
+            },
           )}
         >
           {categories &&
@@ -86,7 +86,7 @@ const Navbar: FC<PropTypes> = ({ categories }) => {
                     {
                       "bg-green-300":
                         query.slug && query.slug === category.slug,
-                    }
+                    },
                   )}
                 >
                   {category.name}
@@ -110,7 +110,6 @@ const Navbar: FC<PropTypes> = ({ categories }) => {
                     height={24}
                     className="rounded-full shadow-sm"
                   />
-                  <span className="ml-3">{username}</span>
                   <span>
                     <svg
                       fill="currentColor"
@@ -131,7 +130,7 @@ const Navbar: FC<PropTypes> = ({ categories }) => {
                   "absolute right-0 w-full mt-2 origin-top-right rounded-md shadow-lg md:w-48",
                   {
                     hidden: !openProfile,
-                  }
+                  },
                 )}
               >
                 <div className="px-2 py-2 bg-green-400 rounded-md shadow dark-mode:bg-gray-800">
@@ -140,13 +139,13 @@ const Navbar: FC<PropTypes> = ({ categories }) => {
                       Trang Cá Nhân
                     </a>
                   </Link>
-                  {!roles.includes(RoleEnum.User) &&
+                  {!roles.includes(RoleEnum.User) && (
                     <Link href="/admin/dashboard">
                       <a className="block px-4 py-2 mt-2 text-base font-semibold bg-transparent rounded-lg dark-mode:bg-transparent dark-mode:hover:bg-gray-600 dark-mode:focus:bg-gray-600 dark-mode:focus:text-white dark-mode:hover:text-white dark-mode:text-gray-200 md:mt-0 hover:text-gray-900 focus:text-gray-900 hover:bg-green-300 focus:bg-green-300 focus:outline-none focus:shadow-outline">
                         Dashboard
                       </a>
                     </Link>
-                  }
+                  )}
                   <div
                     className="border-t-2 cursor-pointer"
                     onClick={() => dispatch(logout())}

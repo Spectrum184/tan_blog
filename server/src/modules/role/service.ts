@@ -26,7 +26,6 @@ export class RoleService {
     try {
       const role = new Role();
       role.name = rolePayload.name;
-      role.createdBy = 'admin';
 
       return await this.roleRepository.save(role);
     } catch (error) {

@@ -4,6 +4,7 @@ import Image from "next/image";
 import { ILayoutData } from "hooks/globalHooks";
 import { FC } from "react";
 import { loaderImage } from "utils/fileUpload";
+import Tag from "./Tag";
 
 const RightSideBar: FC<ILayoutData> = ({ categories, tags, authors }) => {
   return (
@@ -60,14 +61,7 @@ const RightSideBar: FC<ILayoutData> = ({ categories, tags, authors }) => {
         </h1>
         <div className="flex flex-wrap max-w-sm px-4 py-6 bg-white rounded-lg rounded-t-none shadow-md">
           {tags.map((tag: string, index: number) => (
-            <span
-              key={index}
-              className="m-1 bg-gray-200 hover:bg-gray-300 rounded-full px-2 font-bold text-sm leading-loose cursor-pointer"
-            >
-              <Link href={`/tag/${tag}`}>
-                <a>#{tag}</a>
-              </Link>
-            </span>
+            <Tag tag={tag} key={index} isLayout={true} />
           ))}
         </div>
       </div>
