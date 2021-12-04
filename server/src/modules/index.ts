@@ -1,9 +1,10 @@
+import * as redisStore from 'cache-manager-redis-store';
+
 import { CacheModule, Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { APP_GUARD } from '@nestjs/core';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { configService } from 'src/config/config.service';
-import * as redisStore from 'cache-manager-redis-store';
 
 import { AccountModule } from './account';
 import { AuthModule } from './auth';
@@ -13,6 +14,7 @@ import { PostModule } from './post';
 import { RoleModule } from './role';
 import { TagModule } from './tag';
 import { UserModule } from './user';
+import { CommentModule } from './comment';
 
 @Module({
   imports: [
@@ -24,6 +26,7 @@ import { UserModule } from './user';
     TagModule,
     CategoryModule,
     PostModule,
+    CommentModule,
     ConfigModule.forRoot(),
     CacheModule.register({
       store: redisStore,

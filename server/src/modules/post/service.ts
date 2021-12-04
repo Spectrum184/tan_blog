@@ -1,6 +1,11 @@
 import slugify from 'slugify';
 
-import { CACHE_MANAGER, Inject, Injectable } from '@nestjs/common';
+import {
+  CACHE_MANAGER,
+  Inject,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { Category } from '../category/entity';
@@ -36,6 +41,9 @@ export class PostService {
       const category = await this.categoryRepository.findOne({
         id: categoryId,
       });
+
+      if (!author || !category)
+        throw new NotFoundException('Không tìm thấy tác giả hoặc chủ đề!');
 
       const arrTag = await this.tagService.createTags(tag);
 
@@ -111,8 +119,10 @@ export class PostService {
         .createQueryBuilder('posts')
         .leftJoinAndSelect('posts.tags', 'tags')
         .leftJoinAndSelect('posts.category', 'category')
-        .leftJoinAndSelect('posts.author', 'author')
-        .where('posts.title LIKE :content', { content: `%${content}%` });
+        .leftJoinAndSelect('posts.author', 'author');
+
+      if (content)
+        builder.where('posts.title LIKE :content', { content: `%${content}%` });
 
       if (sort === 'time') builder.orderBy('posts.createdAt', order);
 

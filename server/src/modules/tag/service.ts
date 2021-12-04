@@ -30,6 +30,8 @@ export class TagService {
     try {
       const arrTag = await this.generateTags(tag);
 
+      if (arrTag.length === 0) return [];
+
       const newArrTag = await Promise.all(
         arrTag.map(async (name: string) => {
           const tag = await this.tagRepository.findOne({

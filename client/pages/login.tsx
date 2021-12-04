@@ -62,6 +62,7 @@ const Login: NextPage = () => {
                 autoFocus
                 value={username}
                 onChange={handleChangeInput}
+                autoComplete="username"
               />
             </div>
             <div className="my-3">
@@ -75,6 +76,7 @@ const Login: NextPage = () => {
                 placeholder="Mật khẩu"
                 value={password}
                 onChange={handleChangeInput}
+                autoComplete="current-password"
               />
             </div>
             <div className="flex justify-between">

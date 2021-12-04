@@ -1,6 +1,15 @@
 import BaseEntity from 'src/common/base-entity';
-import { Column, Entity, JoinTable, ManyToMany, ManyToOne } from 'typeorm';
+
+import {
+  Column,
+  Entity,
+  JoinTable,
+  ManyToMany,
+  ManyToOne,
+  OneToMany,
+} from 'typeorm';
 import { Category } from '../category/entity';
+import { Comment } from '../comment/entity';
 import { Tag } from '../tag/entity';
 import { User } from '../user/entity';
 import { IPost } from './interface';
@@ -42,4 +51,7 @@ export class Post extends BaseEntity implements IPost {
 
   @ManyToMany(() => User, (user) => user.likedPosts)
   likedUsers: User[];
+
+  @OneToMany(() => Comment, (comment) => comment.post, { onDelete: 'CASCADE' })
+  comments: Comment[];
 }

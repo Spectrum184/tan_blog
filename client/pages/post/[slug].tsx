@@ -4,15 +4,19 @@ import Link from "next/link";
 import axios from "axios";
 import moment from "moment";
 import Image from "next/image";
+import ShareModal from "components/ShareModal";
+import Tag from "components/Tag";
+import Comment from "components/Comment";
 
 import { InferGetServerSidePropsType, NextPage } from "next";
 import { IPost } from "interface/post";
 import { loaderImage } from "utils/fileUpload";
-import ShareModal from "components/ShareModal";
-import Tag from "components/Tag";
+import { useAppState } from "redux/store";
 
 const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> =
   ({ post }) => {
+    const { jwtToken } = useAppState((state) => state.user);
+
     return (
       <Layout>
         <Head>
@@ -84,7 +88,21 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> =
               </div>
             </div>
           </div>
-          <div className=""></div>
+          {jwtToken ? (
+            <div className="">
+              <Comment postId={post.id} />
+            </div>
+          ) : (
+            <p className="w-full">
+              Vui lòng
+              <span className="m-1 underline hover:text-gray-600">
+                <Link href={`/login`}>
+                  <a href="">đăng nhập</a>
+                </Link>
+              </span>
+              đề bình luận.
+            </p>
+          )}
         </main>
       </Layout>
     );

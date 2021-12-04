@@ -17,6 +17,7 @@ export class PaginationQueryDto {
   page: number;
 
   @ApiProperty({ description: 'Sort data or not', default: 'time' })
+  @IsOptional()
   @Type(() => String)
   sort?: 'time' | 'view';
 

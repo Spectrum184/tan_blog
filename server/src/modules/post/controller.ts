@@ -57,7 +57,7 @@ export class PostController {
     try {
       const result = await this.postService.findPosts(query);
 
-      return res.status(HttpStatus.OK).send({ ...result });
+      return res.status(HttpStatus.OK).send(result);
     } catch (error) {
       this.logger.error(error);
 

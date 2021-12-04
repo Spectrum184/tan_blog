@@ -10,7 +10,9 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { Account } from '../account/entity';
+import { Comment } from '../comment/entity';
 import { Post } from '../post/entity';
+import { Reply } from '../reply/entity';
 import { Role } from '../role/entity';
 import { IAdmin, IMod, IUser } from './interface';
 
@@ -91,6 +93,12 @@ class User extends BaseEntity implements IUser {
   })
   @JoinTable({ name: 'user_liked_posts' })
   likedPosts: Post[];
+
+  @OneToMany(() => Comment, (comment) => comment.user, { onDelete: 'CASCADE' })
+  comments: Comment[];
+
+  @OneToMany(() => Reply, (reply) => reply.user, { onDelete: 'CASCADE' })
+  replies: Reply[];
 }
 
 export { User, Admin, Mod };
