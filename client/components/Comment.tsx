@@ -1,16 +1,22 @@
 import { FC, useState, SyntheticEvent } from "react";
-import { useAppState } from "redux/store";
+import { createComment } from "redux/commentStore";
+import { useAppDispatch, useAppState } from "redux/store";
 
 type PropTypes = {
   postId: string;
 };
 
 const Comment: FC<PropTypes> = ({ postId }) => {
-  const { user } = useAppState((state) => state);
+  const { jwtToken } = useAppState((state) => state.user);
   const [content, setContent] = useState<string>("");
+  const dispatch = useAppDispatch();
 
   const onComment = (e: SyntheticEvent) => {
     e.preventDefault();
+
+    if (!content) return;
+
+    dispatch(createComment({ postId, content, jwtToken }));
   };
 
   return (

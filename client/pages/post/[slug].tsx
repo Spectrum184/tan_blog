@@ -12,6 +12,7 @@ import { InferGetServerSidePropsType, NextPage } from "next";
 import { IPost } from "interface/post";
 import { loaderImage } from "utils/fileUpload";
 import { useAppState } from "redux/store";
+import CommentDisplay from "components/CommentDisplay";
 
 const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> =
   ({ post }) => {
@@ -75,7 +76,7 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> =
             className="mt-4"
             dangerouslySetInnerHTML={{ __html: post.content }}
           />
-          <div className="w-full flex items-center justify-between">
+          <div className="w-full flex items-center justify-between mt-2">
             <div className="">
               <ShareModal url={`post/${post.slug}`} />
             </div>
@@ -103,6 +104,9 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> =
               đề bình luận.
             </p>
           )}
+          <div className="">
+            <CommentDisplay postId={post.id} />
+          </div>
         </main>
       </Layout>
     );

@@ -1,7 +1,7 @@
 import cn from "classnames";
 
 import { usePagination, DOTS } from "hooks/globalHooks";
-import { FC, useState } from "react";
+import { FC } from "react";
 
 type PropTypes = {
   onPageChange: (pageNumber: number) => void;
@@ -37,7 +37,7 @@ const Pagination: FC<PropTypes> = ({
             "px-2 md:px-3 py-1 md:py-2  mx-1 font-medium text-gray-900 bg-white rounded-md cursor-pointer hover:bg-green-500 hover:text-white",
             {
               "pointer-events-none bg-gray-300": currentPage === 1,
-            }
+            },
           )}
           onClick={onPrevious}
         >
@@ -61,7 +61,7 @@ const Pagination: FC<PropTypes> = ({
                 "px-2 md:px-3 py-1 md:py-2  mx-1 font-medium text-gray-900 bg-white rounded-md cursor-pointer hover:bg-green-500 hover:text-white",
                 {
                   "bg-green-500": currentPage === pageNumber,
-                }
+                },
               )}
               onClick={() => onPageChange(Number(pageNumber))}
             >
@@ -74,7 +74,7 @@ const Pagination: FC<PropTypes> = ({
             "px-2 md:px-3 py-1 md:py-2 mx-1 font-medium text-gray-900 bg-white rounded-md hover:bg-green-500 cursor-pointer hover:text-white",
             {
               "pointer-events-none bg-gray-300": currentPage === lastPage,
-            }
+            },
           )}
           onClick={onNext}
         >

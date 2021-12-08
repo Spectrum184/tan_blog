@@ -1,5 +1,3 @@
-import { Reply } from '../reply/entity';
-import { User } from '../user/entity';
 import { Comment } from './entity';
 
 interface IUser {
@@ -12,6 +10,7 @@ interface IUser {
 interface IReply {
   id: string;
   content: string;
+  createdAt: string;
   user: IUser;
 }
 
@@ -19,6 +18,7 @@ export class CommentDto {
   constructor(comment: Comment) {
     this.content = comment.content;
     this.id = comment.id;
+    this.createdAt = comment.createdAt.toLocaleDateString();
     this.user = {
       id: comment.user.id,
       username: comment.user.name,
@@ -30,6 +30,7 @@ export class CommentDto {
           return {
             id: reply.id,
             content: reply.content,
+            createdAt: reply.createdAt.toLocaleDateString(),
             user: {
               id: reply.user.id,
               username: reply.user.username,
@@ -45,4 +46,5 @@ export class CommentDto {
   id: string;
   user: IUser;
   replies?: IReply[];
+  createdAt: string;
 }

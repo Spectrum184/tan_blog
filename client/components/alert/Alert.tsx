@@ -1,7 +1,8 @@
+import Toast from "./Toast";
+
 import { FC } from "react";
 import { setAlertState } from "redux/alertStore";
 import { useAppDispatch, useAppState } from "redux/store";
-import Toast from "./Toast";
 
 const Alert: FC = () => {
   const { alert } = useAppState((state) => state);

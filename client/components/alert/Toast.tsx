@@ -16,7 +16,7 @@ const Toast: FC<PropTypes> = ({ type, content, handleShow }) => {
   }, [handleShow]);
 
   return (
-    <div className="fixed z-50 right-4 top-4">
+    <div className="fixed z-50 right-4 top-16">
       <div className="flex max-w-sm w-full bg-white shadow-md rounded-lg overflow-hidden mx-auto">
         <div
           className={cn("w-2", {
