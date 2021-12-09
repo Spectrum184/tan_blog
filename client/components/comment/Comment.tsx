@@ -17,6 +17,7 @@ const Comment: FC<PropTypes> = ({ postId }) => {
     if (!content) return;
 
     dispatch(createComment({ postId, content, jwtToken }));
+    setContent("");
   };
 
   return (
@@ -31,7 +32,7 @@ const Comment: FC<PropTypes> = ({ postId }) => {
         cols={33}
         value={content}
         onChange={(e) => setContent(e.target.value)}
-      ></textarea>
+      />
       <input
         type="submit"
         value="Bình luận"

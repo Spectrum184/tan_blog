@@ -21,7 +21,7 @@ export class CommentDto {
     this.createdAt = comment.createdAt.toLocaleDateString();
     this.user = {
       id: comment.user.id,
-      username: comment.user.name,
+      username: comment.user.username,
       avatar: comment.user.avatar,
       name: comment.user.name,
     };

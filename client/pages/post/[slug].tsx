@@ -6,13 +6,13 @@ import moment from "moment";
 import Image from "next/image";
 import ShareModal from "components/ShareModal";
 import Tag from "components/Tag";
-import Comment from "components/Comment";
+import CommentDisplay from "components/comment/CommentDisplay";
+import Comment from "components/comment/Comment";
 
 import { InferGetServerSidePropsType, NextPage } from "next";
 import { IPost } from "interface/post";
 import { loaderImage } from "utils/fileUpload";
 import { useAppState } from "redux/store";
-import CommentDisplay from "components/CommentDisplay";
 
 const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> =
   ({ post }) => {
@@ -90,11 +90,11 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> =
             </div>
           </div>
           {jwtToken ? (
-            <div className="">
+            <div className="mb-8">
               <Comment postId={post.id} />
             </div>
           ) : (
-            <p className="w-full">
+            <p className="w-full mb-8">
               Vui lòng
               <span className="m-1 underline hover:text-gray-600">
                 <Link href={`/login`}>

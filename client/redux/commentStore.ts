@@ -28,7 +28,7 @@ const commentSlice = createSlice({
       Object.assign(state, action.payload);
     },
     addCommentData(state, action: PayloadAction<IComment>) {
-      state.data.push(action.payload);
+      state.data.unshift(action.payload);
     },
   },
 });
@@ -42,8 +42,15 @@ export const getComments =
       const res = await getDataAPI(
         `comment/post/${postId}/search?page=${page}&limit=9`,
       );
+      const data = await res.data;
 
-      console.log(res);
+      dispatch(
+        setCommentData({
+          data: data.data,
+          page: data.page,
+          totalPage: data.totalPage,
+        }),
+      );
     } catch (error: any) {
       dispatch(
         setAlertState({
