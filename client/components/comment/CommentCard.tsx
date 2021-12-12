@@ -21,6 +21,8 @@ const CommentCard: FC<IComment> = ({
 
   const onReply = () => {
     dispatch(createReply({ commentId: id, content: contentReply, jwtToken }));
+    setContentReply("");
+    setIsReply(!isReply);
   };
 
   return (
@@ -99,12 +101,7 @@ const CommentCard: FC<IComment> = ({
         {replies &&
           replies.length > 0 &&
           replies.map((reply) => (
-            <ReplyCard
-              commentId={id}
-              reply={reply}
-              key={reply.id}
-              commentUser={user.name}
-            />
+            <ReplyCard commentId={id} reply={reply} key={reply.id} />
           ))}
       </div>
     </div>

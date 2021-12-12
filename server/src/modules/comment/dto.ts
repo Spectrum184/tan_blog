@@ -26,19 +26,21 @@ export class CommentDto {
       name: comment.user.name,
     };
     this.replies = comment.replies
-      ? comment.replies.map((reply) => {
-          return {
-            id: reply.id,
-            content: reply.content,
-            createdAt: reply.createdAt.toLocaleDateString(),
-            user: {
-              id: reply.user.id,
-              username: reply.user.username,
-              avatar: reply.user.avatar,
-              name: reply.user.name,
-            },
-          };
-        })
+      ? comment.replies
+          .map((reply) => {
+            return {
+              id: reply.id,
+              content: reply.content,
+              createdAt: reply.createdAt.toLocaleDateString(),
+              user: {
+                id: reply.user.id,
+                username: reply.user.username,
+                avatar: reply.user.avatar,
+                name: reply.user.name,
+              },
+            };
+          })
+          .reverse()
       : undefined;
   }
 

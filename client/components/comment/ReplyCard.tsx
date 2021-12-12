@@ -9,10 +9,9 @@ import { createReply } from "redux/commentStore";
 type PropTypes = {
   commentId: string;
   reply: IReply;
-  commentUser: string;
 };
 
-const ReplyCard: FC<PropTypes> = ({ commentId, reply, commentUser }) => {
+const ReplyCard: FC<PropTypes> = ({ commentId, reply }) => {
   const [isReply, setIsReply] = useState<boolean>(false);
   const [contentReply, setContentReply] = useState<string>("");
   const { jwtToken, username, roles } = useAppState((state) => state.user);
@@ -20,6 +19,8 @@ const ReplyCard: FC<PropTypes> = ({ commentId, reply, commentUser }) => {
 
   const onReply = () => {
     dispatch(createReply({ commentId, content: contentReply, jwtToken }));
+    setContentReply("");
+    setIsReply(!isReply);
   };
 
   return (
@@ -73,7 +74,7 @@ const ReplyCard: FC<PropTypes> = ({ commentId, reply, commentUser }) => {
             <div className="flex">
               <p
                 onClick={() => {
-                  setContentReply(`@${commentUser}:`);
+                  setContentReply(`@${reply.user.name}:`);
                   setIsReply(!isReply);
                 }}
                 className="text-sm text-gray-500 font-semibold hover:underline cursor-pointer"
