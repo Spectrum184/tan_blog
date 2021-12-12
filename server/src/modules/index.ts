@@ -15,6 +15,7 @@ import { RoleModule } from './role';
 import { TagModule } from './tag';
 import { UserModule } from './user';
 import { CommentModule } from './comment';
+import { ReplyModule } from './reply';
 
 @Module({
   imports: [
@@ -27,6 +28,7 @@ import { CommentModule } from './comment';
     CategoryModule,
     PostModule,
     CommentModule,
+    ReplyModule,
     ConfigModule.forRoot(),
     CacheModule.register({
       store: redisStore,

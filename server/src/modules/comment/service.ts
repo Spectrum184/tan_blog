@@ -62,8 +62,6 @@ export class CommentService {
 
       builder.skip((page - 1) * limit).take(limit);
 
-      console.log(builder.getSql());
-
       const comments = await builder.getMany();
 
       if (comments.length === 0)

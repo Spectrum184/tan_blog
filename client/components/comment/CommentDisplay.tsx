@@ -28,6 +28,7 @@ const CommentDisplay: FC<PropTypes> = ({ postId }) => {
             createdAt={c.createdAt}
             key={c.id}
             id={c.id}
+            replies={c.replies}
           />
         ))}
       <Pagination

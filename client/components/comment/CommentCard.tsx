@@ -5,6 +5,7 @@ import { IComment } from "interface/comment";
 import { FC, useState } from "react";
 import { loaderImage } from "utils/fileUpload";
 import { useAppDispatch, useAppState } from "redux/store";
+import { createReply } from "redux/commentStore";
 
 const CommentCard: FC<IComment> = ({
   user,
@@ -15,13 +16,17 @@ const CommentCard: FC<IComment> = ({
 }) => {
   const [isReply, setIsReply] = useState<boolean>(false);
   const [contentReply, setContentReply] = useState<string>("");
-  const { username, roles } = useAppState((state) => state.user);
+  const { username, roles, jwtToken } = useAppState((state) => state.user);
   const dispatch = useAppDispatch();
+
+  const onReply = () => {
+    dispatch(createReply({ commentId: id, content: contentReply, jwtToken }));
+  };
 
   return (
     <div className="flex mb-2">
       <div className="flex-shrink-0 mr-3">
-        <div className="relative mt-2 w-8 h-8 sm:w-10 sm:h-10">
+        <div className="relative mt-2 w-6 h-6 sm:w-10 sm:h-10">
           <Image
             layout="fill"
             src={user.avatar}
@@ -48,7 +53,10 @@ const CommentCard: FC<IComment> = ({
                 onChange={(e) => setContentReply(e.target.value)}
               />
               <div className="md:ml-4 flex mt-2 md:mt-0 md:flex-col items-center justify-center">
-                <button className="p-1 pl-4 pr-4 m-2 bg-green-500 text-gray-100 text-lg rounded-lg focus:border-4 border-green-300">
+                <button
+                  onClick={onReply}
+                  className="p-1 pl-4 pr-4 m-2 bg-green-500 text-gray-100 text-lg rounded-lg focus:border-4 border-green-300"
+                >
                   Trả lời
                 </button>
                 <button
@@ -91,7 +99,12 @@ const CommentCard: FC<IComment> = ({
         {replies &&
           replies.length > 0 &&
           replies.map((reply) => (
-            <ReplyCard commentId={id} reply={reply} key={reply.id} />
+            <ReplyCard
+              commentId={id}
+              reply={reply}
+              key={reply.id}
+              commentUser={user.name}
+            />
           ))}
       </div>
     </div>

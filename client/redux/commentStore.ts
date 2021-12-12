@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction, Dispatch } from "@reduxjs/toolkit";
-import { IComment, ICommentPaginate } from "interface/comment";
+import { IComment, ICommentPaginate, IReply } from "interface/comment";
 import { getDataAPI, postDataAPI } from "utils/fetchData";
 import { setAlertState } from "./alertStore";
 
@@ -10,6 +10,12 @@ interface IGetComment {
 
 interface ICreateComment {
   postId: string;
+  content: string;
+  jwtToken?: string;
+}
+
+interface ICreateReply {
+  commentId: string;
   content: string;
   jwtToken?: string;
 }
@@ -30,10 +36,21 @@ const commentSlice = createSlice({
     addCommentData(state, action: PayloadAction<IComment>) {
       state.data.unshift(action.payload);
     },
+    addReplyData(
+      state,
+      action: PayloadAction<{ commentId: string; reply: IReply }>,
+    ) {
+      for (const comment of state.data) {
+        if (comment.id === action.payload.commentId) {
+          comment.replies?.unshift(action.payload.reply);
+        }
+      }
+    },
   },
 });
 
-export const { setCommentData, addCommentData } = commentSlice.actions;
+export const { setCommentData, addCommentData, addReplyData } =
+  commentSlice.actions;
 
 export const getComments =
   ({ postId, page }: IGetComment) =>
@@ -71,6 +88,24 @@ export const createComment =
       const comment: IComment = await res.data;
 
       dispatch(addCommentData(comment));
+    } catch (error: any) {
+      dispatch(
+        setAlertState({
+          show: true,
+          type: "error",
+          message: error.response.data.message,
+        }),
+      );
+    }
+  };
+
+export const createReply =
+  ({ commentId, content, jwtToken }: ICreateReply) =>
+  async (dispatch: Dispatch) => {
+    try {
+      const res = await postDataAPI("reply", { commentId, content }, jwtToken);
+
+      dispatch(addReplyData(res.data));
     } catch (error: any) {
       dispatch(
         setAlertState({

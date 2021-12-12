@@ -7,7 +7,7 @@ interface IUser {
   name: string;
 }
 
-interface IReply {
+export interface IReplyContent {
   id: string;
   content: string;
   createdAt: string;
@@ -45,6 +45,6 @@ export class CommentDto {
   content: string;
   id: string;
   user: IUser;
-  replies?: IReply[];
+  replies?: IReplyContent[];
   createdAt: string;
 }
