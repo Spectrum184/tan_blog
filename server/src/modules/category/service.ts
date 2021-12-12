@@ -77,7 +77,8 @@ export class CategoryService {
           'category.slug = :slug',
           { slug },
         )
-        .leftJoinAndSelect('posts.author', 'author');
+        .leftJoinAndSelect('posts.author', 'author')
+        .loadRelationCountAndMap('posts.comments', 'posts.comments');
 
       if (sort === 'time') builder.orderBy('posts.createdAt', order);
 

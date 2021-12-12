@@ -94,7 +94,7 @@ export const useListPost = ({
   const newPrefix = slug ? `${prefix}/${slug}` : prefix;
   const { data, error } = useSWR(
     `${newPrefix}?page=${page}&limit=${limit}&content=${content}&order=${order}`,
-    fetcher
+    fetcher,
   );
 
   const loading: boolean = !data && !error;

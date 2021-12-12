@@ -14,6 +14,7 @@ export interface IPost {
   category: ICategoryPost;
   views: number;
   author: IAuthor;
+  comments: number;
 }
 
 export interface IPostData {

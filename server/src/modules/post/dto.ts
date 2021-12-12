@@ -1,3 +1,4 @@
+import { Comment } from '../comment/entity';
 import { Post } from './entity';
 import { IPost } from './interface';
 
@@ -21,7 +22,7 @@ export class PostDto implements IPost {
     this.content = post.content;
     this.thumbnail = post.thumbnail;
     this.status = post.status;
-    this.createdAt = post.createdAt.toUTCString();
+    this.createdAt = post.createdAt.toLocaleDateString();
     this.tags = post.tags?.map((tag) => tag.name);
     this.category = { name: post.category?.name, slug: post.category?.slug };
     this.views = post.views;
@@ -55,7 +56,7 @@ export class ListPostDto implements IPost {
     this.content = post.content.replace(/<[^>]*>/g, '').substr(0, 250);
     this.thumbnail = post.thumbnail;
     this.status = post.status;
-    this.createdAt = post.createdAt.toUTCString();
+    this.createdAt = post.createdAt.toLocaleDateString();
     this.tags = post.tags?.map((tag) => tag.name);
     this.category = { name: post.category?.name, slug: post.category?.slug };
     this.views = post.views;
@@ -65,6 +66,7 @@ export class ListPostDto implements IPost {
       id: post.author?.id,
       name: post.author?.name,
     };
+    this.comments = post.comments;
   }
 
   id: string;
@@ -79,4 +81,5 @@ export class ListPostDto implements IPost {
   category: ICategoryPost;
   views: number;
   author: IAuthor;
+  comments: number | Comment[];
 }

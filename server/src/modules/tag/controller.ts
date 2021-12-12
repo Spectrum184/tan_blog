@@ -5,10 +5,12 @@ import {
   InternalServerErrorException,
   Logger,
   Param,
+  Query,
   Res,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { FastifyReply } from 'fastify';
+import { PaginationQueryDto } from 'src/common/pagination';
 import { Public } from '../auth/decorator';
 import { TagService } from './service';
 
@@ -37,15 +39,16 @@ export class TagController {
   }
 
   @Public()
-  @Get(':tag')
+  @Get(':name')
   async findOne(
-    @Param('tag') tagName: string,
+    @Param('name') name: string,
+    @Query() query: PaginationQueryDto,
     @Res() res: FastifyReply,
   ): Promise<FastifyReply> {
     try {
-      const tag = await this.tagService.findPostByTag(tagName);
+      const result = await this.tagService.findPostByTag(name, query);
 
-      return res.status(HttpStatus.OK).send({ tag });
+      return res.status(HttpStatus.OK).send(result);
     } catch (error) {
       this.logger.error(error);
 

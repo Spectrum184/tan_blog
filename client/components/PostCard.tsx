@@ -1,5 +1,4 @@
 import Image from "next/image";
-import moment from "moment";
 import Link from "next/link";
 
 import { IPost } from "interface/post";
@@ -16,6 +15,7 @@ const PostCard: FC<IPost> = ({
   thumbnail,
   views,
   tags,
+  comments,
 }) => {
   return (
     <div className="mt-3">
@@ -30,7 +30,7 @@ const PostCard: FC<IPost> = ({
             className="object-cover shadow-md md:rounded-l-lg"
           />
         </div>
-        <div className="mx-auto px-10 py-4 md:w-4/5 w-full">
+        <div className="mx-auto px-4 md:px-10 py-4 md:w-4/5 w-full">
           <div className="flex items-center justify-between">
             <span className="font-light text-xs text-gray-600 flex">
               <svg
@@ -47,10 +47,10 @@ const PostCard: FC<IPost> = ({
                   d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
                 />
               </svg>
-              {moment(createdAt).fromNow()}
+              {createdAt}
               <svg
                 xmlns="http://www.w3.org/2000/svg"
-                className="h-4 w-4 ml-4 mr-1"
+                className="h-4 w-4 ml-2 mr-1"
                 fill="none"
                 viewBox="0 0 24 24"
                 stroke="currentColor"
@@ -69,6 +69,21 @@ const PostCard: FC<IPost> = ({
                 />
               </svg>
               {views}
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-4 w-4 mr-1 ml-2"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth={2}
+                  d="M17 8h2a2 2 0 012 2v6a2 2 0 01-2 2h-2v4l-4-4H9a1.994 1.994 0 01-1.414-.586m0 0L11 14h4a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2v4l.586-.586z"
+                />
+              </svg>
+              {comments}
             </span>
             <Link href={`/category/${category.slug}`}>
               <a className="px-2 py-1 text-sm font-bold text-gray-100 bg-gray-600 rounded hover:bg-gray-500">
@@ -104,7 +119,7 @@ const PostCard: FC<IPost> = ({
                 </span>
               ))}
             </div>
-            <div>
+            <div className="hidden md:block">
               <Link href={`/user/${author.username}`}>
                 <a className="flex items-center">
                   <Image

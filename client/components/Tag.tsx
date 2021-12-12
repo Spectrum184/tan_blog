@@ -12,7 +12,7 @@ const Tag: FC<PropTypes> = ({ tag, isLayout }) => {
   return (
     <span
       className={cn(
-        "m-1 bg-gray-200 hover:bg-gray-300 rounded-full px-2 text-sm leading-loose cursor-pointer",
+        "m-1 bg-gray-200 hover:bg-gray-300 rounded-full p-2 text-sm leading-loose cursor-pointer",
         {
           "font-bold": isLayout,
         },

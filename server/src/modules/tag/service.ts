@@ -1,7 +1,11 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { map, of } from 'rxjs';
+import { IResultPagination } from 'src/common/interface';
+import { PaginationQueryDto } from 'src/common/pagination';
 import { Repository } from 'typeorm';
+import { ListPostDto, PostDto } from '../post/dto';
+import { Post } from '../post/entity';
 import { TagDto, TagPostDto } from './dto';
 import { Tag } from './entity';
 
@@ -9,6 +13,7 @@ import { Tag } from './entity';
 export class TagService {
   constructor(
     @InjectRepository(Tag) private readonly tagRepository: Repository<Tag>,
+    @InjectRepository(Post) private readonly postRepository: Repository<Post>,
   ) {}
 
   async generateTags(name: string): Promise<string[]> {
@@ -67,19 +72,51 @@ export class TagService {
     }
   }
 
-  async findPostByTag(tagName: string): Promise<any> {
+  async findPostByTag(
+    name: string,
+    {
+      page,
+      limit = 9,
+      sort = 'time',
+      order = 'DESC',
+    }: Partial<PaginationQueryDto>,
+  ): Promise<IResultPagination<PostDto>> {
     try {
-      const tag = await this.tagRepository
-        .createQueryBuilder('tag')
-        .where('tag.name = :tagName', { tagName })
-        .leftJoinAndSelect('tag.posts', 'posts', 'posts.status = :status', {
-          status: true,
-        })
+      const builder = this.postRepository
+        .createQueryBuilder('posts')
         .leftJoinAndSelect('posts.category', 'category')
+        .innerJoinAndSelect('posts.tags', 'tags', 'tags.name = :name', {
+          name,
+        })
         .leftJoinAndSelect('posts.author', 'author')
-        .getOne();
+        .loadRelationCountAndMap('posts.comments', 'posts.comments');
 
-      return new TagPostDto(tag);
+      if (sort === 'time') builder.orderBy('posts.createdAt', order);
+
+      if (sort === 'view') builder.orderBy('posts.views', order);
+
+      const total = await builder.getCount();
+
+      builder.skip((page - 1) * limit).take(limit);
+
+      const posts = await builder.getMany();
+
+      if (posts.length === 0)
+        return {
+          data: [],
+          total: 0,
+          page,
+          totalPage: Math.ceil(total / limit),
+        };
+
+      const newPosts = posts.map((post) => new ListPostDto(post));
+
+      return {
+        data: newPosts,
+        total,
+        page,
+        totalPage: Math.ceil(total / limit),
+      };
     } catch (error) {
       throw error;
     }

@@ -1,9 +1,9 @@
 import Pagination from "../Pagination";
+import CommentCard from "./CommentCard";
 
 import { FC, useEffect } from "react";
 import { getComments, setCommentData } from "redux/commentStore";
 import { useAppDispatch, useAppState } from "redux/store";
-import CommentCard from "./CommentCard";
 
 type PropTypes = {
   postId: string;
@@ -14,8 +14,8 @@ const CommentDisplay: FC<PropTypes> = ({ postId }) => {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
-    dispatch(getComments({ postId, page: 1 }));
-  }, [dispatch, postId]);
+    dispatch(getComments({ postId, page: comment.page }));
+  }, [dispatch, postId, comment.page]);
 
   return (
     <div className="w-full">

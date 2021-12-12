@@ -44,7 +44,7 @@ const Home: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> =
                   onClick={() => goToPost(posts[0].slug)}
                 />
               </div>
-              <span className="text-green-700 text-sm hidden md:block mt-4">
+              <span className="text-green-700 text-sm hidden md:block mt-4 hover:underline">
                 <Link href={`/category/${posts[0].category.slug}`}>
                   <a>{posts[0].category.name}</a>
                 </Link>
@@ -85,7 +85,7 @@ const Home: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> =
                     />
                   </div>
                   <div className="bg-white rounded rounded-t-none md:rounded-l-none p-4 md:py-0 flex-1 shadow-md">
-                    <span className="text-green-700 text-sm hidden md:block">
+                    <span className="text-green-700 text-sm hidden md:block hover:underline">
                       <Link href={`/category/${post.category.slug}`}>
                         <a>{post.category.name}</a>
                       </Link>
@@ -194,7 +194,7 @@ const Home: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> =
 
 export const getServerSideProps = async ({ query }: any) => {
   const res = await axios.get(
-    `${process.env.SERVER_URL}/posts/get-random-post`
+    `${process.env.SERVER_URL}/posts/get-random-post`,
   );
 
   return {

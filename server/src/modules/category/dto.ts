@@ -9,7 +9,7 @@ export class CategoryDto implements ICategory {
     this.name = category.name;
     this.slug = category.slug;
     this.thumbnail = category.thumbnail;
-    this.createdAt = category.createdAt.toUTCString();
+    this.createdAt = category.createdAt.toLocaleDateString();
     this.posts = category.posts;
   }
 
@@ -28,7 +28,7 @@ export class CategoryPostDto implements ICategory {
     this.name = category.name;
     this.slug = category.slug;
     this.description = category.description;
-    this.createdAt = category.createdAt.toUTCString();
+    this.createdAt = category.createdAt.toLocaleDateString();
     this.thumbnail = category.thumbnail;
     this.posts = category.posts?.map(
       (post) =>

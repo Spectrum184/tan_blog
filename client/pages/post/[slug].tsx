@@ -2,7 +2,6 @@ import Layout from "components/Layout";
 import Head from "next/head";
 import Link from "next/link";
 import axios from "axios";
-import moment from "moment";
 import Image from "next/image";
 import ShareModal from "components/ShareModal";
 import Tag from "components/Tag";
@@ -35,7 +34,7 @@ const Post: NextPage<InferGetServerSidePropsType<typeof getServerSideProps>> =
                   {post.author.name}
                 </a>
               </Link>
-              từ {moment(post.createdAt).fromNow()}
+              từ {post.createdAt}
             </div>
             <div className="flex content-center">
               <span className="mr-1">{post.views}</span>
