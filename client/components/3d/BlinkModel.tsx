@@ -1,5 +1,5 @@
 import Loader from "./Loader";
-import Blink from "./Blink";
+import Courier from "./Courier";
 import Light from "./Light";
 
 import { FC, Suspense } from "react";
@@ -17,7 +17,7 @@ const BlinkModel: FC = () => {
           dispatchEvent={undefined}
         />
         <Light />
-        <Blink />
+        <Courier />
       </Suspense>
     </Canvas>
   );

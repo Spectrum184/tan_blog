@@ -3,7 +3,12 @@ module.exports = {
   purge: ["./pages/**/*.{js,ts,jsx,tsx}", "./components/**/*.{js,ts,jsx,tsx}"],
   darkMode: "class", // or 'media' or 'class'
   theme: {
-    extend: {},
+    extend: {
+      backgroundImage: {
+        circuit:
+          "url('https://res.cloudinary.com/sonobe/image/upload/v1639840503/samples/download_ual2cs.svg')",
+      },
+    },
     minHeight: {
       0: "0",
       "1/4": "25%",

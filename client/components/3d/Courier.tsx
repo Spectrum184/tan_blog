@@ -26,7 +26,7 @@ interface IActions {
     | undefined;
 }
 
-const Blink: FC = () => {
+const Courier: FC = () => {
   const group = useRef<IGroup>();
   const action = useRef<IActions>();
   const [model, setModel] = useState<Object3D | null>(null);
@@ -62,11 +62,11 @@ const Blink: FC = () => {
 
   useFrame((_, delta) => mixer?.update(delta));
 
-  useFrame(() => {
-    if (typeof group.current !== "undefined") {
-      return (group.current.rotation.y += 0.002);
-    }
-  });
+  // useFrame(() => {
+  //   if (typeof group.current !== "undefined") {
+  //     return (group.current.rotation.y += 0.002);
+  //   }
+  // });
 
   return (
     <>
@@ -81,4 +81,4 @@ const Blink: FC = () => {
   );
 };
 
-export default Blink;
+export default Courier;
