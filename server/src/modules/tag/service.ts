@@ -6,7 +6,7 @@ import { PaginationQueryDto } from 'src/common/pagination';
 import { Repository } from 'typeorm';
 import { ListPostDto, PostDto } from '../post/dto';
 import { Post } from '../post/entity';
-import { TagDto, TagPostDto } from './dto';
+import { TagDto } from './dto';
 import { Tag } from './entity';
 
 @Injectable()
